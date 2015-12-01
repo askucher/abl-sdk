@@ -4,8 +4,8 @@
 
 ##Install
 
-```
-bower install ablsdk
+```bash
+bower install abl-sdk
 ```
 
 ```Javascript

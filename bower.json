@@ -1,6 +1,6 @@
 {
   "name": "abl-sdk",
-  "homepage": "https://github.com/bucket-list/Dashboard",
+  "homepage": "https://github.com/askucher/abl-sdk",
   "description": "Adventure bucket list sdk",
   "main": [ "./lib/abl-sdk-module.js",
             "./lib/abl-calc-service.js", 
