@@ -8,16 +8,18 @@
 
 Transforms date server utc to user friendly date and visa versa. 
 
-
+```
 methods:
 
 * frontendify(string) => new Date()
 * backendify(date) => string
+```
 
 ###ablcalc service
 
 Calculates activity price includes add-ons, coupons, etc.
 
+```
 methods:
 
 * totalWithoutTaxesfees()
@@ -29,3 +31,4 @@ methods:
 * calcAddonPrice()
 * totalAddons()
 * calcTotal()
+```
