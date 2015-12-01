@@ -5,6 +5,12 @@
   "main": [ "./lib/abl-sdk-module.js",
             "./lib/abl-calc-service.js", 
             "./lib/abl-date-service.js" ],
+  "ignore": [
+    "src",
+    ".gitignore",
+    "push",
+    "run"
+  ],
   "moduleType": [],
   "authors": [
     "Andrey Stehno"
