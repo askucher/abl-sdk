@@ -1,0 +1,13 @@
+{
+  "name": "abl-sdk",
+  "homepage": "https://github.com/bucket-list/Dashboard",
+  "description": "Adventure bucket list sdk",
+  "main": [ "./abl-sdk-module.js",
+            "./abl-calc-service.js", 
+            "./abl-date-service.js" ],
+  "moduleType": [],
+  "authors": [
+    "Andrey Stehno"
+  ],
+  "license": "MIT"
+}
