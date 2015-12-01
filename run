@@ -1,1 +1,1 @@
-lsc -c ./*.ls
+lsc -c src/*.ls -o lib
