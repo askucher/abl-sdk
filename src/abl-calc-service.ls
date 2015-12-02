@@ -54,7 +54,7 @@ angular
                 coupon.codes.push data
                 coupon.code = ""
               $xabl
-                .get "coupons/#{coupon.code}"
+                .get "coupon/#{coupon.code}"
                 .success (data)->
                     apply data
                 .error ->
