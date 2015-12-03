@@ -33,10 +33,11 @@ angular
               show-addon-price(addon) * addon.quantity
           total-addons = ->
               state.addons.map(calc-addon-price) |> sum
-          calc-total = ->
+          calc-coupon = ->
               total = total-without-taxesfees! + calc-taxes-fees!
-              total - coupon.calc(total)
-          
+              coupon.calc(total)
+          calc-total = ->
+              total-without-taxesfees! + calc-taxes-fees! - calc-coupon!
           coupon = 
             codes: []
             calc: (total)->
@@ -80,6 +81,7 @@ angular
           addons: state.addons
           attendees: state.attendees
           total-without-taxesfees: total-without-taxesfees
+          calc-coupon: calc-coupon
           calc-tax-fee: calc-tax-fee
           calc-taxes-fees: calc-taxes-fees
           show-price: show-price
