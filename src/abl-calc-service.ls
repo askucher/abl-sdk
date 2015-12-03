@@ -50,6 +50,7 @@ angular
                  coupon.codes.splice index, 1
             add: ->
               return if (coupon.code ? "").length is 0
+              coupon.error = ""
               apply = (data)->
                 coupon.codes.push data
                 coupon.code = ""
@@ -57,18 +58,18 @@ angular
                 .get "coupon/#{coupon.code}"
                 .success (data)->
                     apply data
-                .error ->
-                    coupon.error = "Not found"
-                    apply do 
-                      _id: '6345cfe789abc'
-                      activity: '123cfe098abc'
-                      code: 'FALL25OFF'
-                      duration: 'forever'
-                      amountOff: 25
-                      currency: 'CAD'
-                      percentOff: 25
-                      maxRedemptions: 25
-                      redeemBy: 'ISO 8601 Datetime'
+                .error (data)->
+                    coupon.error = data?errors?0 ? "Not found"
+                    #apply do 
+                    #  _id: '6345cfe789abc'
+                    #  activity: '123cfe098abc'
+                    #  code: 'FALL25OFF'
+                    #  duration: 'forever'
+                    #  amountOff: 25
+                    #  currency: 'CAD'
+                    #  percentOff: 25
+                    #  maxRedemptions: 25
+                    #  redeemBy: 'ISO 8601 Datetime'
                     #apply do 
                     #
                     #  code: coupon.code
