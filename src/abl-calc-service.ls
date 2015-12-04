@@ -35,16 +35,17 @@ angular
               state.addons.map(calc-addon-price) |> sum
           calc-coupon = ->
               total = total-without-taxesfees! + calc-taxes-fees!
-              coupon.calc(total)
+              _ =
+                | coupon.codes.length is 0 => 0
+                | coupon.codes.0.amount-off => coupon.codes.0.amount-off
+                | coupon.codes.0.percent-off => total / 100 * coupon.codes.0.percent-off
+                | _ => 0
+              _
           calc-total = ->
               total-without-taxesfees! + calc-taxes-fees! - calc-coupon!
           coupon = 
             codes: []
-            calc: (total)->
-              | coupon.codes.length is 0 => 0
-              | coupon.codes.0.amount-off => coupon.codes.0.amount-off
-              | coupon.codes.0.percent-off => total / 100 * coupon.codes.0.percent-off
-              | _ => 0 
+            calc: calc-coupon
             remove: (c)->
                index = coupon.codes.index-of c
                if index > -1
@@ -60,21 +61,8 @@ angular
                 .success (data)->
                     apply data
                 .error (data)->
-                    coupon.error = data?errors?0 ? "Not found"
-                    #apply do 
-                    #  _id: '6345cfe789abc'
-                    #  activity: '123cfe098abc'
-                    #  code: 'FALL25OFF'
-                    #  duration: 'forever'
-                    #  amountOff: 25
-                    #  currency: 'CAD'
-                    #  percentOff: 25
-                    #  maxRedemptions: 25
-                    #  redeemBy: 'ISO 8601 Datetime'
-                    #apply do 
-                    #
-                    #  code: coupon.code
-                    #  not-found: yes
+                    coupon.error = data?errors?0 ? "Coupon not found"
+                    
               
             code: ""
           coupon: coupon
