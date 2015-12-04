@@ -1,6 +1,6 @@
 {
   "name": "abl-sdk",
-  "homepage": "https://github.com/bucket-list/abl-sdk",
+  "homepage": "https://github.com/bucket-list/abl-sdk.git",
   "description": "Adventure bucket list sdk",
   "main": [ "./lib/abl-sdk-module.js",
             "./lib/abl-calc-service.js", 
@@ -13,7 +13,7 @@
   ],
   "moduleType": [],
   "authors": [
-    "Andrey Stehno"
+    "Bucket list"
   ],
   "license": "MIT"
 }
