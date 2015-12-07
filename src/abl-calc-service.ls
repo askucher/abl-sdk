@@ -15,10 +15,10 @@ angular
           state = 
             attendees: charges.filter(-> it.type is \aap).map(make-editable)
             addons: charges.filter(-> it.type is \addon).map(make-editable)
-          total-without-taxesfees = ->
+          calc-subtotal = ->
               (state.attendees.map(calc-price) |> sum) + total-addons!
           calc-tax-fee = (charge)->
-            | charge.type is \tax => total-without-taxesfees! / 100 * charge.amount
+            | charge.type is \tax => calc-subtotal! / 100 * charge.amount
             | charge.type is \fee => (state.attendees.map(-> it.quantity) |> sum) * charge.amount
             | _ => 0
           calc-taxes-fees = ->
@@ -34,17 +34,17 @@ angular
           total-addons = ->
               state.addons.map(calc-addon-price) |> sum
           calc-coupon = ->
-              total = total-without-taxesfees! + calc-taxes-fees!
+              subtotal = calc-subtotal!
               _ =
                 | coupon.codes.length is 0 => 0
                 | coupon.codes.0.amount-off? =>  
-                     | coupon.codes.0.amount-off <= total => coupon.codes.0.amount-off
-                     | _ => total
-                | coupon.codes.0.percent-off? => total / 100 * coupon.codes.0.percent-off
+                     | coupon.codes.0.amount-off <= subtotal => coupon.codes.0.amount-off
+                     | _ => subtotal
+                | coupon.codes.0.percent-off? => subtotal / 100 * coupon.codes.0.percent-off
                 | _ => 0
               _
           calc-total = ->
-              total-without-taxesfees! + calc-taxes-fees! - calc-coupon!
+              calc-subtotal! + calc-taxes-fees! - calc-coupon!
           coupon = 
             codes: []
             calc: calc-coupon
@@ -70,7 +70,7 @@ angular
           coupon: coupon
           addons: state.addons
           attendees: state.attendees
-          total-without-taxesfees: total-without-taxesfees
+          total-without-taxesfees: calc-subtotal
           calc-coupon: calc-coupon
           calc-tax-fee: calc-tax-fee
           calc-taxes-fees: calc-taxes-fees
@@ -79,4 +79,5 @@ angular
           show-addon-price: show-addon-price
           calc-addon-price: calc-addon-price
           total-addons: total-addons
+          calc-subtotal: calc-subtotal
           calc-total: calc-total
