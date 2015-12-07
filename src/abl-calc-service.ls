@@ -37,7 +37,9 @@ angular
               total = total-without-taxesfees! + calc-taxes-fees!
               _ =
                 | coupon.codes.length is 0 => 0
-                | coupon.codes.0.amount-off => coupon.codes.0.amount-off
+                | coupon.codes.0.amount-off =>  
+                     | coupon.codes.0.amount-off <= total => coupon.codes.0.amount-off
+                     | _ => total
                 | coupon.codes.0.percent-off => total / 100 * coupon.codes.0.percent-off
                 | _ => 0
               _
