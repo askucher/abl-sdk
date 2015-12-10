@@ -12,8 +12,10 @@ angular
             quantity: charge.count ? 0
             amount: charge.amount
             _id: charge._id
+          by-price = (a, b)->
+              b.amount - a.amount
           state = 
-            attendees: charges.filter(-> it.type is \aap).map(make-editable)
+            attendees: charges.filter(-> it.type is \aap).map(make-editable).sort(by-price)
             addons: charges.filter(-> it.type is \addon).map(make-editable)
           calc-subtotal = ->
               (state.attendees.map(calc-price) |> sum) + total-addons!
