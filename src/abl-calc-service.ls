@@ -40,7 +40,7 @@ angular
               _ =
                 | coupon.codes.length is 0 => 0
                 | coupon.codes.0.amount-off? =>  
-                     | coupon.codes.0.amount-off <= subtotal => coupon.codes.0.amount-off
+                     | coupon.codes.0.amount-off < subtotal => coupon.codes.0.amount-off
                      | _ => subtotal
                 | coupon.codes.0.percent-off? => subtotal / 100 * coupon.codes.0.percent-off
                 | _ => 0
@@ -58,8 +58,11 @@ angular
               return if (coupon.code ? "").length is 0
               coupon.error = ""
               apply = (data)->
-                coupon.codes.push data
-                coupon.code = ""
+                if moment!.diff(moment(data.redeem-by), \minutes)
+                   coupon.error = data?errors?0 ? "This coupon is expired"
+                else
+                   coupon.codes.push data
+                   coupon.code = ""
               $xabl
                 .get "coupon/#{coupon.code}"
                 .success (data)->
