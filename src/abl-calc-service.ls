@@ -56,12 +56,14 @@ angular
                index = coupon.codes.index-of c
                if index > -1
                  coupon.codes.splice index, 1
-            add: ->
+            add: (activity)->
               return if (coupon.code ? "").length is 0
               coupon.error = ""
               apply = (data)->
                 if moment!.diff(moment(data.redeem-by), \minutes)
-                   coupon.error = data?errors?0 ? "This coupon is expired"
+                   coupon.error = "This coupon is expired"
+                if data.activities.length > 0 and data.activities.0 isnt activity
+                   coupon.error = "This coupon is not valid for this activity."
                 else
                    coupon.codes.push data
                    coupon.code = ""
