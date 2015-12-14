@@ -68,7 +68,7 @@ angular
                    coupon.codes.push data
                    coupon.code = ""
               $xabl
-                .get "coupon/#{coupon.code}"
+                .get "/api/v1/coupon/#{coupon.code}"
                 .success (data)->
                     apply data
                 .error (data)->
