@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \ablcalc, ($http)->
+  .service \ablcalc, ($xabl)->
       sum = (arr)->
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
@@ -67,8 +67,8 @@ angular
                 else
                    coupon.codes.push data
                    coupon.code = ""
-              $http
-                .get "api/v1/coupon/#{coupon.code}"
+              $xabl
+                .get "coupon/#{coupon.code}"
                 .success (data)->
                     apply data
                 .error (data)->
