@@ -60,13 +60,16 @@ angular
               return if (coupon.code ? "").length is 0
               coupon.error = ""
               apply = (data)->
-                if moment!.diff(moment(data.redeem-by), \minutes)
-                   coupon.error = "This coupon is expired"
-                if data.activities.length > 0 and data.activities.0 isnt activity
-                   coupon.error = "This coupon is not valid for this activity."
-                else
-                   coupon.codes.push data
-                   coupon.code = ""
+                success = ->
+                  coupon.codes.push data
+                  coupon.code = ""
+                  ""
+                coupon.error =
+                  | coupon.max-redemptions >= coupon.redemptions => "This coupon has been fully redeemed."
+                  | moment!.diff(moment(data.redeem-by), \minutes) => "This coupon is expired"
+                  | data.activities.length > 0 and data.activities.0 isnt activity => "This coupon is not valid for this activity."
+                  | _ => success!
+                      
               $xabl
                 .get "coupon/#{coupon.code}"
                 .success (data)->
