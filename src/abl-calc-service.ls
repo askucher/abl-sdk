@@ -65,7 +65,7 @@ angular
                   coupon.code = ""
                   ""
                 coupon.error =
-                  | coupon.max-redemptions > coupon.redemptions => "This coupon has been fully redeemed."
+                  | coupon.redemptions < coupon.maxRedemptions => "This coupon has been fully redeemed."
                   | moment!.diff(moment(data.redeem-by), \minutes) > 0 => "This coupon is expired"
                   | data.activities.length > 0 and data.activities.0 isnt activity => "This coupon is not valid for this activity."
                   | _ => success!
