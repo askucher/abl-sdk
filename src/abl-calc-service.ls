@@ -15,8 +15,8 @@ angular
           by-price = (a, b)->
               b.amount - a.amount
           state = 
-            attendees: charges.filter(-> it.type is \aap).map(make-editable).sort(by-price)
-            addons: charges.filter(-> it.type is \addon).map(make-editable)
+            attendees: charges?filter(-> it.type is \aap).map(make-editable).sort(by-price)
+            addons: charges?filter(-> it.type is \addon).map(make-editable)
           calc-subtotal = ->
               (state.attendees.map(calc-price) |> sum) + total-addons!
           calc-tax-fee = (charge)->
@@ -40,7 +40,7 @@ angular
               amount-off = ->
                   | coupon.codes.0.amount-off < subtotal => coupon.codes.0.amount-off
                   | _ => subtotal
-              
+
               _ =
                 | coupon.codes.length is 0 => 0
                 | coupon.codes.0.amount-off? => amount-off!
@@ -49,7 +49,7 @@ angular
               _
           calc-total = ->
               calc-subtotal! + calc-taxes-fees! - calc-coupon!
-          coupon = 
+          coupon =
             codes: []
             calc: calc-coupon
             remove: (c)->
@@ -65,19 +65,19 @@ angular
                   coupon.code = ""
                   ""
                 coupon.error =
-                  | coupon.max-redemptions > coupon.redemptions => "This coupon has been fully redeemed."
+                  | coupon.redemptions < coupon.maxRedemptions => "This coupon has been fully redeemed."
                   | moment!.diff(moment(data.redeem-by), \minutes) > 0 => "This coupon is expired"
                   | data.activities.length > 0 and data.activities.0 isnt activity => "This coupon is not valid for this activity."
                   | _ => success!
-                      
+
               $xabl
                 .get "coupon/#{coupon.code}"
                 .success (data)->
                     apply data
                 .error (data)->
                     coupon.error = data?errors?0 ? "Coupon not found"
-                    
-              
+
+
             code: ""
           coupon: coupon
           addons: state.addons
