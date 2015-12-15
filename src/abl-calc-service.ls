@@ -7,14 +7,14 @@ angular
         | arr.length is 0 => 0
         | _ => arr.reduce((x, y)-> x + y)
       (charges)->
-          make-editable = (charge)-> 
+          make-editable = (charge)->
             name: charge.name
             quantity: charge.count ? 0
             amount: charge.amount
             _id: charge._id
           by-price = (a, b)->
               b.amount - a.amount
-          state = 
+          state =
             attendees: charges?filter(-> it.type is \aap).map(make-editable).sort(by-price)
             addons: charges?filter(-> it.type is \addon).map(make-editable)
           calc-subtotal = ->
@@ -65,7 +65,7 @@ angular
                   coupon.code = ""
                   ""
                 coupon.error =
-                  | coupon.redemptions < coupon.maxRedemptions => "This coupon has been fully redeemed."
+                  | data.maxRedemptions >= data.redemptions => "This coupon has been fully redeemed."
                   | moment!.diff(moment(data.redeem-by), \minutes) > 0 => "This coupon is expired"
                   | data.activities.length > 0 and data.activities.0 isnt activity => "This coupon is not valid for this activity."
                   | _ => success!
