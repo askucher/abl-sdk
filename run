@@ -1,5 +1,5 @@
 rm main.js
 #npm install -g livescript
-lsc -c src/*.ls -p >> main.js
+lsc -cpb src/*.ls >> main.js
 #npm install -g minifier
 minify main.js main.js
