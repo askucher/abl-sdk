@@ -1,4 +1,8 @@
 sh run
+#npm install -g jq
+jq .subversion=.subversion+1 bower.json > output.json
+jq .version=.uperversion+\".\"+\(.subversion\|tostring\) output.json > bower.json
+rm output.json
 git pull origin master
 git add .
 git add -u

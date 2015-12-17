@@ -1,7 +1,3 @@
-jq .subversion=.subversion+1 bower.json > output.json
-jq .version=.uperversion+\".\"+\(.subversion\|tostring\) output.json > bower.json
-rm output.json
-
 rm main.js
 #npm install -g livescript
 lsc -c src/*.ls -p >> main.js
