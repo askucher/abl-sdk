@@ -1,1 +1,5 @@
-lsc -c src/*.ls -o lib
+rm main.js
+#npm install -g livescript
+lsc -c src/*.ls -p >> main.js
+#npm install -g minifier
+minify main.js main.js

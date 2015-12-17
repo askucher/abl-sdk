@@ -2,9 +2,7 @@
   "name": "abl-sdk",
   "homepage": "https://github.com/bucket-list/abl-sdk.git",
   "description": "Adventure bucket list sdk",
-  "main": [ "./lib/abl-sdk-module.js",
-            "./lib/abl-calc-service.js", 
-            "./lib/abl-date-service.js" ],
+  "main": ["main.min.js"],
   "ignore": [
     "src",
     ".gitignore",
