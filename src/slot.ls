@@ -1,7 +1,7 @@
 angular
  .module \ablsdk
  .service \ablslot, (abldate, ablcalc, ablapi, formula, p)->
-    (activity, model)->
+    (activity)->
        transform-charge = (item)->
          _id: item._id
          name: item.name
@@ -10,6 +10,9 @@ angular
        state =
          slots: []
          model:
+           date: 
+              start: null
+              end: null
            visible: no
            value: null
            event-id: null
