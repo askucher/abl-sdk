@@ -8,15 +8,14 @@ angular
          calendars: []
          active-slots: []
        get-day = (date)->
-          if date is null
-          then null
-          else
-            res = do
+          if date?
+             res = do
               if date?format?
                 date
               else
                 moment(date)
-          res.format(\YYYYMMDD) |> parse-int
+             res.format(\YYYYMMDD) |> parse-int
+          else null
        new-date = ->
           d = moment.apply(null, arguments).tz(activity.time-zone)
           d
