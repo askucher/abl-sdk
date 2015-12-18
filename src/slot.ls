@@ -237,7 +237,7 @@ angular
            
            state.model.chosen = chosen
            state.model.visible = no
-           state.model.closed!
+           state.model.closed chosen
        choose-slot = (slot)->
            return if not-available-slot(slot)
            perform-choose-slot slot
