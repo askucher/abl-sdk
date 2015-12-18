@@ -13,7 +13,6 @@ angular
            date: 
               start: null
               end: null
-           visible: no
            value: null
            event-id: null
            charges: []
