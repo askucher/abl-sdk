@@ -237,7 +237,9 @@ angular
            calendar.up!
        calendar-down = ->
            calendar.down!
+           
        state
+         ..start-month = start-month
          ..set-calendars = set-calendars
          ..select-day = select-day
          ..generate-calendar = generate-calendar
