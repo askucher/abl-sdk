@@ -230,12 +230,16 @@ angular
        not-available-slot = (slot)->
            slot.available <= 0
        close = (chosen)->
+           state.model.chosen = chosen
            state.model.visible = no
+           set-default = (attendee)->
+                    if attendee.quantity is 0 and attendee.name is \Adult
+                        attendee.quantity = 1
+           state.model.attendees.for-each set-default
            state.model.closed chosen, state.model
        choose-slot = (slot)->
            return if not-available-slot(slot)
            perform-choose-slot slot
-           state.model.chosen = yes
            close yes
        is-active-day = (date)->
            get-day(date) is get-day(state.model.value)
