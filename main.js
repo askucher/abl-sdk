@@ -784,9 +784,8 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
       res.format('YYYYMMDD'));
     };
     newDate = function(){
-      var d, current;
+      var d;
       d = moment.apply(null, arguments).tz(activity.timeZone);
-      current = moment().tz(tz);
       return d;
     };
     generateCalendar = function(date, callback){

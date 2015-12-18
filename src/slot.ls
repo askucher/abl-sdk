@@ -19,7 +19,6 @@ angular
           res.format(\YYYYMMDD) |> parse-int
        new-date = ->
           d = moment.apply(null, arguments).tz(activity.time-zone)
-          current = moment!.tz(tz)
           d
        generate-calendar = (date, callback)->
          d = new-date(date)
