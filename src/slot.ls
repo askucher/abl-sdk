@@ -236,7 +236,7 @@ angular
                     if attendee.quantity is 0 and attendee.name is \Adult
                         attendee.quantity = 1
            state.model.attendees.for-each set-default
-           state.model.closed chosen, state.model
+           #state.model.closed chosen, state.model
        choose-slot = (slot)->
            return if not-available-slot(slot)
            perform-choose-slot slot
