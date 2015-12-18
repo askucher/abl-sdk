@@ -2,9 +2,22 @@ angular
  .module \ablsdk
  .service \ablslot, (abldate, ablcalc, ablapi, formula, p)->
     (activity, model)->
+       transform-charge = (item)->
+         _id: item._id
+         name: item.name
+         quantity: 0
+         amount: item.amount
        state =
          slots: []
-         model: model
+         model:
+           visible: no
+           value: null
+           event-id: null
+           charges: []
+           attendees: []
+           addons: activity.charges.filter(-> it.type is \addon).map(transform-charge)
+           questions: activity.questions ? []
+           bg: activity.image
          calendars: []
          active-slots: []
        get-day = (date)->
