@@ -1215,14 +1215,15 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
     };
     close = function(chosen){
       var setDefault;
-      state.model.chosen = chosen;
-      state.model.visible = false;
       setDefault = function(attendee){
         if (attendee.quantity === 0 && attendee.name === 'Adult') {
           return attendee.quantity = 1;
         }
       };
-      return state.model.attendees.forEach(setDefault);
+      state.model.attendees.forEach(setDefault);
+      state.model.chosen = chosen;
+      state.model.visible = false;
+      return state.model.closed();
     };
     chooseSlot = function(slot){
       if (notAvailableSlot(slot)) {
