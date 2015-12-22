@@ -31,6 +31,11 @@ angular
               for x in xs when f x
                 return no
               yes
+            sum: (xs) ->
+              result = 0
+              for x in xs
+                result += x
+              result
             sort: (xs) ->
               xs.concat!.sort (x, y) ->
                 if x > y
