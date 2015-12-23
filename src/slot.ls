@@ -242,7 +242,7 @@ angular
              ..attendees.for-each set-default
              ..chosen = chosen
              ..visible = no
-             ..closed chosen
+           state.model.closed? chosen
        choose-slot = (slot)->
            return if not-available-slot(slot)
            perform-choose-slot slot

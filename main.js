@@ -1193,7 +1193,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
       return slot.available <= 0;
     };
     close = function(chosen){
-      var setDefault, x$;
+      var setDefault, x$, ref$;
       setDefault = function(attendee){
         if (attendee.quantity === 0 && attendee.name === 'Adult') {
           return attendee.quantity = 1;
@@ -1203,8 +1203,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
       x$.attendees.forEach(setDefault);
       x$.chosen = chosen;
       x$.visible = false;
-      x$.closed(chosen);
-      return x$;
+      return typeof (ref$ = state.model).closed == 'function' ? ref$.closed(chosen) : void 8;
     };
     chooseSlot = function(slot){
       if (notAvailableSlot(slot)) {
