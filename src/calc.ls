@@ -62,7 +62,7 @@ angular
                 success = ->
                   coupon.codes.push data
                   coupon.code = ""
-                  coupon.success = yes
+                  coupon.success = "Coupon #{data.couponId} added successfully"
                   $timeout do 
                      * ->
                          delete coupon.success
