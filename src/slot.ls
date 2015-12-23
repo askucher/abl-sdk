@@ -69,10 +69,10 @@ angular
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
            available = 
-              slot.available - eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) 
+              slot.available - eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) + 1
            debug do 
                 available: slot.available
-                taken: eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) 
+                taken: eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) + 1
                 result: available
            available
        perform-choose-slot = (slot)->
