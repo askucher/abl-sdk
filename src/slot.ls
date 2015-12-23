@@ -83,6 +83,7 @@ angular
            state.model.charges = slot.charges
            state.model.calc = ablcalc(slot.charges ++ activity.charges)
            state.model._id = slot._id
+           state.model.event-id = activity.timeslots.filter(-> it._id is slot._id).0.event-id
            attendees = state.model.attendees
            make-attendee = (timeslot)->
                q = attendees.filter(-> it.name is timeslot.name)
