@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \ablcalc, ($xabl)->
+  .service \ablcalc, ($xabl, $timeout)->
       sum = (arr)->
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
@@ -63,6 +63,11 @@ angular
                 success = ->
                   coupon.codes.push data
                   coupon.code = ""
+                  coupon.success = yes
+                  $timeout do 
+                     * ->
+                         delete coupon.success
+                     * 3000
                   ""
                 coupon.error =
                   | data.max-redemptions isnt 0 and data.max-redemptions <= data.redemptions => "This coupon has been fully redeemed."
