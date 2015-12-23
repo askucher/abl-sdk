@@ -268,12 +268,18 @@ angular
              * ->
                  select-day state.model.value
        
+       move = (booking-id)->
+         $xabl
+           .put do
+              * "bookings/move/#{booking-id}"
+              * event-instance-id: create-event-instance-id!
        create-event-instance-id = ->
          transform = abldate activity.time-zone
          state.model.event-id + \_ + transform.backendify(state.model.date.start).replace(/[\:-]/ig,'')
      
        
        state
+         ..move = move
          ..setup = setup
          ..create-event-instance-id = create-event-instance-id
          ..start-month = start-month
