@@ -1,6 +1,6 @@
 angular
  .module \ablsdk
- .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug)->
+ .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl)->
     (activity, input-model)->
        model = input-model ? {}
        transform-charge = (item)->
