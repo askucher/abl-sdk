@@ -238,11 +238,11 @@ angular
            set-default = (attendee)->
                     if attendee.quantity is 0 and attendee.name is \Adult
                         attendee.quantity = 1
-           state.model.attendees.for-each set-default
-           
-           state.model.chosen = chosen
-           state.model.visible = no
-           state.model.closed chosen
+           state.model
+             ..attendees.for-each set-default
+             ..chosen = chosen
+             ..visible = no
+             ..closed chosen
        choose-slot = (slot)->
            return if not-available-slot(slot)
            perform-choose-slot slot
@@ -267,6 +267,7 @@ angular
              * generate-calendar start-month.clone!.add(1, \month)
              * ->
                  select-day state.model.value
+       
        create-event-instance-id = ->
          transform = abldate activity.time-zone
          state.model.event-id + \_ + transform.backendify(state.model.date.start).replace(/[\:-]/ig,'')
@@ -292,5 +293,6 @@ angular
          ..choose-slot = choose-slot
          ..not-available-slot = not-available-slot
          ..disabled-slot = disabled-slot
+       setup!
        state  
         
