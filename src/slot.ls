@@ -1,6 +1,6 @@
 angular
  .module \ablsdk
- .service \ablslot, (abldate, ablcalc, ablapi, formula, p)->
+ .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug)->
     (activity, model)->
        transform-charge = (item)->
          _id: item._id
@@ -68,6 +68,7 @@ angular
            ntime = time ? hack-date(time, moment!)
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
+           debug \make-available, slot.available, state.model.attendees.map(-> it.quantity)
            slot.available - eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) 
        perform-choose-slot = (slot)->
            return if slot.available is 0

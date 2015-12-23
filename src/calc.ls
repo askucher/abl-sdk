@@ -40,7 +40,6 @@ angular
               amount-off = ->
                   | coupon.codes.0.amount-off < subtotal => coupon.codes.0.amount-off
                   | _ => subtotal
-
               _ =
                 | coupon.codes.length is 0 => 0
                 | coupon.codes.0.amount-off? => amount-off!
@@ -81,8 +80,6 @@ angular
                     apply data
                 .error (data)->
                     coupon.error = data?errors?0 ? "Coupon not found"
-
-
             code: ""
           coupon: coupon
           addons: state.addons
