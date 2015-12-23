@@ -1,17 +1,16 @@
 angular
  .module \ablsdk
  .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug)->
-    (activity, model)->
+    (activity, input-model)->
+       model = input-model ? {}
        transform-charge = (item)->
          _id: item._id
          name: item.name
          quantity: 0
          amount: item.amount
-         
        state =
          slots: []
          model: model
-           
          calendars: []
          active-slots: []
        state.model 
@@ -262,8 +261,20 @@ angular
            calendar.up!
        calendar-down = ->
            calendar.down!
-           
+       setup = ->
+         set-calendars do
+             * generate-calendar start-month.clone!
+             * generate-calendar start-month.clone!.add(1, \month)
+             * ->
+                 select-day state.model.value
+       create-event-instance-id = ->
+         transform = abldate activity.time-zone
+         state.model.event-id + \_ + transform.backendify(state.model.date.start).replace(/[\:-]/ig,'')
+     
+       
        state
+         ..setup = setup
+         ..create-event-instance-id = create-event-instance-id
          ..start-month = start-month
          ..set-calendars = set-calendars
          ..select-day = select-day

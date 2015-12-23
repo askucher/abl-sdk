@@ -6,7 +6,6 @@ angular
         url = parsed-url.0
         state =
           loading: no
-          
         factory =
            local-storage:
              remove: (item)->
