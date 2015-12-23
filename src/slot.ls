@@ -68,8 +68,13 @@ angular
            ntime = time ? hack-date(time, moment!)
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
-           debug \make-available, slot.available, state.model.attendees.map(-> it.quantity)
-           slot.available - eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) 
+           available = 
+              slot.available - eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) 
+           debug do 
+                available: slot.available
+                taken: eval(([0] ++ state.model.attendees.map(-> it.quantity)).join('+')) 
+                result: available
+           available
        perform-choose-slot = (slot)->
            return if slot.available is 0
            day = state.model.value
