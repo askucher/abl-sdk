@@ -278,9 +278,7 @@ angular
        active-slots: active-slots
        move: move
        start-month: start-month
-       set-calendars: set-calendars
        select-day: select-day
-       generate-calendar: generate-calendar
        slots: slots
        calendars: calendars
        create-event-instance-id: create-event-instance-id
