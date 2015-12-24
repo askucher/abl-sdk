@@ -2,21 +2,7 @@ angular
  .module \ablsdk
  .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl)->
     (activity, input-model)->
-       model = input-model ? {}
-       slots = []
-       calendars = []
-       active-slots = []
-       model 
-          ..date =
-              start: null
-              end: null
-          ..value= null
-          ..event-id= null
-          ..charges= []
-          ..attendees= []
-          ..addons= activity.charges.filter(-> it.type is \addon).map(transform-charge)
-          ..questions= activity.questions ? []
-          ..bg= activity.image
+       
        transform-charge = (item)->
          _id: item._id
          name: item.name
@@ -178,6 +164,7 @@ angular
              scroll-to(active) if active > 0
        next-month = (d, x) ->
          date.clone!.add(x, \months)
+       
        calendar = 
            first: start-month
            second: start-month.clone!.add(1, \months)
@@ -274,6 +261,21 @@ angular
        create-event-instance-id = ->
          transform = abldate activity.time-zone
          model.event-id + \_ + transform.backendify(model.date.start).replace(/[\:-]/ig,'')
+       model = input-model ? {}
+       slots = []
+       calendars = []
+       active-slots = []
+       model 
+          ..date =
+              start: null
+              end: null
+          ..value= null
+          ..event-id= null
+          ..charges= []
+          ..attendees= []
+          ..addons= activity.charges.filter(-> it.type is \addon).map(transform-charge)
+          ..questions= activity.questions ? []
+          ..bg= activity.image
        setup!
        active-slots: active-slots
        move: move
