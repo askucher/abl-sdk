@@ -3,11 +3,11 @@
   "homepage": "https://github.com/bucket-list/abl-sdk.git",
   "description": "Adventure bucket list sdk",
   "main": ["main.js"],
-  
-  "version": "0.0.3",
+
+  "version": "0.0.4",
   "uperversion": "0.0",
   "subversion": 2,
-  
+
   "ignore": [
     "src",
     ".gitignore",
