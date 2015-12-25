@@ -277,11 +277,10 @@ angular
           ..questions= activity.questions ? []
           ..bg= activity.image
        setup!
+       model: model
        active-slots: active-slots
        move: move
-       start-month: start-month
        select-day: select-day
-       slots: slots
        calendars: calendars
        create-event-instance-id: create-event-instance-id
        calendar-up: calendar-up
