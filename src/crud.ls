@@ -120,6 +120,7 @@ angular
           switch typeof options
             case \Number
                 i.options.page = options
+                debug i.options.page, options
             case \Object
                 i.url-options = $.extend({}, options.$url? {}, i.options.url-options)
                 delete options.$url
