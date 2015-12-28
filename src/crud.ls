@@ -140,8 +140,8 @@ angular
         remove = (item, $event, options)->
           return if state.loading
           default-options = 
-            title: "Deletion"
-            content: "Are you that you want to delete this item?"
+            title: "Confirm Delete"
+            content: "Are you sure you want to delete this item?"
             ok: "Confirm"
             cancel: "Cancel"
           $md-dialog
