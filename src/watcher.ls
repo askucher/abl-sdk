@@ -23,7 +23,6 @@ angular
                          n.$watch \array, func
                  watch = Array.observe ? create-watch!
                  watch array, callback
-        debug browser.name
         r =
           | browser.name is \firefox => ugly!
           | browser.name is \unknown => ugly!

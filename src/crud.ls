@@ -50,7 +50,7 @@ angular
                   $xabl
                    .get do 
                      * configure-url url
-                     * i.options 
+                     * params: i.options 
                    .success (data, status, headers)->
                      i.length = 0
                      params = (name)->
