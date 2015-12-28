@@ -116,7 +116,7 @@ angular
         i.url-options = {}
         fetch = (options)->
           return if state.loading
-          switch typeof options
+          switch typeof! options
             case \Number
                 i.options.page = options
                 debug \number, i.options, options
