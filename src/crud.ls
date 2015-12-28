@@ -115,7 +115,6 @@ angular
         i.options = {}
         i.url-options = {}
         fetch = (options)->
-          debug \fetch, state.loading
           return if state.loading
           switch typeof options
             case \Number
@@ -127,6 +126,7 @@ angular
                 i.options = $.extend({}, options, i.options)
                 i.page = 1
           state.loading = yes
+          debug \final-options, i.options, options
           provider.fetch!
         fetch init-options
         splice = ->
