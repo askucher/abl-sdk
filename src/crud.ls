@@ -119,12 +119,11 @@ angular
           switch typeof options
             case \Number
                 i.options.page = options
-                debug i.options.page, options
+                debug \number, i.options, options
             case \Object
                 i.url-options = $.extend({}, options.$url? {}, i.options.url-options)
                 delete options.$url
                 i.options = $.extend({}, options, i.options)
-                i.page = 1
           state.loading = yes
           debug \final-options, i.options, options
           provider.fetch!
