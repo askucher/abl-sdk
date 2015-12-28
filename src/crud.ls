@@ -125,6 +125,11 @@ angular
                 delete options.$url
                 i.options = $.extend({}, options, i.options)
           state.loading = yes
+          if i.options.page?
+            if i.options.page is 1
+               delete i.options.page
+            else 
+               i.options.page -= 1
           debug \final-options, i.options, options
           provider.fetch!
         fetch init-options
