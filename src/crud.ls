@@ -47,6 +47,10 @@ angular
                       callback? data
               
               fetch: ->
+                  debug do
+                     * \fetch
+                     * configure-url url
+                     * i.options
                   $xabl
                    .get do 
                      * configure-url url
