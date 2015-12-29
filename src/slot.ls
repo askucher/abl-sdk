@@ -66,7 +66,7 @@ angular
            model.charges = slot.charges
            model.calc = ablcalc(slot.charges ++ activity.charges)
            model._id = slot._id
-           model.event-id = activity.timeslots.filter(-> it._id is slot._id).0.event-id
+           model.event-id = activity.timeslots.filter(-> it._id is slot._id)?0?event-id
            attendees = model.attendees
            make-attendee = (timeslot)->
                q = attendees.filter(-> it.name is timeslot.name)
