@@ -6,7 +6,8 @@ angular
         | typeof arr is null => 0
         | arr.length is 0 => 0
         | _ => arr.reduce((x, y)-> x + y)
-      (charges)->
+      (input-charges)->
+          charges = input-charges?filter(-> status is \active)
           make-editable = (charge)->
             name: charge.name
             quantity: charge.count ? 0
