@@ -11,6 +11,10 @@ angular
               xs
             map: (f, xs) -->
               [f x for x in xs]
+            fold: (f, memo, xs) -->
+              for x in xs
+                memo = f memo, x
+              memo
             filter: (f, xs) -->
               [x for x in xs when f x]
             find: (f, xs) -->

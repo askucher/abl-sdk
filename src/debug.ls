@@ -5,7 +5,7 @@ angular
       * \debug
       * (enabledDebug)->
           (input)->
-            if enabledDebug
+            if enabled-debug
               switch typeof! input
                 case \Function
                   input!

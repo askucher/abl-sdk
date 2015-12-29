@@ -10,3 +10,5 @@ angular
                  params = arguments
                  safe-apply ->
                     func.apply null, params
+              if $window.parent?
+                 $window.parent.prefill = $window.prefill
