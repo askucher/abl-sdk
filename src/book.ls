@@ -46,8 +46,8 @@ angular
                 | bag.start is null => \none
                 | get-day(bag.start) isnt get-day(bag.end) => \different
                 | _ => \same
-            different-days = (bag)->
-              get-day(bag.start) isnt get-day(bag.end)
+            #different-days = (bag)->
+            #  get-day(bag.start) isnt get-day(bag.end)
             valid = (form)->
               !state.loading and form.$valid
             error = (message)->
@@ -65,10 +65,10 @@ angular
             reset-idenpotency-key!
             few = (arr)->
               arr?filter?(-> it.quantity > 0) ? []
-            more-then-one = ->
-              few(state.calendar.attendees).length > 0
-            nobody = ->
-              state.calendar.attendees.filter(-> it.quantity > 0).length is 0
+            #more-then-one = ->
+            #  few(state.calendar.attendees).length > 0
+            #nobody = ->
+            #  state.calendar.attendees.filter(-> it.quantity > 0).length is 0
             sum = (arr)->
                 | typeof arr is \undefined => 0
                 | typeof arr is null => 0
@@ -180,6 +180,7 @@ angular
                 error "Please correct the form"
             agree = ->
               state.form.agreed = !state.form.agreed
+              try-checkout!
             is-error = (v) ->
               v.required or v.pattern or v.minlength or v.maxlength or v.phone
             show-error = (name, v) ->
@@ -272,19 +273,18 @@ angular
               state.form.agreed = yes
             state
               ..investigate-date = investigate-date
-              ..different-days = different-days
               ..placeholder = placeholder
               ..close-error = close-error
               ..checkout = checkout
               ..agree = agree
               ..fields = fields
-              ..try-checkout = try-checkout
               ..few = few
-              ..more-then-one = more-then-one
-              ..nobody = nobody
               ..exp-date-changed = exp-date-changed
               ..card-changed = card-changed
               ..disabled-order = disabled-order
               ..typing = typing
               ..message = message
+              #..nobody = nobody
+              #..different-days = different-days
+              #..more-then-one = more-then-one
             state
