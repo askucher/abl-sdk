@@ -227,6 +227,7 @@ angular
            model.chosen = chosen
            model.visible = no
            model.closed? chosen
+           debug \close, model
        choose-slot = (slot)->
            return if not-available-slot(slot)
            perform-choose-slot slot
