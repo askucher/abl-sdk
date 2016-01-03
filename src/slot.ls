@@ -223,10 +223,9 @@ angular
            set-default = (attendee)->
                     if attendee.quantity is 0 and attendee.name is \Adult
                         attendee.quantity = 1
-           model
-             ..attendees.for-each set-default
-             ..chosen = chosen
-             ..visible = no
+           model.attendees.for-each set-default
+           model.chosen = chosen
+           model.visible = no
            model.closed? chosen
        choose-slot = (slot)->
            return if not-available-slot(slot)
