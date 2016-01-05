@@ -82,7 +82,7 @@ angular
         provider = factory[parsed-url.1 ? \backend]
         configure-url = (url)->
           state =
-              url = url
+              url: url
           replace = (pair)->
              state.url = state.url.replace(':' + pair.0, pair.1) 
           i.url-options |> p.obj-to-pairs |> p.each replace
