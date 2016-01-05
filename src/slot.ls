@@ -52,7 +52,9 @@ angular
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
            available = 
-              slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity)).join('+'))
+              if [\inactive, \canceled, \cancelled].index-of(slot.status) > -1 
+              then 0
+              else slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity)).join('+'))
            available
        perform-choose-slot = (slot)->
            return if slot.available is 0
@@ -90,9 +92,9 @@ angular
                start = merge(day, slot.start-time)
                duration = slot.end-time - slot.start-time
                events = slot.events.filter(actual).map(-> it.available)
-               
                available =
                   events.0 ? slot.max-occ
+               status: slot.status
                start-time: start
                time: start.value-of!
                end-time: start.clone!.add(duration, \milliseconds)
