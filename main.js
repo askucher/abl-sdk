@@ -777,7 +777,7 @@ angular.module('ablsdk').service('crud', function($xabl, $rootScope, debug, $mdD
         i.urlOptions = $.extend({}, (ref$ = processOptions.$url) != null
           ? ref$
           : {}, i.options.urlOptions);
-        delete options.$url;
+        delete processOptions.$url;
         i.options = $.extend({}, processOptions, i.options);
       }
       state.loading = true;
