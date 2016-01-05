@@ -114,17 +114,20 @@ angular
           state.loading = no
         i.options = {}
         i.url-options = {}
+        i.function-options = -> {}
         fetch = (options)->
           return if state.loading
           switch typeof! options
             case \Function 
-                return fetch options!
+                i.function-options = options
+                return fetch {}
             case \Number
                 i.options.page = options
             case \Object
-                i.url-options = $.extend({}, options.$url? {}, i.options.url-options)
+                process-options = $.extend({}, options, i.function-options!)
+                i.url-options = $.extend({}, process-options.$url? {}, i.options.url-options)
                 delete options.$url
-                i.options = $.extend({}, options, i.options)
+                i.options = $.extend({}, process-options, i.options)
           state.loading = yes
           if i.options.page?
             if i.options.page is 1
