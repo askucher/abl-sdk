@@ -125,7 +125,7 @@ angular
                 i.options.page = options
             case \Object
                 process-options = $.extend({}, options, i.function-options!)
-                i.url-options = $.extend({}, process-options.$url? {}, i.options.url-options)
+                i.url-options = $.extend({}, (process-options.$url ? {}), i.options.url-options)
                 delete options.$url
                 i.options = $.extend({}, process-options, i.options)
           state.loading = yes
