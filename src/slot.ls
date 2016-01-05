@@ -90,10 +90,11 @@ angular
            transform-slot = (slot)->
                start = merge(day, slot.start-time)
                duration = slot.end-time - slot.start-time
-               events = slot.events.filter(actual).map(-> it.available)
+               event = slot.events.find(actual)
                available =
-                  events.0 ? slot.max-occ
-               status: events.0?status
+                  event?available ? slot.max-occ
+               debug event?status
+               status: event?status
                start-time: start
                time: start.value-of!
                end-time: start.clone!.add(duration, \milliseconds)
