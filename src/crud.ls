@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \crud, ($xabl, $root-scope, debug, $md-dialog, safe-apply, watcher)->
+  .service \crud, ($xabl, $root-scope, debug, $md-dialog, safe-apply, watcher, p)->
      (url, init-options)->
         parsed-url = url.split(\@)
         url = parsed-url.0
@@ -81,9 +81,12 @@ angular
                      success data
         provider = factory[parsed-url.1 ? \backend]
         configure-url = (url)->
-          for name of i.url-options
-             url = url.replace(':' + name, i.url-options[name])
-          url
+          state =
+              url = url
+          replace = (pair)->
+             state.url = state.url.replace(':' + pair.0, pair.1) 
+          i.url-options |> p.obj-to-pairs |> p.each replace
+          state.url
         $scope = $root-scope.$new!
         $scope.items = []
         i = $scope.items
@@ -105,9 +108,11 @@ angular
          return if state.loading
          provider.add item, callback
         success = (data)->
+          parts = url.split(\/)
+          part = parts[parts.length -1]
           array = 
               | typeof! data is \Array => data
-              | typeof! data[url] is \Array => data[url]
+              | typeof! data[part] is \Array => data[part]
               | typeof! data is \Object => [data]
               | _ => []
           Array.prototype.push.apply i, array
@@ -179,6 +184,12 @@ angular
               a = []
               Array.prototype.push.apply a, source
               a
+          source.fetch-on = (array, $scope)->
+              $scope.$watch do 
+                  * array
+                  * i~fetch
+                  * yes
+              source
           source.watch = (array, $scope)->
               func = ->
                       safe-apply ->
