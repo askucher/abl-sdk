@@ -84,7 +84,7 @@ angular
           state =
               url: url
           replace = (pair)->
-             state.url = state.url.replace(':' + pair.0, pair.1) 
+             state.url = state.url.replace( (':' + pair.0), pair.1) 
           i.url-options |> p.obj-to-pairs |> p.each replace
           state.url
         $scope = $root-scope.$new!
