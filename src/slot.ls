@@ -2,7 +2,6 @@ angular
  .module \ablsdk
  .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl)->
     (activity, input-model)->
-       
        transform-charge = (item)->
          _id: item._id
          name: item.name
@@ -52,7 +51,7 @@ angular
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
            available = 
-              if [\inactive, \canceled, \cancelled].index-of(slot.status) > -1 
+              if \inactive is slot.status
               then 0
               else slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity)).join('+'))
            available
@@ -94,7 +93,7 @@ angular
                events = slot.events.filter(actual).map(-> it.available)
                available =
                   events.0 ? slot.max-occ
-               status: slot.status
+               status: events.0?status
                start-time: start
                time: start.value-of!
                end-time: start.clone!.add(duration, \milliseconds)
