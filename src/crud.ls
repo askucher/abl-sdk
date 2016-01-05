@@ -109,7 +109,7 @@ angular
          provider.add item, callback
         success = (data)->
           parts = url.split(\/)
-          part = parts[parts.length -1]
+          part = parts[parts.length - 1]
           array = 
               | typeof! data is \Array => data
               | typeof! data[part] is \Array => data[part]
