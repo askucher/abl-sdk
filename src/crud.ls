@@ -117,9 +117,10 @@ angular
         fetch = (options)->
           return if state.loading
           switch typeof! options
+            case \Function 
+                return fetch options!
             case \Number
                 i.options.page = options
-                debug \number, i.options, options
             case \Object
                 i.url-options = $.extend({}, options.$url? {}, i.options.url-options)
                 delete options.$url
@@ -130,7 +131,6 @@ angular
                delete i.options.page
             else 
                i.options.page -= 1
-          debug \final-options, i.options, options
           provider.fetch!
         fetch init-options
         splice = ->
