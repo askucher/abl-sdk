@@ -126,7 +126,7 @@ angular
         i.get-options = -> 
           i.options
         fetch = (options)->
-          debug \input-options, options
+          
           return if state.loading
           switch typeof! options
             case \Function 
@@ -135,7 +135,10 @@ angular
             case \Number
                 i.options.page = options
             case \Object
+                debug \input-options, options, i.get-options!
+                debug \extend, $.extend({}, options, i.get-options!)
                 i.options = $.extend({}, options, i.get-options!)
+                debug \extended, i.options
           state.loading = yes
           if i.options.page?
             if i.options.page is 1
