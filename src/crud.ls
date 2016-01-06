@@ -51,10 +51,13 @@ angular
                      * \fetch
                      * configure-url url
                      * i.options
+                  options = 
+                    angular.copy(i.options)
+                  delete options.$url
                   $xabl
                    .get do 
                      * configure-url url
-                     * params: i.options 
+                     * params: options 
                    .success (data, status, headers)->
                      i.length = 0
                      params = (name)->
@@ -85,7 +88,9 @@ angular
               url: url
           replace = (pair)->
              state.url = state.url.replace( (':' + pair.0), pair.1) 
-          i.url-options |> p.obj-to-pairs |> p.each replace
+          u = i.get-options!.$url
+          if u?
+             u |> p.obj-to-pairs |> p.each replace
           state.url
         $scope = $root-scope.$new!
         $scope.items = []
@@ -118,21 +123,18 @@ angular
           Array.prototype.push.apply i, array
           state.loading = no
         i.options = {}
-        i.url-options = {}
-        i.function-options = -> {}
+        i.get-options = -> 
+          i.options
         fetch = (options)->
           return if state.loading
           switch typeof! options
             case \Function 
-                i.function-options = options
+                i.get-options = options
                 return fetch {}
             case \Number
                 i.options.page = options
             case \Object
-                process-options = $.extend({}, options, i.function-options!)
-                i.url-options = $.extend({}, (process-options.$url ? {}), i.options.url-options)
-                delete process-options.$url
-                i.options = $.extend({}, process-options, i.options)
+                i.options = $.extend({}, options, i.get-options!)
           state.loading = yes
           if i.options.page?
             if i.options.page is 1
