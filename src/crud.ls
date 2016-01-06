@@ -126,6 +126,7 @@ angular
         i.get-options = -> 
           i.options
         fetch = (options)->
+          debug \input-options, options
           return if state.loading
           switch typeof! options
             case \Function 
