@@ -135,9 +135,13 @@ angular
             case \Number
                 i.options.page = options
             case \Object
-                debug \input-options, options, i.get-options!
-                debug \extend, $.extend({}, options, i.get-options!)
-                i.options = $.extend({}, options, i.get-options!)
+                debug do 
+                    input-options: options
+                    applied: i.get-options!
+                    extended: angular.extend({}, options, i.get-options!)
+                window.input-options = options
+                window.applied = i.get-options!
+                i.options = angular.extend({}, options, i.get-options!)
                 debug \extended, i.options
           state.loading = yes
           if i.options.page?
