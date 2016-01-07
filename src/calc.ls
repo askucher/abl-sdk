@@ -53,12 +53,17 @@ angular
             codes: []
             calc: calc-coupon
             remove: (c)->
-               index = coupon.codes.index-of c
-               if index > -1
+              index = coupon.codes.index-of c
+              if index > -1
                  coupon.codes.splice index, 1
             add: (activity)->
               return if (coupon.code ? "").length is 0
-              coupon.error = ""
+              coupon.code = coupon.code.to-upper-case!
+              coupon.error = 
+                 | coupon.code.length is 0 => "Code is required"
+                 | coupon.code.length < 6 => "6 chars are required"
+                 | _ => ""
+              return if coupon.error.length > 0
               apply = (data)->
                 success = ->
                   coupon.codes.push data

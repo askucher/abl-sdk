@@ -100,7 +100,7 @@ angular
                end-time: start.clone!.add(duration, \milliseconds)
                charges: slot.charges
                price: formula.get-visual-price(timeslots: [slot])
-               available: available
+               available: event?status is \inactive then 0 else available
                _id: slot._id
                duration: 
                  moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
