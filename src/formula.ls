@@ -17,7 +17,7 @@ angular
                                         |> p.filter (-> it.status is \active)
                                         |> p.map (-> it.amount)
                   all = (slot)->
-                    (slot?charges ? []) |> p.map (-> it.amount)
+                    (slot?charges ? []) |> p.filter (.status is \active)  |> p.map (.amount)
                   merged-adults = 
                     merge ac.timeslots.map(only-adult)
                   
