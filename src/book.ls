@@ -56,7 +56,7 @@ angular
               error ""
             typing = (name)->
               state.tried-checkout = no
-              state.typing = name
+              state.typing-input = name
             reset-idenpotency-key = ->
                state.idenpotency-key = do
                   s = ->
@@ -246,12 +246,12 @@ angular
                       if field is name
                         return show-error field, val
                       return ""
-                if state.typing is name
+                if state.typing-input is name
                   #show example during typing
                   if form[name]?$error?pattern? and fields[name].example?length > 0
                     return "example: " + fields[name].example
             placeholder = (name)->
-                if state.typing is name
+                if state.typing-input is name
                 then fields[name].example
                 else fields[name].placeholder
             prefill ->
