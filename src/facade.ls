@@ -1,5 +1,5 @@
 angular
-  .module \app
+  .module \ablsdk
   .service \ablfacade, (ablbook, ablslot)->
      (activity, callback)->
        book =
