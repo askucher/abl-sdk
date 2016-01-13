@@ -18,8 +18,10 @@ angular
           state =
             attendees: charges?filter(-> it.type is \aap).map(make-editable).sort(by-price)
             addons: charges?filter(-> it.type is \addon).map(make-editable)
+          total-adjustment = ->
+             adjustment.list |> p.map (.amount) |> p.sum
           calc-subtotal = ->
-              (state.attendees.map(calc-price) |> sum) + total-addons!
+              (state.attendees.map(calc-price) |> sum) + total-adjustment! + total-addons! 
           calc-tax-fee = (charge)->
             | charge.type is \tax => calc-subtotal! / 100 * charge.amount
             | charge.type is \fee => (state.attendees.map(-> it.quantity) |> sum) * charge.amount
@@ -54,7 +56,7 @@ angular
           calc-balance-due = ->
               64
           adjustment = 
-            list: []
+            list: charges.filter(-> it.type is \adjustment)
             add: (item)->
               adjustment.list.push item
             remove: (item)->
@@ -91,6 +93,7 @@ angular
                   | data.activities.length > 0 and data.activities.0 isnt activity => "This coupon is not valid for this activity."
                   | _ => success!
 
+              
               $xabl
                 .get "coupon/#{coupon.code}"
                 .success (data)->
