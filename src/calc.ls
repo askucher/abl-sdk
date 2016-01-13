@@ -49,6 +49,10 @@ angular
               _
           calc-total = ->
               calc-subtotal! + calc-taxes-fees! - calc-coupon!
+          calc-previous-total = ->
+              calc-total!
+          calc-balance-due = ->
+              64
           coupon =
             codes: []
             calc: calc-coupon
@@ -101,3 +105,5 @@ angular
           total-addons: total-addons
           calc-subtotal: calc-subtotal
           calc-total: calc-total
+          calc-previous-total: calc-previous-total
+          calc-balance-due: calc-balance-due
