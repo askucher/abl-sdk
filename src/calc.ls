@@ -53,6 +53,13 @@ angular
               calc-total!
           calc-balance-due = ->
               64
+          adjustment = 
+            list: []
+            add: (item)->
+              adjustment.list.push item
+            remove: (item)->
+              index = adjustment.list.index-of(item)
+              adjustment.list.splice index, 1
           coupon =
             codes: []
             calc: calc-coupon
@@ -92,6 +99,7 @@ angular
                     coupon.error = data?errors?0 ? "Coupon not found"
             code: ""
           coupon: coupon
+          adjustment: adjustment
           addons: state.addons
           attendees: state.attendees
           total-without-taxesfees: calc-subtotal

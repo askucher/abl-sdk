@@ -137,7 +137,8 @@ angular
                             attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a.name, a.quantity])
                                                                        |> p.pairs-to-obj
                             answers: state.calendar.questions |> p.map ((a)-> [a._id, a.answer])
-                                                                 |> p.pairs-to-obj
+                                                              |> p.pairs-to-obj
+                            adjustments: state.calendar.calc.adjustment.list
                             full-name: f.name
                             email: f.email
                             phone-number: f.phone
