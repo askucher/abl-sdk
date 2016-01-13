@@ -92,9 +92,9 @@ angular
                state.form.credit-card.exp-date =
                  | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
                  | _ => e
-            get-event-instance-id = (activity, calendar)->
-              event-id = activity.timeslots.filter(-> it._id is calendar._id).0.event-id
-              event-id + \_ + calendar.date.origin
+            get-event-instance-id = ->
+              event-id = activity.timeslots.filter(-> it._id is state.calendar._id).0.event-id
+              event-id + \_ + state.calendar.date.origin
             card-changed = (event)->
               value = event.target.value
               return if typeof value is \undefined
@@ -136,7 +136,7 @@ angular
                                     then state.calendar.calc.coupon.codes.0.coupon-id
                                     else undefined
                             payment-method: \credit
-                            event-instance-id: get-event-instance-id(activity, state.calendar)
+                            event-instance-id: get-event-instance-id!
                             addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, a.quantity])
                                                                 |> p.pairs-to-obj
                             attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a.name, a.quantity])
