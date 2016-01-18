@@ -50,6 +50,14 @@ angular
             #  get-day(bag.start) isnt get-day(bag.end)
             valid = (form)->
               !state.loading and form.$valid
+            issue = (form)->
+              for field of fields
+                if fields.has-own-property field
+                  text =
+                    message form, field
+                  if text.length > 0
+                     return text
+              "Please check the form"
             error = (message)->
               state.form.error = message
             close-error = ->
@@ -183,7 +191,7 @@ angular
                       error err
                       global-callback \error, error
               else
-                error "Please correct the form"
+                error issue(form)
             agree = ->
               state.form.agreed = !state.form.agreed
               try-checkout!
@@ -230,6 +238,8 @@ angular
                   pattern: /[0-9]{3,4}/i
                   example: "000"
                   placeholder: "CVV"
+              agreed: 
+                  pattern: \true
             try-checkout = ->
               if state.form.agreed 
                 state.tried-checkout = yes
