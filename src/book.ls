@@ -146,9 +146,9 @@ angular
                             payment-method: \credit
                             event-instance-id: get-event-instance-id!
                             addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, a.quantity])
-                                                                |> p.pairs-to-obj
+                                                               |> p.pairs-to-obj
                             attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a.name, a.quantity])
-                                                                       |> p.pairs-to-obj
+                                                                      |> p.pairs-to-obj
                             answers: state.calendar.questions |> p.map ((a)-> [a._id, a.answer])
                                                               |> p.pairs-to-obj
                             adjustments: state.calendar.calc.adjustment.list
@@ -197,8 +197,11 @@ angular
               try-checkout!
             is-error = (v) ->
               v.required or v.pattern or v.minlength or v.maxlength or v.phone
+            required = (name)->
+              | name is \agreed => "Please confirm our terms and conditions"
+              | _ => "#name is required"
             show-error = (name, v) ->
-              | v.required => "#name is required"
+              | v.required => required(name)
               | v.pattern => "Please follow the example #{fields[name].example}"
               | v.minlength => "#name is too short"
               | v.maxlength => "#name is too long"
