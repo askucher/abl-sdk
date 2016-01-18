@@ -197,11 +197,8 @@ angular
               try-checkout!
             is-error = (v) ->
               v.required or v.pattern or v.minlength or v.maxlength or v.phone
-            required = (name)->
-              | name is \agreed => "Please confirm our terms and conditions"
-              | _ => "#name is required"
             show-error = (name, v) ->
-              | v.required => required(name)
+              | v.required => fields[name]?message?required ? "#name is required"
               | v.pattern => "Please follow the example #{fields[name].example}"
               | v.minlength => "#name is too short"
               | v.maxlength => "#name is too long"
@@ -243,6 +240,8 @@ angular
                   placeholder: "CVV"
               agreed: 
                   pattern: \true
+                  message: 
+                    required: "Please accept the terms and conditions"
             try-checkout = ->
               if state.form.agreed 
                 state.tried-checkout = yes
