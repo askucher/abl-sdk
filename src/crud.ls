@@ -65,7 +65,11 @@ angular
                         if header?
                            parser = document.createElement \a
                            parser.href = headers![name]
-                           JSON.parse('{"' + decodeURI(parser.search.substr(1, 2000)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+                           try 
+                             return JSON.parse('{"' + decodeURI(parser.search.substr(1, 2000)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+                           catch err
+                             console.error err, parser.search
+                             return undefined
                         else 
                            undefined
                      i.options.total = do
