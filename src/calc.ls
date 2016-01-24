@@ -6,7 +6,8 @@ angular
         | typeof arr is null => 0
         | arr.length is 0 => 0
         | _ => arr.reduce((x, y)-> x + y)
-      (input-charges)->
+      (input-charges, input-payments)->
+          payments = input-payments ? []
           charges = input-charges?filter(-> it.status is \active)
           make-editable = (charge)->
             name: charge.name
@@ -52,11 +53,11 @@ angular
           calc-total = ->
               calc-subtotal! + calc-taxes-fees! - calc-coupon!
           calc-previous-total = ->
-              calc-total!
+              calc-total! - calc-balance-due!
           calc-balance-due = ->
-              64
+              payments |> p.map (.amount) |> p.sum
           adjustment = 
-            list: charges.filter(-> it.type is \adjustment)
+            list: payments |> p.filter(-> it.type is \adjustment)
             add: (item)->
               adjustment.list.push item
             remove: (item)->
