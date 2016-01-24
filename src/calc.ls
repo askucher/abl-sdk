@@ -60,6 +60,8 @@ angular
             list: payments |> p.filter(-> it.type is \adjustment)
             add: (item)->
               adjustment.list.push item
+            removable: (item)->
+              !item._id?
             remove: (item)->
               index = adjustment.list.index-of(item)
               adjustment.list.splice index, 1
