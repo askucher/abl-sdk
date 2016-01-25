@@ -6,6 +6,14 @@ angular
         url = parsed-url.0
         state =
           loading: no
+          frontendify = (data, url)->
+              parts = url.split(\/)
+              part = parts[parts.length - 1]
+              array = 
+                  | typeof! data is \Array => data
+                  | typeof! data[part] is \Array => data[part]
+                  | typeof! data is \Object => [data]
+                  | _ => []
         factory =
            local-storage:
              remove: (item)->
@@ -117,16 +125,20 @@ angular
          return if state.loading
          provider.add item, callback
         success = (data)->
-          parts = url.split(\/)
-          part = parts[parts.length - 1]
-          array = 
-              | typeof! data is \Array => data
-              | typeof! data[part] is \Array => data[part]
-              | typeof! data is \Object => [data]
-              | _ => []
-          Array.prototype.push.apply i, array
+          result = 
+            state.frontendify data, url
+          switch typeof! result
+             case \Array
+               Array.prototype.push.apply i, array
+             case \Object
+               extend-object = (pair)->
+                   i[pair.0] = pair.1
+               result |> p.obj-to-pairs |> p.each extend-object
           state.loading = no
         i.options = {}
+        i.converter = (converter)->
+            state.frontendify = converter.frontendify
+            state.backendify = converter.backendify
         i.get-options = -> 
           i.options
         fetch = (options)->
