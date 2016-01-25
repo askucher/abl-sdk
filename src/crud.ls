@@ -6,7 +6,7 @@ angular
         url = parsed-url.0
         state =
           loading: no
-          frontendify = (data, url)->
+          frontendify: (data, url)->
               parts = url.split(\/)
               part = parts[parts.length - 1]
               array = 
