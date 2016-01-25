@@ -127,7 +127,9 @@ angular
         success = (data)->
           result = 
             state.frontendify data, url
-          switch typeof! result
+          type = 
+              typeof! result
+          switch type
              case \Array
                Array.prototype.push.apply i, array
              case \Object
