@@ -131,7 +131,7 @@ angular
               typeof! result
           switch type
              case \Array
-               Array.prototype.push.apply i, array
+               Array.prototype.push.apply i, result
              case \Object
                extend-object = (pair)->
                    i[pair.0] = pair.1
