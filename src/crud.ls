@@ -141,6 +141,7 @@ angular
         i.converter = (converter)->
             state.frontendify = converter.frontendify
             state.backendify = converter.backendify
+            i
         i.get-options = -> 
           i.options
         fetch = (options)->
