@@ -59,7 +59,9 @@ angular
           adjustment = 
             list: payments |> p.filter(-> it.type is \adjustment)
             add: (item)->
-              adjustment.list.push angular.copy item
+              new-item = angular.copy item
+              new-item.amount *= 100
+              adjustment.list.push new-item
             removable: (item)->
               !item._id?
             remove: (item)->
