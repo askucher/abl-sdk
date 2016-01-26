@@ -2,7 +2,9 @@ angular
   .module(\ablsdk)
   .service do 
       * \p
-      * ->
+      * -> 
+            flatten = (xs) -->
+              [].concat.apply [], [(if typeof! x is 'Array' then flatten x else x) for x in xs]
             head: first = (xs) ->
               xs.0
             each: (f, xs) -->
@@ -52,8 +54,7 @@ angular
                [].concat.apply [], xss
             concat-map: (f, xs) -->
                [].concat.apply [], [f x for x in xs]
-            flatten: (xs) -->
-              [].concat.apply [], [(if typeof! x is 'Array' then flatten x else x) for x in xs]
+            flatten: flatten
             sort-with: (f, xs) -->
               xs.concat!.sort f
             sort-by: (f, xs) -->
