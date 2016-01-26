@@ -48,6 +48,12 @@ angular
                   -1
                 else
                   0
+            concat: (xss) ->
+               [].concat.apply [], xss
+            concat-map: (f, xs) -->
+               [].concat.apply [], [f x for x in xs]
+            flatten: (xs) -->
+              [].concat.apply [], [(if typeof! x is 'Array' then flatten x else x) for x in xs]
             sort-with: (f, xs) -->
               xs.concat!.sort f
             sort-by: (f, xs) -->
