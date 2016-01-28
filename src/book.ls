@@ -229,11 +229,11 @@ angular
               card:
                   pattern: /[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}/i
                   example: '0000 0000 0000 0000'
-                  placeholder: "Card #"
+                  placeholder: "Card Number (0000 0000 0000 0000)"
               exp-date:
                   pattern: /[0-9]{2}\/[0-9]{2}/i
                   example: "05/15"
-                  placeholder: 'Exp date'
+                  placeholder: 'Exp Date (MM/DD)'
               start-date: {}
               cvv:
                   pattern: /[0-9]{3,4}/i
