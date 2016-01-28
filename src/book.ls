@@ -167,7 +167,7 @@ angular
                             .success (data)->
                               if data.booking-id?
                                  reset-idenpotency-key!
-                                 callback!
+                                 callback data
                               else
                                  error data.error
                             .error (e)->
@@ -184,8 +184,9 @@ angular
                 state.loading = yes
                 payment-setup!
                   .success (data)->
-                      stripe-process data.public-key, ->
-                        global-callback \success, data
+                      stripe-process data.public-key, (booking)->
+                        state.booking = booking
+                        global-callback \success, booking
                   .error (err)->
                       state.loading = no
                       error err
