@@ -98,6 +98,7 @@ angular
                t = ->
                  it ? ""
                state.form.credit-card.exp-date =
+                 | e.length is 0 => e.0 + e.1 + \/
                  | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
                  | _ => e
             get-event-instance-id = ->
