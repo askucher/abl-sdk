@@ -22,7 +22,7 @@ angular
           total-adjustment = ->
              adjustment.list |> p.map (.amount) |> p.sum
           calc-subtotal = ->
-              (state.attendees.map(calc-price) |> sum) + total-adjustment! + total-addons! 
+              (state.attendees.map(calc-price) |> sum) + total-adjustment! + total-addons!
           calc-tax-fee = (charge)->
             | charge.type is \tax => calc-subtotal! / 100 * charge.amount
             | charge.type is \fee => (state.attendees.map(-> it.quantity) |> sum) * charge.amount
@@ -50,14 +50,25 @@ angular
                 | coupon.codes.0.percent-off? => subtotal / 100 * coupon.codes.0.percent-off
                 | _ => 0
               _
+          warning = (charge, name)->
+              removed =
+                charge.status is \inactive
+              aap =
+                input-charges |> p.filter (-> it.status is \inactive and it.name is charge.name and it.type is \aap)
+              changed = aap?
+              res = 
+                | name is \removed => removed
+                | name is \changed => changed
+                | _ => removed or changed
+              res
           calc-total = ->
               calc-subtotal! + calc-taxes-fees! - calc-coupon!
           calc-previous-total = ->
               calc-total! - calc-balance-due!
           calc-balance-due = ->
-              payments |> p.map (.amount) |> p.sum
+              payments |> p.filter (.status is \active) |> p.map (.amount) |> p.sum
           adjustment = 
-            list: payments |> p.filter(-> it.type is \adjustment)
+            list: payments |> p.filter(-> it.type is \adjustment and it.status is \active)
             add: (item)->
               new-item = angular.copy item
               new-item.amount *= 100
@@ -106,6 +117,7 @@ angular
                 .error (data)->
                     coupon.error = data?errors?0 ? "Coupon not found"
             code: ""
+          warning: warning
           coupon: coupon
           adjustment: adjustment
           addons: state.addons

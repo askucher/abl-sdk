@@ -186,7 +186,6 @@ angular
                 payment-setup!
                   .success (data)->
                       stripe-process data.public-key, (booking)->
-                        debug \booking, booking
                         state.booking = booking
                         global-callback \success, booking
                   .error (err)->
