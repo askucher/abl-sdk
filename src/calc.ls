@@ -66,9 +66,9 @@ angular
           calc-previous-total = ->
               calc-total! - calc-balance-due!
           calc-balance-due = ->
-              payments |> p.filter (.status is \active) |> p.map (.amount) |> p.sum
+              payments |> p.map (.amount) |> p.sum
           adjustment = 
-            list: payments |> p.filter(-> it.type is \adjustment and it.status is \active)
+            list: payments |> p.filter(-> it.type is \adjustment)
             add: (item)->
               new-item = angular.copy item
               new-item.amount *= 100
