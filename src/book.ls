@@ -179,6 +179,7 @@ angular
               $xabl
                   .get \payments/setup
             validate = (form)->
+              debug \validate
               return if state.loading is yes
               if !valid(form)
                  error issue(form)
