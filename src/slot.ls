@@ -90,7 +90,7 @@ angular
            transform-slot = (slot)->
                start = merge(day, slot.start-time)
                duration = slot.end-time - slot.start-time
-               event = slot.events.find(actual)
+               event = slot.events |> p.find(actual)
                available =
                   event?available ? slot.max-occ
                debug event?status
@@ -159,10 +159,10 @@ angular
                if step is 0 then start
                else up step
              is-active = (step)->
-               typeof get(step).days.find(-> !is-disabled-day(it)) isnt \undefined
+               typeof (get(step).days |> p.find(-> !is-disabled-day(it))) isnt \undefined
              scroll-to = (i)->
                [1 to i].for-each calendar~down
-             active = [0 to 6].find(is-active)
+             active = [0 to 6] |> p.find(is-active)
              scroll-to(active) if active > 0
        next-month = (d, x) ->
          date.clone!.add(x, \months)
