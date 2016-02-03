@@ -55,7 +55,7 @@ angular
                 if fields.has-own-property field
                   text =
                     message form, field
-                  if text.length > 0
+                  if text?length > 0
                      return text
               "Please check the form"
             error = (message)->
