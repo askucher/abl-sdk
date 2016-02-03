@@ -178,6 +178,10 @@ angular
             payment-setup = ->
               $xabl
                   .get \payments/setup
+            validate = (form)->
+              return if state.loading is yes
+              if !valid(form)
+                 error issue(form)
             checkout = (form)->
               return if state.loading is yes
               state.tried-checkout = yes
@@ -297,6 +301,7 @@ angular
               ..placeholder = placeholder
               ..close-error = close-error
               ..checkout = checkout
+              ..validate = validate
               ..agree = agree
               ..fields = fields
               ..few = few
