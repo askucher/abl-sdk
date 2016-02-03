@@ -53,12 +53,16 @@ angular
           warning = (charge, name)->
               removed =
                 charge.status is \inactive
+              type = charge.type
               aap =
-                input-charges |> p.filter (-> it.status is \inactive and it.name is charge.name and it.type is \aap)
+                input-charges |> p.filter (-> it.status is \inactive and it.name is charge.name and it.type is type)
               changed = aap?
+              name = 
+                | type is \aap => "pricing level"
+                | type is \addon => "add-on"
               res = 
-                | name is \removed => removed
-                | name is \changed => changed
+                | name is \removed => "Warning: This #name no longer exists. You can only reduce the quantity at this #name. If you wish to offer another #name at this price, please create on Adjustment to currect the price."
+                | name is \changed => "Warning: This #name has changed since the booking was created. You can only reduce the quantity at this #name. If you wish to offer the old #name, please create an Adjustment."
                 | _ => removed or changed
               res
           calc-total = ->
