@@ -29,7 +29,7 @@ angular
                      | merged-adults.length > 0 => max merged-adults
                      | merged-all.length > 0 => max merged-all
                      | _ => 0
-                  return final
+                  return final / 100
               else
                  \Non
           get-slot-price: (slot)->
