@@ -8,7 +8,7 @@ angular
         | _ => arr.reduce((x, y)-> x + y)
       (input-charges, input-payments)->
           payments = input-payments ? []
-          charges = input-charges?filter(-> it.status is \active)
+          charges = input-charges?filter(-> it.status is \active) ? []
           make-editable = (charge)->
             name: charge.name
             quantity: charge.count ? 0
@@ -16,9 +16,35 @@ angular
             _id: charge._id
           by-price = (a, b)->
               b.amount - a.amount
-          state =
-            attendees: charges?filter(-> it.type is \aap).map(make-editable).sort(by-price)
-            addons: charges?filter(-> it.type is \addon).map(make-editable)
+          old-amounts = (type)->
+            payments |> p.filter (.type is type)
+                     |> p.group-by (-> it.name ++ it.amount)
+                     |> p.obj-to-pairs 
+                     |> p.map (.1)
+                     |> p.map (arr)-> 
+                           name: arr.0.name
+                           amount: arr.0.amount
+                           quantity: arr.length
+                           _ids: arr |> p.map (._id)
+                     |> p.map make-editable
+                     |> p.sort by-price
+          exclude = (type, charge)-->
+            old =
+              old-amounts(type) |> p.find (-> charge.name is it.name and charge.amount is it.amount)
+            if old?
+             old.old = yes
+            old?
+          available-amounts = (type)->
+            charges  |> p.filter (.type is type)
+                     |> p.map make-editable
+                     |> p.filter exclude type
+                     |> p.sort by-price
+          get-amounts = (type)->
+             [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
+            
+          state = 
+            attendees: get-amounts \aap
+            addons: get-amounts \addon
           total-adjustment = ->
              adjustment.list |> p.map (.amount) |> p.sum
           calc-subtotal = ->
@@ -54,16 +80,15 @@ angular
               removed =
                 charge.status is \inactive
               type = charge.type
-              aap =
-                input-charges |> p.filter (-> it.status is \inactive and it.name is charge.name and it.type is type)
-              changed = aap?
+              changed = charge.old
               name = 
                 | type is \aap => "pricing level"
                 | type is \addon => "add-on"
               res = 
-                | name is \removed => "Warning: This #name no longer exists. You can only reduce the quantity at this #name. If you wish to offer another #name at this price, please create on Adjustment to currect the price."
-                | name is \changed => "Warning: This #name has changed since the booking was created. You can only reduce the quantity at this #name. If you wish to offer the old #name, please create an Adjustment."
-                | _ => removed or changed
+                | removed and name is \removed => "Warning: This #name no longer exists. You can only reduce the quantity at this #name. If you wish to offer another #name at this price, please create on Adjustment to currect the price."
+                | changed and name is \changed => "Warning: This #name has changed since the booking was created. You can only reduce the quantity at this #name. If you wish to offer the old #name, please create an Adjustment."
+                | (removed or changed) and name is \mutated => yes
+                | _ => ""
               res
           calc-total = ->
               calc-subtotal! + calc-taxes-fees! - calc-coupon!
