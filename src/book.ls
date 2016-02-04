@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \ablbook, ($xabl, p, stripe, debug, prefill, ablcalc)->
+  .service \ablbook, ($xabl, p, stripe, debug, prefill)->
       (activity, global-callback)->
             state =
                tried-checkout: no
