@@ -16,18 +16,19 @@ angular
             _id: charge._id
           by-price = (a, b)->
               b.amount - a.amount
+          transform = (arr)-> 
+            name: arr.0.name
+            amount: arr.0.amount
+            quantity: arr.length
+            _ids: arr |> p.map (._id)
           old-amounts = (type)->
             payments |> p.filter (.type is type)
                      |> p.group-by (-> it.name ++ it.amount)
                      |> p.obj-to-pairs 
                      |> p.map (.1)
-                     |> p.map (arr)-> 
-                           name: arr.0.name
-                           amount: arr.0.amount
-                           quantity: arr.length
-                           _ids: arr |> p.map (._id)
+                     |> p.map transform
                      |> p.map make-editable
-                     |> p.sort by-price
+                     |> p.sort-by by-price
           exclude = (type, charge)-->
             old =
               old-amounts(type) |> p.find (-> charge.name is it.name and charge.amount is it.amount)
@@ -38,7 +39,7 @@ angular
             charges  |> p.filter (.type is type)
                      |> p.map make-editable
                      |> p.filter exclude type
-                     |> p.sort by-price
+                     |> p.sort-by by-price
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
             
