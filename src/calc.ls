@@ -42,6 +42,12 @@ angular
                      |> p.sort-by by-price
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
+          debug do 
+            charges: charges
+            aaps: charges  |> p.filter (.type is \aap)
+            edible: charges  |> p.filter (.type is \aap) |> p.map make-editable
+            exclude: charges  |> p.filter (.type is \aap) |> p.map make-editable |> p.filter exclude \aap 
+            
             
           state = 
             attendees: get-amounts \aap
