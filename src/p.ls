@@ -55,6 +55,15 @@ angular
             concat-map: (f, xs) -->
                [].concat.apply [], [f x for x in xs]
             flatten: flatten
+            group-by: (f, xs) -->
+              results = {}
+              for x in xs
+                key = f x
+                if key of results
+                  results[key].push x
+                else
+                  results[key] = [x]
+              results
             sort-with: (f, xs) -->
               xs.concat!.sort f
             sort-by: (f, xs) -->
