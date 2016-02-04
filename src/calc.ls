@@ -4,8 +4,7 @@ angular
       sum = (arr)->
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
-        | arr.length is 0 => 0
-        | _ => arr.reduce((x, y)-> x + y)
+        | _ => arr |> p.sum
       (input-charges, input-payments)->
           payments = input-payments ? []
           charges = input-charges?filter(-> it.status is \active) ? []
@@ -28,7 +27,7 @@ angular
                      |> p.map (.1)
                      |> p.map transform
                      |> p.map make-editable
-                     |> p.sort-by by-price
+                     |> p.sort-with by-price
           exclude = (type, charge)-->
             old =
               old-amounts(type) |> p.find (-> charge.name is it.name and charge.amount is it.amount)
@@ -39,7 +38,7 @@ angular
             charges  |> p.filter (.type is type)
                      |> p.map make-editable
                      |> p.filter exclude type
-                     |> p.sort-by by-price
+                     |> p.sort-with by-price
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
           debug do 
