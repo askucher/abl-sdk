@@ -34,7 +34,7 @@ angular
               old-amounts(type) |> p.find (-> charge.name is it.name and charge.amount is it.amount)
             if old?
              old.old = yes
-            old?
+            !old?
           available-amounts = (type)->
             charges  |> p.filter (.type is type)
                      |> p.map make-editable
