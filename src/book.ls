@@ -274,8 +274,9 @@ angular
                       return ""
                 if state.typing-input is name
                   #show example during typing
-                  #if form[name]?$error?pattern? and fields[name].example?length > 0
-                  #  return "example: " + fields[name].example
+                  if form[name]?$error?pattern? and fields[name].example?length > 0
+                    return ""
+                    return "example: " + fields[name].example
             placeholder = (name)->
                 if state.typing-input is name
                 then fields[name].example
