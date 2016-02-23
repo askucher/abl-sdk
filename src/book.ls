@@ -98,7 +98,7 @@ angular
                t = ->
                  it ? ""
                state.form.credit-card.exp-date =
-                 | e.length is 0 => e.0 + e.1 + \/
+                 | e.length is 2 => e.0 + e.1 + \/
                  | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
                  | _ => e
             get-event-instance-id = ->
@@ -170,7 +170,7 @@ angular
                                  reset-idenpotency-key!
                                  callback data
                               else
-                                 error data.error
+                                 error(e.errors?0 ? "Server error")
                             .error (e)->
                                  error(e.errors?0 ? "Server error")
                             .finally ->
@@ -193,6 +193,7 @@ angular
                   .success (data)->
                       stripe-process data.public-key, (booking)->
                         state.booking = booking
+                        
                         global-callback \success, booking
                   .error (err)->
                       state.loading = no
