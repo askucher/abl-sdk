@@ -97,8 +97,10 @@ angular
           calc-previous-total = ->
               prevous-charges |> p.map (.amount)
                               |> p.sum
+          deposit = (paid ? []) |> p.map (.amount)
+                                |> p.sum
           calc-balance-due = ->
-              -(calc-total! - (paid ? 0))
+              -(calc-total! - deposit)
           adjustment = 
             list: prevous-charges |> p.filter(-> it.type is \adjustment)
             add: (item)->
