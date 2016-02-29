@@ -5,9 +5,9 @@ angular
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
         | _ => arr |> p.sum
-      (input-charges, input-payments, paid)->
-          payments = input-payments?filter(-> it.status is \active) ? []
-          charges = input-charges?filter(-> it.status is \active) ? []
+      (input-new-charges, input-prevous-charges, paid)->
+          prevous-charges = input-prevous-charges?filter(-> it.status is \active) ? []
+          new-charges = input-new-charges?filter(-> it.status is \active) ? []
           make-editable = (charge)->
             name: charge.name
             quantity: charge.count ? 0
@@ -21,13 +21,13 @@ angular
             quantity: arr.length
             _ids: arr |> p.map (._id)
           old-amounts = (type)->
-            payments |> p.filter (.type is type)
-                     |> p.group-by (-> it.name ++ it.amount)
-                     |> p.obj-to-pairs 
-                     |> p.map (.1)
-                     |> p.map transform
-                     |> p.map make-editable
-                     |> p.sort-with by-price
+            prevous-charges |> p.filter (.type is type)
+                            |> p.group-by (-> it.name ++ it.amount)
+                            |> p.obj-to-pairs 
+                            |> p.map (.1)
+                            |> p.map transform
+                            |> p.map make-editable
+                            |> p.sort-with by-price
           exclude = (type, charge)-->
             old =
               old-amounts(type) |> p.find (-> charge.name is it.name and charge.amount is it.amount)
@@ -35,17 +35,13 @@ angular
              old.old = yes
             !old?
           available-amounts = (type)->
-            charges  |> p.filter (.type is type)
-                     |> p.map make-editable
-                     |> p.filter exclude type
-                     |> p.sort-with by-price
+            new-charges  |> p.filter (.type is type)
+                         |> p.map make-editable
+                         |> p.filter exclude type
+                         |> p.sort-with by-price
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
-          debug do 
-            charges: charges
-            aaps: charges  |> p.filter (.type is \aap)
-            edible: charges  |> p.filter (.type is \aap) |> p.map make-editable
-            exclude: charges  |> p.filter (.type is \aap) |> p.map make-editable |> p.filter exclude \aap 
+          
             
             
           state = 
@@ -60,9 +56,9 @@ angular
             | charge.type is \fee => (state.attendees.map(-> it.quantity) |> sum) * charge.amount
             | _ => 0
           calc-taxes-fees = ->
-              charges.map(calc-tax-fee) |> sum
+              new-charges.map(calc-tax-fee) |> sum
           show-price = (attendee)->
-              (charges.filter(-> it.type is \aap and it.name is attendee.name)?0?amount ? 0)
+              (new-charges.filter(-> it.type is \aap and it.name is attendee.name)?0?amount ? 0)
           calc-price = (attendee)->
               show-price(attendee) * attendee.quantity
           show-addon-price = (addon)->
@@ -99,12 +95,12 @@ angular
           calc-total = ->
               calc-subtotal! + calc-taxes-fees! - calc-coupon!
           calc-previous-total = ->
-              payments |> p.map (.amount)
-                       |> p.sum
+              prevous-charges |> p.map (.amount)
+                              |> p.sum
           calc-balance-due = ->
-              calc-total! - (paid ? 0)
+              -(calc-total! - (paid ? 0))
           adjustment = 
-            list: payments |> p.filter(-> it.type is \adjustment)
+            list: prevous-charges |> p.filter(-> it.type is \adjustment)
             add: (item)->
               new-item = angular.copy item
               new-item.amount *= 100
