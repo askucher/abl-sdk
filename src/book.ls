@@ -237,7 +237,7 @@ angular
               card:
                   pattern: /[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}/i
                   example: '0000 0000 0000 0000'
-                  placeholder: "Card Number (0000 0000 0000 0000)"
+                  placeholder: "Credit Card Number"
               exp-date:
                   pattern: /[0-9]{2}\/[0-9]{2}/i
                   example: "05/15"

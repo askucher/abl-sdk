@@ -5,8 +5,8 @@ angular
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
         | _ => arr |> p.sum
-      (input-charges, input-payments)->
-          payments = input-payments ? []
+      (input-charges, input-payments, paid)->
+          payments = input-payments?filter(-> it.status is \active) ? []
           charges = input-charges?filter(-> it.status is \active) ? []
           make-editable = (charge)->
             name: charge.name
@@ -99,9 +99,10 @@ angular
           calc-total = ->
               calc-subtotal! + calc-taxes-fees! - calc-coupon!
           calc-previous-total = ->
-              calc-total! - calc-balance-due!
+              payments |> p.map (.amount)
+                       |> p.sum
           calc-balance-due = ->
-              payments |> p.map (.amount) |> p.sum
+              calc-total! - (paid ? 0)
           adjustment = 
             list: payments |> p.filter(-> it.type is \adjustment)
             add: (item)->
