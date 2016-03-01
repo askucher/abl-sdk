@@ -8,25 +8,23 @@ angular
       (input-new-charges, input-prevous-charges, paid)->
           prevous-charges = input-prevous-charges?filter(-> it.status is \active) ? []
           new-charges = input-new-charges?filter(-> it.status is \active) ? []
-          make-editable = (charge)->
+          make-new-charge = (charge)->
             name: charge.name
             quantity: charge.count ? 0
             amount: charge.amount
-            _id: charge._id
           by-price = (a, b)->
-              b.amount - a.amount
-          transform = (arr)-> 
+            b.amount - a.amount
+          make-old-charge = (arr)-> 
             name: arr.0.name
             amount: arr.0.amount
             quantity: arr.length
             _ids: arr |> p.map (._id)
           old-amounts = (type)->
             prevous-charges |> p.filter (.type is type)
-                            |> p.group-by (-> it.name ++ it.amount)
+                            |> p.group-by (-> it.name + it.amount)
                             |> p.obj-to-pairs 
                             |> p.map (.1)
-                            |> p.map transform
-                            |> p.map make-editable
+                            |> p.map make-old-charge
                             |> p.sort-with by-price
           exclude = (type, charge)-->
             old =
@@ -36,7 +34,7 @@ angular
             !old?
           available-amounts = (type)->
             new-charges  |> p.filter (.type is type)
-                         |> p.map make-editable
+                         |> p.map make-new-charge
                          |> p.filter exclude type
                          |> p.sort-with by-price
           get-amounts = (type)->
