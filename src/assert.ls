@@ -8,4 +8,4 @@ angular
             debug ->
              test = input!
              if test isnt yes
-                debug "[FAILED]", test
+                throw "[FAILED TEST]" + input.to-string!

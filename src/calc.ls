@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \ablcalc, ($xabl, $timeout, p, debug)->
+  .service \ablcalc, ($xabl, $timeout, p, debug, assert)->
       sum = (arr)->
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
@@ -40,6 +40,9 @@ angular
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
           
+          assert ->
+            get-amounts(\aap).length > 0
+            
             
             
           state = 
