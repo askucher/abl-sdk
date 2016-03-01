@@ -202,4 +202,10 @@ angular
     parsed-type-check = build-parsed-type-check!
     (type, input, options)->
        debug ->
-          parsed-type-check (parse-type type), input, options
+          result = parsed-type-check (parse-type type), input, options
+          if !result
+            console.error do
+               * "Type doesn't match with object"
+               * type
+               * input
+             
