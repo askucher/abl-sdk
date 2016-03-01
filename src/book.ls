@@ -137,7 +137,8 @@ angular
                             return error err
                           a = activity
                           
-                          
+                          make-nulls = (total)->
+                            [1 to total] |> p.map (-> null)
                           
                           req =
                             stripe-token: token
@@ -146,9 +147,9 @@ angular
                                     else undefined
                             payment-method: \credit
                             event-instance-id: get-event-instance-id!
-                            addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, a.quantity])
+                            addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, make-nulls a.quantity])
                                                                |> p.pairs-to-obj
-                            attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a._id, a.quantity])
+                            attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a._id,make-nulls a.quantity])
                                                                       |> p.pairs-to-obj
                             answers: state.calendar.questions |> p.map ((a)-> [a._id, a.answer])
                                                               |> p.pairs-to-obj
