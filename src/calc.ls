@@ -39,13 +39,14 @@ angular
                          |> p.sort-with by-price
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
-          
           assert ->
             get-amounts(\aap).length > 0
-            
-            
-            
-          state = 
+          assert ->
+            top =
+               get-amounts(\app) |> p.head
+            return yes if !top
+            return no  if !top.amount? or !top.quantity? or !top.name?
+          state =
             attendees: get-amounts \aap
             addons: get-amounts \addon
           total-adjustment = ->
