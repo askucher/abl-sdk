@@ -1,13 +1,30 @@
 angular
   .module \ablsdk
-  .service \ablcalc, ($xabl, $timeout, p, debug, test)->
+  .service \ablcalc, ($xabl, $timeout, p, debug, test, typecheck)->
+      
+      
       sum = (arr)->
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
         | _ => arr |> p.sum
       (input-new-charges, input-prevous-charges, paid)->
+            
+          
           prevous-charges = input-prevous-charges?filter(-> it.status is \active) ? []
           new-charges = input-new-charges?filter(-> it.status is \active) ? []
+          
+          debug -> 
+            options =
+              custom-types:
+                CHARGE:
+                  type-of: '{_id: String, amount: Number, created: String, name: String, percentage: Boolean, status: String, type: String}'
+                  validate: -> yes
+            typecheck '[CHARGE]', prevous-charges, options
+            typecheck '[CHARGE]', new-charges, options
+            
+          
+            
+          
           make-new-charge = (charge)->
             name: charge.name
             quantity: charge.count ? 0

@@ -1,7 +1,7 @@
 angular
   .module \ablsdk
   .service \typecheck, (debug, p)->
-    parse-type = do 
+    build-parse-type = -> 
         # helpers
         identifier-regex = /[\$\w]+/
         
@@ -113,6 +113,7 @@ angular
           | #{ identifier-regex.source } # identifier
           | \S                           # all single char ops - valid, and non-valid (for error purposes)
           //g
+        
         (input) ->
           throw new Error 'No type specified.' unless input.length
           tokens = (input.match token-regex or [])
@@ -123,7 +124,7 @@ angular
             consume-types tokens
           catch
             throw new Error "#{e.message} - Remaining tokens: #{ JSON.stringify tokens } - Initial input: '#input'"
-    parsed-type-check = do
+    build-parsed-type-check = ->
         any = p.any 
         all = p.all 
         is-it-NaN = p.is-it-NaN
@@ -197,6 +198,8 @@ angular
         (parsed-type, input, options = {}) ->
           custom-types := options.custom-types or {}
           check-multiple input, parsed-type
+    parse-type = build-parse-type!
+    parsed-type-check = build-parsed-type-check!
     (type, input, options)->
        debug ->
           parsed-type-check (parse-type type), input, options
