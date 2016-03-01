@@ -11,6 +11,11 @@ angular
               for x in xs
                 f x
               xs
+            is-it-NaN: (x) -> x isnt x
+            all: (f, xs) -->
+              for x in xs when not f x
+                return false
+              true
             map: (f, xs) -->
               xs.map(f)
             fold: (f, memo, xs) -->
