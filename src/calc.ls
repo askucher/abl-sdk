@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \ablcalc, ($xabl, $timeout, p, debug, assert)->
+  .service \ablcalc, ($xabl, $timeout, p, debug, test)->
       sum = (arr)->
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
@@ -39,9 +39,9 @@ angular
                          |> p.sort-with by-price
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
-          assert ->
+          test ->
             get-amounts(\aap).length > 0
-          assert ->
+          test ->
             top =
                get-amounts(\app) |> p.head
             return yes if !top
