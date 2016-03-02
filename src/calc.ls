@@ -13,25 +13,32 @@ angular
           prevous-charges = input-prevous-charges?filter(-> it.status is \active) ? []
           new-charges = input-new-charges?filter(-> it.status is \active) ? []
           
-          debug -> 
-            options =
-              custom-types:
-                CHARGE:
-                  type-of: '{_id: String, amount: Number, created: String, name: String, percentage: Boolean, status: String, type: String}'
-                  validate: -> yes
-            typecheck '[CHARGE]', prevous-charges, options
-            typecheck '[CHARGE]', new-charges, options
-            
+          #debug -> 
+          #  options =
+          #    custom-types:
+          #      CHARGE:
+          #        type-of: '{_id: String, amount: Number, created: String, name: String, percentage: Boolean, status: String, type: String}'
+          #        validate: -> yes
+          #  typecheck '[CHARGE]', prevous-charges, options
+          #  typecheck '[CHARGE]', new-charges, options
+          debug do
+             prevous-charges: prevous-charges
+             new-charges: new-charges
+             input-new-charges: input-new-charges
+             input-prevous-charges: input-prevous-charges
+             
+             
           
             
           
           make-new-charge = (charge)->
             name: charge.name
-            quantity: charge.count ? 0
+            quantity: 0
             amount: charge.amount
           by-price = (a, b)->
             b.amount - a.amount
-          make-old-charge = (arr)-> 
+          make-old-charge = (arr)->
+            #debug \make-old, arr
             name: arr.0.name
             amount: arr.0.amount
             quantity: arr.length
@@ -57,12 +64,16 @@ angular
           get-amounts = (type)->
              [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
           test ->
-            get-amounts(\aap).length > 0
+             get-amounts(\aap).length > 0
+            
           test ->
             top =
                get-amounts(\app) |> p.head
             return yes if !top
             return no  if !top.amount? or !top.quantity? or !top.name?
+          
+          
+          
           state =
             attendees: get-amounts \aap
             addons: get-amounts \addon

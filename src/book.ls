@@ -149,7 +149,7 @@ angular
                             event-instance-id: get-event-instance-id!
                             addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, make-nulls a.quantity])
                                                                |> p.pairs-to-obj
-                            attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a._id,make-nulls a.quantity])
+                            attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a._id, make-nulls a.quantity])
                                                                       |> p.pairs-to-obj
                             answers: state.calendar.questions |> p.map ((a)-> [a._id, a.answer])
                                                               |> p.pairs-to-obj
