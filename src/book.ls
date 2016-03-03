@@ -139,7 +139,7 @@ angular
                           
                           make-nulls = (total)->
                             [1 to total] |> p.map (-> null)
-                          
+                          debug state.calendar.calc.attendees
                           req =
                             stripe-token: token
                             coupon-id: if state.calendar.calc.coupon.codes.length > 0 
