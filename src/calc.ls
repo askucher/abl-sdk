@@ -10,7 +10,7 @@ angular
       (input-new-charges, input-prevous-charges, paid)->
             
           
-          prevous-charges = input-prevous-charges
+          prevous-charges = input-prevous-charges ? []
           new-charges = input-new-charges?filter(-> it.status is \active) ? []
           
           #debug -> 
