@@ -141,7 +141,7 @@ angular
                             [1 to total] |> p.map (-> null)
                           debug state.calendar.calc.attendees
                           req =
-                            token: token
+                            stripe-token: token
                             coupon-id: if state.calendar.calc.coupon.codes.length > 0 
                                     then state.calendar.calc.coupon.codes.0.coupon-id
                                     else undefined
