@@ -35,6 +35,7 @@ angular
             name: charge.name
             quantity: 0
             amount: charge.amount
+            _id: charge._id #for widget
           by-price = (a, b)->
             b.amount - a.amount
           make-old-charge = (arr)->
