@@ -134,18 +134,32 @@ angular
               -(calc-total! - deposit)
           adjustment = 
             list: prevous-charges |> p.filter(-> it.type is \adjustment)
-            add: (item)->
-              new-item = angular.copy item
+            description: ""
+            amount: ""
+            add: ->
+              new-item = 
+                description: adjustment.description
+                amount: adjustment.amount
               new-item.amount *= 100
               adjustment.list.push new-item
+              adjustment.description = ""
+              adjustment.amount = ""
             removable: (item)->
               !item._id?
             remove: (item)->
               index = adjustment.list.index-of(item)
               adjustment.list.splice index, 1
+            edit: (c)->
+              adjustment.description = c.description
+              adjustment.amount = c.amount / 100
+              #adjustment.code = c.code
+              adjustment.remove c
           coupon =
             codes: []
             calc: calc-coupon
+            edit: (c)->
+              coupon.code = c.code
+              coupon.remove c
             remove: (c)->
               index = coupon.codes.index-of c
               if index > -1
