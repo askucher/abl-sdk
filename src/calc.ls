@@ -160,9 +160,11 @@ angular
           coupon =
             codes: []
             calc: calc-coupon
+            show: no
             edit: (c)->
               coupon.code = c.code
               coupon.remove c
+              coupon.show = yes
             remove: (c)->
               index = coupon.codes.index-of c
               if index > -1
@@ -180,6 +182,7 @@ angular
                   coupon.codes.push data
                   coupon.code = ""
                   coupon.success = "Coupon #{data.couponId} added successfully"
+                  coupon.show = no
                   $timeout do 
                      * ->
                          delete coupon.success
