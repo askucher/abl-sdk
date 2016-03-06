@@ -169,22 +169,22 @@ angular
            removed.for-each provider.remove
         remove = (item, $event, options)->
           return if state.loading
-          default-options = 
+          default-options =
             title: "Confirm Delete"
             content: "Are you sure you want to delete this item?"
-            ok: "Confirm"
-            cancel: "Cancel"
-          $md-dialog
-              .show do
-                 $md-dialog.confirm!
-                    .title(options?title ? default-options.title)
-                    .content(options?content ? default-options.content)
-                    .ok(options?ok ? default-options.ok)
-                    .cancel(options?cancel ? default-options.cancel)
-                    .targetEvent($event)
-              .then do 
-                  * -> provider.remove(item)
-                  * ->
+            ok: \Confirm
+            cancel: \Cancel
+          confirm = $md-dialog.confirm do 
+              controller: \confirm
+              templateUrl: \confirm
+              locals: 
+                  options: angular.extend {}, default-options, options
+              targetEvent: $event
+          
+          $mdDialog.show(confirm).then (result)->
+              if result is yes 
+                 provider.remove(item)
+          
         watchers = []
         improve = (source)->
           observers = []
