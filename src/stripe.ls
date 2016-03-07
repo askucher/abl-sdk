@@ -23,7 +23,7 @@ angular
                   address_line1: card.location?street_address
                   address_city: card.location?city
                   address_country: card.location?country
-                  state: card.location?state
+                  address_state: card.location?state
                 * (status, resp)->
                     if resp.id?
                        safe-apply ->
