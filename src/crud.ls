@@ -11,6 +11,7 @@ angular
               part = parts[parts.length - 1]
               array = 
                   | typeof! data is \Array => data
+                  | typeof! data.list is \Array => data.list
                   | typeof! data[part] is \Array => data[part]
                   | typeof! data is \Object => [data]
                   | _ => []
@@ -55,10 +56,6 @@ angular
                       callback? data
               
               fetch: ->
-                  debug do
-                     * \fetch
-                     * configure-url url
-                     * i.options
                   options = 
                     angular.copy(i.options)
                   delete options.$url
@@ -78,7 +75,7 @@ angular
                            catch err
                              console.error err, parser.search
                              return undefined
-                        else 
+                        else
                            undefined
                      i.options.total = do
                         r = params(\x-last-page-url)
