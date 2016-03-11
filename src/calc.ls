@@ -136,6 +136,7 @@ angular
             list: prevous-charges |> p.filter(-> it.type is \adjustment)
             description: ""
             amount: ""
+            is-edit: no
             show: no
             add: ->
               new-item = 
@@ -146,15 +147,19 @@ angular
               adjustment.description = ""
               adjustment.amount = ""
               adjustment.show = no
+              adjustment.is-edit = no
             removable: (item)->
-              !item._id? and !adjustment.show
+              !item._id?
             remove: (item)->
               index = adjustment.list.index-of(item)
               adjustment.list.splice index, 1
             edit: (c)->
+              if adjustment.is-edit
+                adjustment.add!
               adjustment.description = c.description
               adjustment.amount = c.amount / 100
               adjustment.show = yes
+              adjustment.is-edit = yes
               #adjustment.code = c.code
               adjustment.remove c
           coupon =
