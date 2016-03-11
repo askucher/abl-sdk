@@ -172,7 +172,7 @@ angular
             ok: \Confirm
             cancel: \Cancel
           confirm = $md-dialog.confirm do 
-              controller: \confirm
+              controller: \confirm2
               templateUrl: \confirm
               locals: 
                   options: angular.extend {}, default-options, options
