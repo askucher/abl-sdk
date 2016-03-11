@@ -195,7 +195,7 @@ angular
                      slot.until-time = comp slot.until-time
                      slot
                  slots.length = 0
-                 loaded-slots.timeslots.map(transform-date).for-each (item)->
+                 loaded-slots.list.map(transform-date).for-each (item)->
                      slots.push item
                  scroll.active-date!
                  callback?!
