@@ -147,7 +147,7 @@ angular
               adjustment.amount = ""
               adjustment.show = no
             removable: (item)->
-              !item._id?
+              !item._id? and !adjustment.show
             remove: (item)->
               index = adjustment.list.index-of(item)
               adjustment.list.splice index, 1
