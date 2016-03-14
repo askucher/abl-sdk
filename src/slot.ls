@@ -258,7 +258,7 @@ angular
        move = (booking-id)->
          $xabl
            .put do
-              * "bookings/move/#{booking-id}"
+              * "bookings/#{booking-id}/move"
               * event-instance-id: create-event-instance-id!
        create-event-instance-id = ->
          transform = abldate activity.time-zone
