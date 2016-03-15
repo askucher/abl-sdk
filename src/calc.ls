@@ -212,6 +212,10 @@ angular
           adjustment: adjustment
           addons: state.addons
           attendees: state.attendees
+          show-attendees: ->
+            state.attendees |> p.map ((o)-> "#{o.name}: #{o.quantity}") |> p.join ", "
+          show-addons: ->
+            state.addons |> p.map ((o)-> "#{o.name}: #{o.quantity}") |> p.join ", "
           total-without-taxesfees: calc-subtotal
           calc-coupon: calc-coupon
           calc-tax-fee: calc-tax-fee
