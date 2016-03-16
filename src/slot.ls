@@ -55,7 +55,7 @@ angular
               then 0
               else slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity)).join('+'))
            available
-       define-date-start = (day)->
+       define-date-start = (day, slot)->
            merged = merge(day, slot.start-time)
            model.date.start = merged
        perform-choose-slot = (slot)->
@@ -63,7 +63,7 @@ angular
            return if slot.available is 0
            day = model.value
            
-           define-date-start day
+           define-date-start day, slot
            transform = abldate activity.time-zone
            model.date.origin =
                 transform.backendify(model.date.start).replace(/[\:-]/ig,'')
@@ -232,7 +232,7 @@ angular
        select-day = (day)->
            return if is-disabled-day(day)
            select day
-           define-date-start day
+           define-date-start day, slots.0
            #slots.0 |> perform-choose-slot
        not-selected = ->
            | model.date.start is null => yes
