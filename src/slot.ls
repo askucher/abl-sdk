@@ -182,7 +182,7 @@ angular
            up: ->
              calendar.move -1
        find-chosen-event = ->
-           return if !state.chosen-event?
+           return if (state.chosen-event ? "").length is 0
            return if slots.length is 0
            #hgt9275so8vjmip31so4iq2s58_20160131T210000Z
            pairs = state.chosen-event.split(\_)
