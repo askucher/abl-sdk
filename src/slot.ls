@@ -187,7 +187,7 @@ angular
            pairs = state.chosen-event.split(\_)
            id = pairs.0
            date-transform = abldate activity.time-zone
-           day = date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!)
+           day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
            debug do 
                slots: slots
                choson-date: day 
