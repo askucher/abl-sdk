@@ -194,7 +194,7 @@ angular
               select day
               visual-slot =
                    active-slots |> p.find (-> it._id is slot._id)
-              
+              debug \visual, visual-slot
               choose-slot visual-slot
        load-events = (callback)->
          ablapi
