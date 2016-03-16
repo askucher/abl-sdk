@@ -191,7 +191,7 @@ angular
            slot =
              slots |> p.find (-> it.event-id is id)
            if slot? and not is-disabled-day(day)
-              select day
+              select-day day
               visual-slot =
                    active-slots |> p.find (-> it._id is slot._id)
               debug \visual, visual-slot
