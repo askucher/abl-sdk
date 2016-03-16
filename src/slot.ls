@@ -180,6 +180,17 @@ angular
              calendar.move 1
            up: ->
              calendar.move -1
+       find-chosen-event = ->
+           return if !state.chosen-event?
+           return if slots.length is 0
+           #hgt9275so8vjmip31so4iq2s58_20160131T210000Z
+           pairs = state.chosen-event.split(\_)
+           id = pairs.0
+           date = date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!)
+           debug do 
+               slots: slots
+               choson-date: date 
+               id: id
        load-events = (callback)->
          ablapi
            .timeslots do
@@ -197,6 +208,7 @@ angular
                  slots.length = 0
                  loaded-slots.list.map(transform-date).for-each (item)->
                      slots.push item
+                 find-chosen-event!
                  scroll.active-date!
                  callback?!
        is-dummy = (date)->
@@ -260,9 +272,11 @@ angular
            .put do
               * "bookings/#{booking-id}/move"
               * event-instance-id: create-event-instance-id!
-       create-event-instance-id = ->
-         transform = abldate activity.time-zone
+       event-instance-id = (model)->
+         transform = abldate activity.time-zone  
          model.event-id + \_ + transform.backendify(model.date.start).replace(/[\:-]/ig,'')
+       create-event-instance-id = ->
+         event-instance-id(model)
        model = input-model ? {}
        slots = []
        calendars = []
@@ -279,6 +293,11 @@ angular
           ..questions= activity.questions ? []
           ..bg= activity.image
        setup!
+       state = 
+           chosen-event: null
+       choose-event:  (id)->
+          state.chosen-event = id
+          find-chosen-event!
        model: model
        active-slots: active-slots
        move: move
