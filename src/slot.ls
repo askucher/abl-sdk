@@ -95,20 +95,17 @@ angular
                available =
                   event?available ? slot.max-occ
                debug event?status
-               new-slot = angular.copy slot
-               new-slot
-                   ..status = event?status
-                   ..start-time = start
-                   ..time = start.value-of!
-                   ..end-time = start.clone!.add(duration, \milliseconds)
-                   ..charges = slot.charges
-                   ..price = formula.get-visual-price(timeslots: [slot])
-                   ..available = if event?status is \inactive then 0 else available
-                   .._id = slot._id
-                   ..duration = 
-                     moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
-                   ..taken = slot.max-occ - available
-               new-slot
+               status: event?status
+               start-time: start
+               time: start.value-of!
+               end-time: start.clone!.add(duration, \milliseconds)
+               charges: slot.charges
+               price: formula.get-visual-price(timeslots: [slot])
+               available: if event?status is \inactive then 0 else available
+               _id: slot._id
+               duration: 
+                 moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
+               taken: slot.max-occ - available
            slots |> p.filter (is-fit-to-slot day)
                  |> p.map transform-slot
                  |> p.sort-by (.time)
