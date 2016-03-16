@@ -249,6 +249,7 @@ angular
            model.closed? chosen
            debug \close, model
        choose-slot = (slot)->
+           debug \choose-slot, slot
            return if not-available-slot(slot)
            perform-choose-slot slot
            close yes
