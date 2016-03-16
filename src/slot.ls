@@ -56,6 +56,7 @@ angular
               else slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity)).join('+'))
            available
        perform-choose-slot = (slot)->
+           debug \perform-choose-slot, slot
            return if slot.available is 0
            day = model.value
            merged = merge(day, slot.start-time)
