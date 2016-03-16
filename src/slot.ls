@@ -186,13 +186,16 @@ angular
            #hgt9275so8vjmip31so4iq2s58_20160131T210000Z
            pairs = state.chosen-event.split(\_)
            id = pairs.0
-           date-transform = abldate data.timeslot.time-zone
-           date = date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!)
+           date-transform = abldate activity.time-zone
+           day = date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!)
            debug do 
                slots: slots
                choson-date: date 
                id: id
-           
+               slot: slots |> p.find(-> it._id is id)
+           select day
+           debug do 
+               active-slots: active-slots
        load-events = (callback)->
          ablapi
            .timeslots do
