@@ -190,7 +190,7 @@ angular
            day = date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!)
            debug do 
                slots: slots
-               choson-date: date 
+               choson-date: day 
                id: id
                slot: slots |> p.find(-> it._id is id)
            select day
