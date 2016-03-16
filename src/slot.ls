@@ -232,8 +232,8 @@ angular
        select-day = (day)->
            return if is-disabled-day(day)
            select day
-           define-date-start day, slots.0
-           #slots.0 |> perform-choose-slot
+           #define-date-start day, slots.0
+           slots.0 |> perform-choose-slot
        not-selected = ->
            | model.date.start is null => yes
            | model.chosen is no => yes
