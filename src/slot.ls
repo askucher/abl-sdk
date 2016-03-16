@@ -188,14 +188,14 @@ angular
            id = pairs.0
            date-transform = abldate activity.time-zone
            day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
-           debug do 
-               slots: slots
-               choson-date: day 
-               id: id
-               slot: slots |> p.find(-> it._id is id)
-           select day
-           debug do 
-               active-slots: active-slots
+           slot =
+             slots |> p.find (-> it.event-id is id)
+           if slot? and not is-disabled-day(day)
+              select day
+              visual-slot =
+                   active-slots |> p.find (-> it._id is slot._id)
+              
+              choose-slot slot
        load-events = (callback)->
          ablapi
            .timeslots do
