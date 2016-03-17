@@ -208,7 +208,7 @@ angular
                 if not-available-slot(visual-slot)
                    debug \findevent-sold-out, day
                    observer.notify \sold-out
-                if in-part(day)
+                else if in-past(day)
                    debug \findevent-too-close, day
                    observer.notify \too-close
        load-events = (callback)->
