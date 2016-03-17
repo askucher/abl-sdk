@@ -320,7 +320,7 @@ angular
             observe: (func)->
               observer.list.push func
             notify: (name, data)->
-              observer.lish.each (watch)->
+              observer.list.each (watch)->
                 watch name, data
        observe: observer.observe
        choose-event:  (id)->
