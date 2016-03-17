@@ -209,6 +209,9 @@ angular
                      choose-slot visual-slot
               else 
                 debug \findevent-disabled, day
+                if not-available-slot(slot) 
+                   debug \findevent-not-available-slot, day
+                   observer.notify \sold-out
                 if in-past(day)
                    debug \findevent-inpast, day
                    observer.notify \too-close
