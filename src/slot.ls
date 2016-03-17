@@ -194,16 +194,24 @@ angular
            day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
            slot =
              slots |> p.find (.event-id is id)
-           if slot? and not is-disabled-day(day)
-              select-day day
-              visual-slot =
-                   active-slots |> p.find (-> it._id is slot._id)
-              if not-available-slot(slot)
-                 observer.notify \sold-out
-              else
-                 choose-slot visual-slot
-           else if in-past(day)
-              observer.notify \too-close
+           debug \findevent-enter
+           if slot? 
+              debug \findevent-slotfound
+              if not is-disabled-day(day)
+                  debug \findevent-not-disabled, day
+                  select-day day
+                  visual-slot =
+                       active-slots |> p.find (-> it._id is slot._id)
+                  if not-available-slot(slot)
+                     debug \findevent-not-available-slot, day
+                     observer.notify \sold-out
+                  else
+                     choose-slot visual-slot
+              else 
+                debug \findevent-disabled, day
+                if in-past(day)
+                   debug \findevent-inpast, day
+                   observer.notify \too-close
        load-events = (callback)->
          ablapi
            .timeslots do
