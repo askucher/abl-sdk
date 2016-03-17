@@ -200,13 +200,12 @@ angular
               if not is-disabled-day(day)
                   debug \findevent-not-disabled, day, slot
                   select-day day
-                  choose-slot do 
-                       * active-slots |> p.find (._id is slot._id)
+                  active-slots |> p.find (._id is slot._id) |> choose-slot
               else 
                 visual-slot = 
                    slots-by-day(day) |> p.find (._id is slot._id)
                 debug \findevent-disabled, visual-slot
-                if not-available-slot (visual-slot)
+                if not-available-slot(visual-slot)
                    debug \findevent-sold-out, day
                    observer.notify \sold-out
                 if in-part(day)
