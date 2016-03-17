@@ -204,7 +204,7 @@ angular
                        * active-slots |> p.find (._id is slot._id)
               else 
                 visual-slot = 
-                   slots-by-day(day) |> p.find(._id is slot._id)
+                   slots-by-day(day) |> p.find (._id is slot._id)
                 debug \findevent-disabled, visual-slot
                 if not-available-slot (visual-slot)
                    debug \findevent-sold-out, day
