@@ -196,21 +196,21 @@ angular
              slots |> p.find (.event-id is id)
            debug \findevent-enter
            if slot? 
-              debug \findevent-slotfound
+              debug \findevent-slotfound, slot
               if not is-disabled-day(day)
-                  debug \findevent-not-disabled, day
+                  debug \findevent-not-disabled, day, slot
                   select-day day
                   visual-slot =
                        active-slots |> p.find (-> it._id is slot._id)
                   if not-available-slot(slot)
-                     debug \findevent-not-available-slot, day
+                     debug \findevent-not-available-slot, day, slot
                      observer.notify \sold-out
                   else
                      choose-slot visual-slot
               else 
-                debug \findevent-disabled, day
+                debug \findevent-disabled, day, slot
                 if not-available-slot(slot) 
-                   debug \findevent-not-available-slot, day
+                   debug \findevent-not-available-slot, day, slot
                    observer.notify \sold-out
                 if in-past(day)
                    debug \findevent-inpast, day
