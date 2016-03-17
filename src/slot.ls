@@ -59,7 +59,7 @@ angular
            merged = merge(day, slot.start-time)
            model.date.start = merged
        perform-choose-slot = (slot)->
-           debug \perform-choose-slot, slot
+           #debug \perform-choose-slot, slot
            return if slot.available is 0
            day = model.value
            
@@ -143,7 +143,8 @@ angular
           | slots |> p.not-any (is-fit-to-slot date) => yes
           | _ => no
        in-past = (date)->
-           get-day(date) < get-day(new-date!) or date.diff(new-date!, \hours) < 24
+           get-day(date) < get-day(new-date!) or date.diff(new-date!, \hours) < 48
+       
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  
        start-month =
@@ -185,22 +186,24 @@ angular
            up: ->
              calendar.move -1
        find-chosen-event = ->
-           debug "find-chosen-event", state.chosen-event
            return if (state.chosen-event ? "").length is 0
            return if slots.length is 0
-           #hgt9275so8vjmip31so4iq2s58_20160131T210000Z
            pairs = state.chosen-event.split(\_)
            id = pairs.0
            date-transform = abldate activity.time-zone
            day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
            slot =
-             slots |> p.find (-> it.event-id is id)
+             slots |> p.find (.event-id is id)
            if slot? and not is-disabled-day(day)
               select-day day
               visual-slot =
                    active-slots |> p.find (-> it._id is slot._id)
-              debug \visual, visual-slot
-              choose-slot visual-slot
+              if not-available-slot(slot)
+                 observer.notify \sold-out
+              else
+                 choose-slot visual-slot
+           else if in-past(day)
+              observer.notify \too-close
        load-events = (callback)->
          ablapi
            .timeslots do
@@ -252,9 +255,7 @@ angular
            model.chosen = chosen
            model.visible = no
            model.closed? chosen
-           debug \close, model
        choose-slot = (slot)->
-           debug \choose-slot, slot
            return if not-available-slot(slot)
            perform-choose-slot slot
            close yes
@@ -307,6 +308,14 @@ angular
        setup!
        state = 
            chosen-event: null
+       observer = 
+            list: []
+            observe: (func)->
+              observer.list.push func
+            notify: (name, data)->
+              observer.lish.each (watch)->
+                watch name, data
+       observe: observer.observe
        choose-event:  (id)->
           state.chosen-event = id
           find-chosen-event!
