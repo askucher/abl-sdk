@@ -200,22 +200,17 @@ angular
               if not is-disabled-day(day)
                   debug \findevent-not-disabled, day, slot
                   select-day day
-                  visual-slot =
-                       active-slots |> p.find (-> it._id is slot._id)
-                  if not-available-slot(slot)
-                     debug \findevent-not-available-slot, day, slot
-                     observer.notify \sold-out
-                  else
-                     choose-slot visual-slot
+                  choose-slot do 
+                       * active-slots |> p.find (._id is slot._id)
               else 
-                visual-slot2 =
-                       active-slots |> p.find (-> it._id is slot._id)
-                debug \findevent-disabled, day, slot, visual-slot2
-                if not-available-slot(visual-slot2) 
-                   debug \findevent-not-available-slot, day, visual-slot2
+                visual-slot = 
+                   slots-by-day(day) |> p.find(._id is slot._id)
+                debug \findevent-disabled, visual-slot
+                if not-available-slot (visual-slot)
+                   debug \findevent-sold-out, day
                    observer.notify \sold-out
-                if in-past(day)
-                   debug \findevent-inpast, day
+                if in-part(day)
+                   debug \findevent-too-close, day
                    observer.notify \too-close
        load-events = (callback)->
          ablapi
