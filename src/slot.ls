@@ -194,7 +194,6 @@ angular
            day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
            slot =
              slots |> p.find (.event-id is id)
-           debug \findevent-enter
            if slot? 
               if not is-disabled-day(day)
                   select-day day

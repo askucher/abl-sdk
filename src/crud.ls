@@ -57,7 +57,8 @@ angular
               
               fetch: ->
                   options = 
-                    angular.copy(i.options)
+                    i.options |> angular.copy
+                  delete options.total
                   delete options.$url
                   $xabl
                    .get do 
