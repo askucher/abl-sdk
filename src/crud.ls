@@ -155,10 +155,10 @@ angular
                 i.options = angular.extend({}, i.get-options!, options)
           state.loading = yes
           if i.options.page?
-            if i.options.page is 1
-               delete i.options.page
-            else 
-               i.options.page -= 1
+            #if i.options.page is 1
+            #   delete i.options.page
+            #else 
+            i.options.page -= 1
           provider.fetch!
         fetch init-options
         splice = ->
