@@ -205,6 +205,8 @@ angular
                    observer.notify \event-sold-out
                 else if in-past(day)
                    observer.notify \event-too-close
+                else
+                   observer.notify \event-not-found
        load-events = (callback)->
          ablapi
            .timeslots do
