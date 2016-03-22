@@ -207,6 +207,8 @@ angular
                    observer.notify \event-too-close
                 else
                    observer.notify \event-not-found
+           else 
+              observer.notify \event-not-found  
        load-events = (callback)->
          ablapi
            .timeslots do
