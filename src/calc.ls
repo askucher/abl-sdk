@@ -8,38 +8,21 @@ angular
         | typeof arr is null => 0
         | _ => arr |> p.sum
       (input-new-charges, input-prevous-charges, paid)->
-            
-          
           prevous-charges = input-prevous-charges ? []
           new-charges = input-new-charges?filter(-> it.status is \active) ? []
-          
-          #debug -> 
-          #  options =
-          #    custom-types:
-          #      CHARGE:
-          #        type-of: '{_id: String, amount: Number, created: String, name: String, percentage: Boolean, status: String, type: String}'
-          #        validate: -> yes
-          #  typecheck '[CHARGE]', prevous-charges, options
-          #  typecheck '[CHARGE]', new-charges, options
           debug do
              prevous-charges: prevous-charges
              new-charges: new-charges
              input-new-charges: input-new-charges
              input-prevous-charges: input-prevous-charges
-             
-             
-          
-            
-          
           make-new-charge = (charge)->
             name: charge.name
             quantity: 0
             amount: charge.amount
-            _id: charge._id #for widget
+            _id: charge._id
           by-price = (a, b)->
             b.amount - a.amount
           make-old-charge = (arr)->
-            #debug \make-old, arr
             name: arr.0.name
             amount: arr.0.amount
             quantity: arr.length
@@ -99,14 +82,15 @@ angular
           total-addons = ->
               state.addons.map(calc-addon-price) |> sum
           calc-coupon = ->
+              code = coupon.codes.0
               subtotal = calc-subtotal!
-              amount-off = ->
-                  | coupon.codes.0.amount-off < subtotal => coupon.codes.0.amount-off
+              amount = ->
+                  | code.amount < subtotal => coupon.codes.0.amount
                   | _ => subtotal
               _ =
-                | coupon.codes.length is 0 => 0
-                | coupon.codes.0.amount-off? => amount-off!
-                | coupon.codes.0.percent-off? => subtotal / 100 * coupon.codes.0.percent-off
+                | !code? => 0
+                | code.percentage is yes => amount!
+                | code.percentage is no  => subtotal / 100 * coupon.codes.0.amount
                 | _ => 0
               _
           warning = (charge, name)->
@@ -163,7 +147,7 @@ angular
               #adjustment.code = c.code
               adjustment.remove c
           coupon =
-            codes: []
+            codes: prevous-charges |> p.filter(-> it.type is \coupon)
             calc: calc-coupon
             show: no
             edit: (c)->
