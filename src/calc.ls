@@ -59,7 +59,7 @@ angular
           
           
           state =
-            attendees: get-amounts \aap
+            attendees: get-amounts \aap 
             addons: get-amounts \addon
           total-adjustment = ->
              adjustment.list |> p.map (.amount) |> p.sum
@@ -118,17 +118,17 @@ angular
               -(calc-total! - deposit)
           adjustment = 
             list: prevous-charges |> p.filter(-> it.type is \adjustment)
-            description: ""
+            name: ""
             amount: ""
             is-edit: no
             show: no
             add: ->
               new-item = 
-                description: adjustment.description
+                name: adjustment.name
                 amount: adjustment.amount
               new-item.amount *= 100
               adjustment.list.push new-item
-              adjustment.description = ""
+              adjustment.name = ""
               adjustment.amount = ""
               adjustment.show = no
               adjustment.is-edit = no
@@ -140,7 +140,7 @@ angular
             edit: (c)->
               if adjustment.is-edit
                 adjustment.add!
-              adjustment.description = c.description
+              adjustment.name = c.name
               adjustment.amount = c.amount / 100
               adjustment.show = yes
               adjustment.is-edit = yes
