@@ -256,6 +256,7 @@ angular
               if state.form.agreed 
                 state.tried-checkout = yes
             message = (form, name)->
+              console.log form, name
               if state.tried-checkout is yes
                 for field of fields
                   if fields.has-own-property field
