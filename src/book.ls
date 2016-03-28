@@ -196,11 +196,11 @@ angular
                 | !s.active and s.touched => yes
                 
                 | _ => no
-              debug do 
-                * "!s.touched and !state.tried-checkout": !s.touched and !state.tried-checkout
-                  "s.active and !state.tried-checkout": s.active and !state.tried-checkout
-                  "!s.active and s.touched": !s.active and s.touched
-                  "state.tried-checkout": state.tried-checkout
+              #debug do 
+              #  * "!s.touched and !state.tried-checkout": !s.touched and !state.tried-checkout
+              #    "s.active and !state.tried-checkout": s.active and !state.tried-checkout
+              #    "!s.active and s.touched": !s.active and s.touched
+              #    "state.tried-checkout": state.tried-checkout
               if show 
               then show-error name, v
               else ""
@@ -263,7 +263,7 @@ angular
               exp-date:
                   pattern: /[0-9]{2}\/[0-9]{2}/i
                   example: "05/15"
-                  placeholder: 'Exp Date (MM/DD)'
+                  placeholder: 'Exp Date (MM/YY)'
                   normalize: (value)->
                      e = value?replace(\/,'') ? ""
                      t = ->
