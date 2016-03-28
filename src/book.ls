@@ -199,6 +199,7 @@ angular
                 | s.active and !state.tried-checkout => 
                 | !s.active and s.touched => yes
                 | s.tried-checkout => yes
+              debug \show-error, show, name
               if show 
               then show-error name, v
               else ""
