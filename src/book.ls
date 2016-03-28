@@ -302,6 +302,8 @@ angular
               c.cvv = "333"
               state.form.agreed = yes
             state
+              ..handle = (event)->
+                debug \handle-inside-sdk, event
               ..investigate-date = investigate-date
               ..get-event-instance-id = get-event-instance-id
               ..placeholder = placeholder
