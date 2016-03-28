@@ -305,7 +305,7 @@ angular
               ..handle = (event)->
                 name = event.target.name #card, #cvv
                 type = event.type #focus, blur, keyup
-                value = event.value #input value
+                value = event.target.value #input value
                 debug do 
                   event: event
                   name: name
