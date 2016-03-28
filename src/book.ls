@@ -92,8 +92,8 @@ angular
                   | val.length is 19 => val + " "
                   | _ => val
               newval + val2
-            exp-date-changed = ->
-               value = event.target.value
+            exp-date-changed = (value)->
+               
                e = value?replace(\/,'') ? ""
                t = ->
                  it ? ""
@@ -104,8 +104,7 @@ angular
             get-event-instance-id = ->
               event-id = activity.timeslots.filter(-> it._id is state.calendar._id).0.event-id
               event-id + \_ + state.calendar.date.origin
-            card-changed = (event)->
-              value = event.target.value
+            card-changed = (value)->
               return if typeof value is \undefined
               state.form.credit-card.card =
                  value |> (.split(' ').join(''))
@@ -311,6 +310,12 @@ angular
                   name: name
                   type: type 
                   value: value
+                if type is \focus
+                   typing name
+                else if type is \keyup and name is \expDate 
+                   exp-date-changed value
+                else if type is \keyup and name is \card 
+                   card-changed value
                 #ng:keyup="book.cardChanged($event)"
                 #ng:keyup="book.expDateChanged($event)"
               ..investigate-date = investigate-date
