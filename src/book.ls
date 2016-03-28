@@ -303,7 +303,14 @@ angular
               state.form.agreed = yes
             state
               ..handle = (event)->
-                debug \handle-inside-sdk, event
+                name = event.target-event.name #card, #cvv
+                type = event.type #focus, blur, keyup
+                value = event.value #input value
+                debug do 
+                  event: event
+                  name: name
+                  type: type 
+                  value: value
               ..investigate-date = investigate-date
               ..get-event-instance-id = get-event-instance-id
               ..placeholder = placeholder
