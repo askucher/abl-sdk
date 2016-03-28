@@ -188,10 +188,11 @@ angular
               #if state.tried-checkout is yes
               s = fields[name].state
               show = 
+                | state.tried-checkout => yes
                 | !s.touched and !state.tried-checkout => no
                 | s.active and !state.tried-checkout => no
                 | !s.active and s.touched => yes
-                | state.tried-checkout => yes
+                
                 | _ => no
               debug do 
                 * "!s.touched and !state.tried-checkout": !s.touched and !state.tried-checkout
