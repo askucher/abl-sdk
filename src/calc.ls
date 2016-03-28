@@ -197,9 +197,9 @@ angular
           addons: state.addons
           attendees: state.attendees
           show-attendees: ->
-            state.attendees |> p.map ((o)-> "#{o.quantity} #{o.name}") |> p.join ", "
+            state.attendees |> p.filter (-> o.quantity > 0) |> p.map ((o)-> "#{o.quantity} #{o.name}") |> p.join ", "
           show-addons: ->
-            state.addons |> p.map ((o)-> "#{o.quantity} #{o.name}") |> p.join ", "
+            state.addons |> p.filter (-> o.quantity > 0) |> p.map ((o)-> "#{o.quantity} #{o.name}") |> p.join ", "
           total-without-taxesfees: calc-subtotal
           calc-coupon: calc-coupon
           calc-tax-fee: calc-tax-fee
