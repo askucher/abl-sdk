@@ -92,24 +92,10 @@ angular
                   | val.length is 19 => val + " "
                   | _ => val
               newval + val2
-            exp-date-changed = (value)->
-               
-               e = value?replace(\/,'') ? ""
-               t = ->
-                 it ? ""
-               state.form.credit-card.exp-date =
-                 | e.length is 2 => e.0 + e.1 + \/
-                 | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
-                 | _ => e
+            
             get-event-instance-id = ->
               event-id = activity.timeslots.filter(-> it._id is state.calendar._id).0.event-id
               event-id + \_ + state.calendar.date.origin
-            card-changed = (value)->
-              return if typeof value is \undefined
-              state.form.credit-card.card =
-                 value |> (.split(' ').join(''))
-                       |> p.fold cardify, ""
-                       |> (-> it.substr(0, 19))
             stripe-process = (key, callback)->
                if typeof key is \undefined
                  state.loading = no
@@ -206,6 +192,19 @@ angular
               try-checkout!
             is-error = (v) ->
               v.required or v.pattern or v.minlength or v.maxlength or v.phone
+            show-error-logical = (name, v)->
+              #if state.tried-checkout is yes
+              s = fields[name].state
+              show = 
+                | !s.touched and !state.tried-checkout => no
+                | s.active and !state.tried-checkout => 
+                | !s.active and s.touched => yes
+                | s.tried-checkout => yes
+              if show 
+              then show-error name, v
+              else ""
+              
+              state.tried-checkout is yes or 
             show-error = (name, v) ->
               | v.required => fields[name]?message?required ? "#name is required"
               | v.pattern => "Please follow the example #{fields[name].example}"
@@ -218,67 +217,92 @@ angular
                   pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
                   example: 'nickname@email.com'
                   placeholder: 'Email'
+                  error: 
+                    show: no
+                    message: ''
               name:
                   pattern: ''
                   example: 'Your name'
                   placeholder: 'Name'
+                  error: 
+                    show: no
+                    message: ''
               phone:
                   pattern: /^[0-9]{3}[-][0-9]{3}[-][0-9]{3,5}$/i
                   placeholder: "Phone +1 123-456-1234"
                   example: "+1 123-456-1234"
+                  error: 
+                    show: no
+                    message: ''
               address:
                   pattern: ''
                   example: 'Address'
                   placeholder: 'Home address'
+                  error: 
+                    show: no
+                    message: ''
               notes:
                   pattern: ''
                   example: "Notes"
                   placeholder: "Notes"
+                  error: 
+                    show: no
+                    message: ''
               card:
                   pattern: /[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}/i
                   example: '0000 0000 0000 0000'
                   placeholder: "Credit Card Number"
+                  normalize: (value)->
+                    return if typeof value is \undefined
+                    state.form.credit-card.card =
+                       value |> (.split(' ').join(''))
+                             |> p.fold cardify, ""
+                             |> (-> it.substr(0, 19))
+                  error: 
+                    show: no
+                    message: ''
               exp-date:
                   pattern: /[0-9]{2}\/[0-9]{2}/i
                   example: "05/15"
                   placeholder: 'Exp Date (MM/DD)'
+                  normalize: (value)->
+                     e = value?replace(\/,'') ? ""
+                     t = ->
+                       it ? ""
+                     state.form.credit-card.exp-date =
+                       | e.length is 2 => e.0 + e.1 + \/
+                       | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
+                       | _ => e
+                  error: 
+                    show: no
+                    message: ''
               start-date: {}
               cvv:
                   pattern: /[0-9]{3,4}/i
                   example: "000"
                   placeholder: "CVV"
+                  error: 
+                    show: no
+                    message: ''
               agreed: 
                   pattern: \true
                   message: 
                     required: "Please accept the terms and conditions"
+                  error: 
+                    show: no
+                    message: ''
             try-checkout = ->
               if state.form.agreed 
                 state.tried-checkout = yes
             message = (form, name)->
-              console.log form, name
-              if state.tried-checkout is yes
-                for field of fields
-                  if fields.has-own-property field
-                    val = form[field]?$error
-                    
-                    if val and is-error(val)
+              for field of fields
+                if fields.has-own-property field
+                   val = form[field]?$error
+                   if val and is-error(val)
                       if field is name
                         return show-error field, val
                       return ""
-                ""
-              else
-                for field of fields
-                  if fields.has-own-property(field)
-                    val = form[field]?$error
-                    if val and is-error(val) and val.maxlength
-                      if field is name
-                        return show-error field, val
-                      return ""
-                if state.typing-input is name
-                  #show example during typing
-                  if form[name]?$error?pattern? and fields[name].example?length > 0
-                    return ""
-                    return "example: " + fields[name].example
+              ""
             placeholder = (name)->
                 if state.typing-input is name
                 then fields[name].example
@@ -289,11 +313,6 @@ angular
               f.name = "Test User"
               f.phone = "+380665243646"
               f.address = "664 Cypress Lane, Campbell, CA, United States"
-              #f.location =
-              #  city: "London"
-              #  coordinates: [-0.12775829999998223, 51.5073509]
-              #  country: "United Kingdom"
-              #  street_address: "London, UK"
               f.notes = "Some test notes"
               c = state.form.credit-card
               c.card = "5105 1051 0510 5100"
@@ -305,19 +324,12 @@ angular
                 name = event.target.name #card, #cvv
                 type = event.type #focus, blur, keyup
                 value = event.target.value #input value
-                debug do 
-                  event: event
-                  name: name
-                  type: type 
-                  value: value
-                if type is \focus
-                   typing name
-                else if type is \keyup and name is \expDate 
-                   exp-date-changed value
-                else if type is \keyup and name is \card 
-                   card-changed value
-                #ng:keyup="book.cardChanged($event)"
-                #ng:keyup="book.expDateChanged($event)"
+                normalize = fields[name]?normalize
+                if type is \keyup and normalize?
+                  normalize value
+                #if type is \focus
+                #   typing name
+                
               ..investigate-date = investigate-date
               ..get-event-instance-id = get-event-instance-id
               ..placeholder = placeholder
