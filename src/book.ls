@@ -46,8 +46,6 @@ angular
                 | bag.start is null => \none
                 | get-day(bag.start) isnt get-day(bag.end) => \different
                 | _ => \same
-            #different-days = (bag)->
-            #  get-day(bag.start) isnt get-day(bag.end)
             valid = (form)->
               !state.loading and form.$valid
             issue = (form)->
@@ -62,9 +60,6 @@ angular
               state.form.error = message
             close-error = ->
               error ""
-            #typing = (name)->
-            #  state.tried-checkout = no
-            #  state.typing-input = name
             reset-idenpotency-key = ->
                state.idenpotency-key = do
                   s = ->
@@ -73,10 +68,6 @@ angular
             reset-idenpotency-key!
             few = (arr)->
               arr?filter?(-> it.quantity > 0) ? []
-            #more-then-one = ->
-            #  few(state.calendar.attendees).length > 0
-            #nobody = ->
-            #  state.calendar.attendees.filter(-> it.quantity > 0).length is 0
             sum = (arr)->
                 | typeof arr is \undefined => 0
                 | typeof arr is null => 0
@@ -166,11 +157,13 @@ angular
                   .get \payments/setup
             validate = (form)->
               return if state.loading is yes
+              debug \change-to-tried-checkout, \validate
               state.tried-checkout = yes
               if !valid(form)
                  error issue(form)
             checkout = (form)->
               return if state.loading is yes
+              debug \change-to-tried-checkout, \checkout
               state.tried-checkout = yes
               if valid(form)
                 state.loading = yes
@@ -296,6 +289,7 @@ angular
                     active: no
             try-checkout = ->
               if state.form.agreed 
+                debug \change-to-tried-checkout, \try-checkout
                 state.tried-checkout = yes
             message = (form, name)->
               for field of fields
