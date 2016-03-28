@@ -62,9 +62,9 @@ angular
               state.form.error = message
             close-error = ->
               error ""
-            typing = (name)->
-              state.tried-checkout = no
-              state.typing-input = name
+            #typing = (name)->
+            #  state.tried-checkout = no
+            #  state.typing-input = name
             reset-idenpotency-key = ->
                state.idenpotency-key = do
                   s = ->
@@ -307,9 +307,7 @@ angular
                       return ""
               ""
             placeholder = (name)->
-                if state.typing-input is name
-                then fields[name].example
-                else fields[name].placeholder
+                fields[name].placeholder
             prefill ->
               f = state.form
               f.email = "test@debug.com"
