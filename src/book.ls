@@ -159,8 +159,10 @@ angular
               return if state.loading is yes
               debug \change-to-tried-checkout, \validate
               state.tried-checkout = yes
-              if !valid(form)
+              is-valid = valid(form)
+              if not is-valid
                  error issue(form)
+              is-valid
             checkout = (form)->
               return if state.loading is yes
               debug \change-to-tried-checkout, \checkout
