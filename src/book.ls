@@ -158,7 +158,7 @@ angular
             validate = (form)->
               return if state.loading is yes
               debug \change-to-tried-checkout, \validate
-              state.tried-checkout = yes
+              #state.tried-checkout = yes
               if !valid(form)
                  error issue(form)
             checkout = (form)->
