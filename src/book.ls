@@ -196,11 +196,15 @@ angular
               s = fields[name].state
               show = 
                 | !s.touched and !state.tried-checkout => no
-                | s.active and !state.tried-checkout => 
+                | s.active and !state.tried-checkout => no
                 | !s.active and s.touched => yes
                 | s.tried-checkout => yes
                 | _ => no
-              debug \show-error, show, name
+              debug do 
+                "!s.touched and !state.tried-checkout => no" : !s.touched and !state.tried-checkout => no
+                "s.active and !state.tried-checkout" : s.active and !state.tried-checkout
+                "!s.active and s.touched" : !s.active and s.touched
+                "s.tried-checkout" : s.tried-checkout
               if show 
               then show-error name, v
               else ""
