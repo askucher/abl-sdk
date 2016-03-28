@@ -300,7 +300,7 @@ angular
                    val = form[field]?$error
                    if val and is-error(val)
                       if field is name
-                        return show-error field, val
+                        return show-error-logical field, val
                       return ""
               ""
             placeholder = (name)->
