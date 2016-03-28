@@ -311,6 +311,8 @@ angular
                   name: name
                   type: type 
                   value: value
+                #ng:keyup="book.cardChanged($event)"
+                #ng:keyup="book.expDateChanged($event)"
               ..investigate-date = investigate-date
               ..get-event-instance-id = get-event-instance-id
               ..placeholder = placeholder
@@ -320,13 +322,7 @@ angular
               ..agree = agree
               ..fields = fields
               ..few = few
-              #deprecated 
-              ..exp-date-changed = exp-date-changed
-              #deprecated 
-              ..card-changed = card-changed
-              #deprecated 
               ..disabled-order = disabled-order
-              ..typing = typing
               ..message = message
               #..nobody = nobody
               #..different-days = different-days
