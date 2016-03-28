@@ -303,7 +303,7 @@ angular
               state.form.agreed = yes
             state
               ..handle = (event)->
-                name = event.target-event.name #card, #cvv
+                name = event.target.name #card, #cvv
                 type = event.type #focus, blur, keyup
                 value = event.value #input value
                 debug do 
