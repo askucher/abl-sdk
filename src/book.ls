@@ -204,7 +204,7 @@ angular
                 * "!s.touched and !state.tried-checkout": !s.touched and !state.tried-checkout
                   "s.active and !state.tried-checkout": s.active and !state.tried-checkout
                   "!s.active and s.touched": !s.active and s.touched
-                  "state.tried-checkout": s.tried-checkout
+                  "state.tried-checkout": state.tried-checkout
               if show 
               then show-error name, v
               else ""
