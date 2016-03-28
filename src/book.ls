@@ -203,8 +203,6 @@ angular
               if show 
               then show-error name, v
               else ""
-              
-              state.tried-checkout is yes or 
             show-error = (name, v) ->
               | v.required => fields[name]?message?required ? "#name is required"
               | v.pattern => "Please follow the example #{fields[name].example}"
