@@ -165,7 +165,6 @@ angular
               $xabl
                   .get \payments/setup
             validate = (form)->
-              debug \validate
               return if state.loading is yes
               state.tried-checkout = yes
               if !valid(form)
@@ -215,37 +214,37 @@ angular
                   pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
                   example: 'nickname@email.com'
                   placeholder: 'Email'
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               name:
                   pattern: ''
                   example: 'Your name'
                   placeholder: 'Name'
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               phone:
                   pattern: /^[0-9]{3}[-][0-9]{3}[-][0-9]{3,5}$/i
                   placeholder: "Phone +1 123-456-1234"
                   example: "+1 123-456-1234"
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               address:
                   pattern: ''
                   example: 'Address'
                   placeholder: 'Home address'
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               notes:
                   pattern: ''
                   example: "Notes"
                   placeholder: "Notes"
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               card:
                   pattern: /[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}/i
                   example: '0000 0000 0000 0000'
@@ -256,9 +255,9 @@ angular
                        value |> (.split(' ').join(''))
                              |> p.fold cardify, ""
                              |> (-> it.substr(0, 19))
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               exp-date:
                   pattern: /[0-9]{2}\/[0-9]{2}/i
                   example: "05/15"
@@ -271,24 +270,24 @@ angular
                        | e.length is 2 => e.0 + e.1 + \/
                        | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
                        | _ => e
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               start-date: {}
               cvv:
                   pattern: /[0-9]{3,4}/i
                   example: "000"
                   placeholder: "CVV"
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
               agreed: 
                   pattern: \true
                   message: 
                     required: "Please accept the terms and conditions"
-                  error: 
-                    show: no
-                    message: ''
+                  state: 
+                    touched: no
+                    active: no
             try-checkout = ->
               if state.form.agreed 
                 state.tried-checkout = yes
@@ -322,12 +321,15 @@ angular
                 name = event.target.name #card, #cvv
                 type = event.type #focus, blur, keyup
                 value = event.target.value #input value
-                normalize = fields[name]?normalize
-                if type is \keyup and normalize?
-                  normalize value
-                #if type is \focus
-                #   typing name
-                
+                field = fields[name]
+                switch type
+                  case \keyup
+                    field.normalize? value
+                  case \focus
+                    field.state.active = yes
+                    field.state.touched = yes
+                  case \blur 
+                    field.state.active = no
               ..investigate-date = investigate-date
               ..get-event-instance-id = get-event-instance-id
               ..placeholder = placeholder
