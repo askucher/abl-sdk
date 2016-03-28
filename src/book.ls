@@ -156,7 +156,7 @@ angular
               $xabl
                   .get \payments/setup
             validate = (form)->
-              return if state.loading is yes
+              return no if state.loading is yes
               debug \change-to-tried-checkout, \validate
               state.tried-checkout = yes
               is-valid = valid(form)
@@ -164,10 +164,7 @@ angular
                  error issue(form)
               is-valid
             checkout = (form)->
-              return if state.loading is yes
-              debug \change-to-tried-checkout, \checkout
-              state.tried-checkout = yes
-              if valid(form)
+              if validate(form)
                 state.loading = yes
                 payment-setup!
                   .success (data)->
@@ -179,8 +176,6 @@ angular
                       state.loading = no
                       error err
                       global-callback \error, error
-              else
-                error issue(form)
             agree = ->
               state.form.agreed = !state.form.agreed
               try-checkout!
