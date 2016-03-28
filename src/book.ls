@@ -320,8 +320,11 @@ angular
               ..agree = agree
               ..fields = fields
               ..few = few
+              #deprecated 
               ..exp-date-changed = exp-date-changed
+              #deprecated 
               ..card-changed = card-changed
+              #deprecated 
               ..disabled-order = disabled-order
               ..typing = typing
               ..message = message
