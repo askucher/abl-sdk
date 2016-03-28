@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \ablbook, ($xabl, p, stripe, debug, prefill)->
+  .service \ablbook, ($xabl, p, stripe, debug, prefill, safe-apply)->
       (activity, global-callback)->
             state =
                tried-checkout: no
@@ -316,18 +316,19 @@ angular
               state.form.agreed = yes
             state
               ..handle = (event)->
-                name = event.target.name #card, #cvv
-                type = event.type #focus, blur, keyup
-                value = event.target.value #input value
-                field = fields[name]
-                switch type
-                  case \keyup
-                    field.normalize? value
-                  case \focus
-                    field.state.active = yes
-                    field.state.touched = yes
-                  case \blur 
-                    field.state.active = no
+                safe-apply ->
+                  name = event.target.name #card, #cvv
+                  type = event.type #focus, blur, keyup
+                  value = event.target.value #input value
+                  field = fields[name]
+                  switch type
+                    case \keyup
+                      field.normalize? value
+                    case \focus
+                      field.state.active = yes
+                      field.state.touched = yes
+                    case \blur 
+                      field.state.active = no
               ..investigate-date = investigate-date
               ..get-event-instance-id = get-event-instance-id
               ..placeholder = placeholder
