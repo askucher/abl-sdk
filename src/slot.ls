@@ -59,7 +59,7 @@ angular
            merged = merge(day, slot.start-time)
            model.date.start = merged
        perform-choose-slot = (slot)->
-           #debug \perform-choose-slot, slot
+           debug \perform-choose-slot, slot
            if !slot?
              throw "Slot is undefined"
            if !slot.available?
