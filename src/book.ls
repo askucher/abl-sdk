@@ -85,7 +85,12 @@ angular
               newval + val2
             
             get-event-instance-id = ->
-              event-id = activity.timeslots.filter(-> it._id is state.calendar._id).0.event-id
+              event-id = 
+                 activity.timeslots |> p.find(-> it._id is state.calendar._id) 
+                                    |> (-> it?event-id)
+              if !event-id?
+                 throw "event id is not found by id #{state.calendar._id} in [#{activity.timeslots.map(-> it._id).join(',')}]" 
+                  
               event-id + \_ + state.calendar.date.origin
             stripe-process = (key, callback)->
                if typeof key is \undefined
@@ -115,7 +120,7 @@ angular
                           
                           make-nulls = (total)->
                             [1 to total] |> p.map (-> null)
-                          debug state.calendar.calc.attendees
+                          #debug state.calendar.calc.attendees
                           req =
                             stripe-token: token
                             coupon-id: if state.calendar.calc.coupon.codes.length > 0 
@@ -157,7 +162,7 @@ angular
                   .get \payments/setup
             validate = (form)->
               return no if state.loading is yes
-              debug \change-to-tried-checkout, \validate
+              #debug \change-to-tried-checkout, \validate
               state.tried-checkout = yes
               is-valid = valid(form)
               if not is-valid
@@ -287,7 +292,7 @@ angular
                     active: no
             try-checkout = ->
               if state.form.agreed 
-                debug \change-to-tried-checkout, \try-checkout
+                #debug \change-to-tried-checkout, \try-checkout
                 state.tried-checkout = yes
             message = (form, name)->
               for field of fields
