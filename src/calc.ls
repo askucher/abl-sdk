@@ -92,8 +92,8 @@ angular
                   | _ => subtotal
               _ =
                 | !code? => 0
-                | percentage is yes => amount!
-                | percentage is no  => subtotal / 100 * origin
+                | percentage is no => amount!
+                | percentage is yes  => subtotal / 100 * origin
                 | _ => 0
               _
           warning = (charge, name)->
