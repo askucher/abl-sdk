@@ -82,14 +82,14 @@ angular
           total-addons = ->
               state.addons.map(calc-addon-price) |> sum
           calc-coupon = ->
-              debug \calc=coupon, coupon.codes
+              
               origin = coupon.codes.0?amount ? 0
               percentage = coupon.codes.0?percentage ? no
-              amount = origin / 100
               subtotal = calc-subtotal!
               amount = ->
-                  | amount < subtotal => amount
+                  | origin < subtotal => origin
                   | _ => subtotal
+              debug \calc=coupon, coupon.codes, origin, subtotal
               _ =
                 | !code? => 0
                 | percentage is no => amount!
