@@ -60,6 +60,10 @@ angular
            model.date.start = merged
        perform-choose-slot = (slot)->
            #debug \perform-choose-slot, slot
+           if !slot?
+             throw "Slot is undefined"
+           if !slot.available?
+             throw "Slot doesn't have required 'available' field"
            return if slot.available is 0
            day = model.value
            
@@ -70,9 +74,11 @@ angular
            model.date.end = slot.end-time
            model.charges = slot.charges
            model.calc = ablcalc(slot.charges ++ activity.charges)
+           if !slot._id?
+             throw "Slot doesn't have required field '_id'"
            model._id = slot._id
            
-           timeslot = 
+           timeslot =
              activity.timeslots |> p.find (._id is slot._id) 
            if !timeslot?
              throw "Slot has not been found by id #{slot._id} in [#{activity.timeslots.map(-> it._id).join(',')}]"
@@ -313,6 +319,7 @@ angular
               end: null
           ..value= null
           ..event-id= null
+          .._id = null
           ..charges= []
           ..attendees= []
           ..addons= activity.charges.filter(-> it.type is \addon).map(transform-charge)
