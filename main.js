@@ -702,9 +702,9 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug, 
       state.addons.map(calcAddonPrice));
     };
     calcCoupon = function(){
-      var origin, percentage, amount, subtotal, _;
-      origin = coupon.codes[0].amount;
-      percentage = coupon.codes[0].percentage;
+      var origin, ref$, ref1$, percentage, ref2$, amount, subtotal, _;
+      origin = (ref$ = (ref1$ = coupon.codes[0]) != null ? ref1$.amount : void 8) != null ? ref$ : 0;
+      percentage = (ref$ = (ref2$ = coupon.codes[0]) != null ? ref2$.percentage : void 8) != null ? ref$ : false;
       amount = origin / 100;
       subtotal = calcSubtotal();
       amount = function(){
