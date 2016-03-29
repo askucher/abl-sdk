@@ -86,7 +86,6 @@ angular
               percentage = coupon.codes.0?percentage ? no
               subtotal = calc-subtotal!
               result =
-                | !code? => 0
                 | percentage is no and origin < subtotal => origin
                 | percentage is no => subtotal
                 | _  => subtotal / 100 * origin
