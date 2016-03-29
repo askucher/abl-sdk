@@ -85,6 +85,8 @@ angular
               newval + val2
             
             get-event-instance-id = ->
+              if !state.calendar._id?
+                throw "Cannot get event instance id because calendar._id is not defined"
               event-id = 
                  activity.timeslots |> p.find(-> it._id is state.calendar._id) 
                                     |> (-> it?event-id)

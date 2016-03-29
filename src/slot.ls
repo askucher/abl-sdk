@@ -71,7 +71,10 @@ angular
            model.charges = slot.charges
            model.calc = ablcalc(slot.charges ++ activity.charges)
            model._id = slot._id
+           
            model.event-id = activity.timeslots.filter(-> it._id is slot._id)?0?event-id
+           if !event-id?
+             throw "Slot has not been found by id #{slot._id} in [#{activity.timeslots.map(-> it._id).join(',')}]"
            attendees = model.attendees
            make-attendee = (timeslot)->
                q = attendees.filter(-> it.name is timeslot.name)
@@ -114,6 +117,7 @@ angular
                  |> p.sort-by (.time)
        select = (day)->
            model.value = day
+           
            active-slots.length = 0
            slots-by-day(day).for-each (slot)->
                active-slots.push slot

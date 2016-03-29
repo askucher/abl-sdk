@@ -10,11 +10,11 @@ angular
       (input-new-charges, input-prevous-charges, paid)->
           prevous-charges = input-prevous-charges ? []
           new-charges = input-new-charges?filter(-> it.status is \active) ? []
-          debug do
-             prevous-charges: prevous-charges
-             new-charges: new-charges
-             input-new-charges: input-new-charges
-             input-prevous-charges: input-prevous-charges
+          #debug do
+          #   prevous-charges: prevous-charges
+          #   new-charges: new-charges
+          #   input-new-charges: input-new-charges
+          #   input-prevous-charges: input-prevous-charges
           make-new-charge = (charge)->
             name: charge.name
             quantity: 0
