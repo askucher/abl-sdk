@@ -72,9 +72,13 @@ angular
            model.calc = ablcalc(slot.charges ++ activity.charges)
            model._id = slot._id
            
-           model.event-id = activity.timeslots.filter(-> it._id is slot._id)?0?event-id
-           if !event-id?
+           timeslot = 
+             activity.timeslots |> p.find (._id is slot._id) 
+           if !timeslot?
              throw "Slot has not been found by id #{slot._id} in [#{activity.timeslots.map(-> it._id).join(',')}]"
+           if !timeslot?event-id?
+             throw "Event id field has not been found in timeslot #{JSON.stringify(timeslot)}"
+           model.event-id = timeslot.event-id
            attendees = model.attendees
            make-attendee = (timeslot)->
                q = attendees.filter(-> it.name is timeslot.name)
