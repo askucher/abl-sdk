@@ -148,12 +148,9 @@ angular
               adjustment.is-edit = yes
               #adjustment.code = c.code
               adjustment.remove c
-          name-to-code = (coupon)->
-            debug \name-to-code, coupon
-            coupon.code = coupon.name 
-            coupon
+
           coupon =
-            codes: prevous-charges |> p.filter(-> it.type is \coupon) |> p.map name-to-code
+            codes: prevous-charges |> p.filter(-> it.type is \coupon)
             calc: calc-coupon
             show: no
             edit: (c)->
@@ -208,6 +205,9 @@ angular
             state.addons |> p.filter (-> it.quantity > 0) |> p.map ((o)-> "#{o.quantity} #{o.name}") |> p.join ", "
           total-without-taxesfees: calc-subtotal
           calc-coupon: calc-coupon
+          coupon-code: ->
+             code = coupon.codes.0
+             code?couponId ? code?name ? "UNKNOWN"
           calc-tax-fee: calc-tax-fee
           calc-taxes-fees: calc-taxes-fees
           show-price: show-price
