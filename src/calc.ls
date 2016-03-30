@@ -148,8 +148,11 @@ angular
               adjustment.is-edit = yes
               #adjustment.code = c.code
               adjustment.remove c
+          name-to-code = (coupon)->
+            coupon.code = coupon.name 
+            coupon
           coupon =
-            codes: prevous-charges |> p.filter(-> it.type is \coupon)
+            codes: prevous-charges |> p.filter(-> it.type is \coupon) |> p.map name-to-code
             calc: calc-coupon
             show: no
             edit: (c)->
