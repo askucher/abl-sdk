@@ -110,7 +110,7 @@ angular
                 | _ => ""
               res
           calc-total = ->
-              calc-subtotal! + calc-taxes-fees! - calc-coupon!
+              calc-subtotal! + calc-taxes-fees! + calc-coupon!
           calc-previous-total = ->
               prevous-charges |> p.map (.amount)
                               |> p.sum
