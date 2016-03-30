@@ -149,6 +149,7 @@ angular
               #adjustment.code = c.code
               adjustment.remove c
           name-to-code = (coupon)->
+            debug \name-to-code, coupon
             coupon.code = coupon.name 
             coupon
           coupon =
