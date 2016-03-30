@@ -94,7 +94,7 @@ angular
                    origin: origin
                    subtotal: subtotal
                    result: result
-              result
+              result * -1
           warning = (charge, name)->
               removed =
                 charge.status is \inactive
