@@ -195,6 +195,8 @@ angular
                     apply data
                 .error (data)->
                     coupon.error = data?errors?0 ? "Coupon not found"
+                    coupon.code = ""
+                    coupon.show = yes
             code: ""
           warning: warning
           coupon: coupon
