@@ -51,7 +51,7 @@ angular
                       * url
                       * item
                    .success (data)->
-                      debug \backend-success, data
+                      #debug \backend-success, data
                       success data
                       callback? data
               

@@ -180,6 +180,7 @@ angular
                          delete coupon.success
                      * 3000
                   ""
+                debug "activity", data.activities.0, activity
                 coupon.error =
                   | data.max-redemptions isnt 0 and data.max-redemptions <= data.redemptions => "This coupon has been fully redeemed."
                   | moment!.diff(moment(data.redeem-by), \minutes) > 0 => "This coupon is expired"
