@@ -24,6 +24,7 @@ angular
                     card: ''
                     exp-date: ''
                     cvv: ''
+                    address_zip: ''
                calendar:
                  value: null
                  visible: no
@@ -106,6 +107,7 @@ angular
                req =
                  number: cc.card
                  cvc: cc.cvv
+                 address_zip: cc.address_zip
                  exp_month: exp-date.0
                  exp_year: "20#{exp-date.1}"
                  full-name: f.name
@@ -249,6 +251,15 @@ angular
                   state: 
                     touched: no
                     active: no
+              address_zip:
+                  pattern: ''
+                  example: '12345'
+                  placeholder: "Postal Code"
+                  normalize: (value)->
+                    value
+                  state: 
+                    touched: no
+                    active: no
               card:
                   pattern: /[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}/i
                   example: '0000 0000 0000 0000'
@@ -316,6 +327,7 @@ angular
               f.notes = "Some test notes"
               c = state.form.credit-card
               c.card = "5105 1051 0510 5100"
+              c.address_zip = "12345"
               c.exp-date = "05/17"
               c.cvv = "333"
               state.form.agreed = yes
