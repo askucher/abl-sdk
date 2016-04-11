@@ -2,5 +2,6 @@ angular.module \ablsdk
  .filter \price, ($filter) ->
     (amount, config) ->
        view = amount / 100
-       | config is 0 or config is "0" => \$ + Math.round(view)
-       | _ => $filter('currency')(view)
+       r = 
+        | config is 0 or config is "0" => \$ + Math.round(view)
+        | _ => $filter('currency')(view)
