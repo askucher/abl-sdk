@@ -3,6 +3,6 @@ angular.module \ablsdk
     (amount, config) ->
        view = amount / 100
        r = 
-        | config is 'right' => $filter('currency')(view).replace("$",'').trim! + " $"
-        | config is 0 or config is "0" => \$ + Math.round(view)
+        | config is '00.00 $' => $filter('currency')(view).replace("$",'').trim! + " $"
+        | config is "$ 00" => \$ + Math.round(view)
         | _ => $filter('currency')(view)
