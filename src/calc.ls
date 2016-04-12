@@ -149,8 +149,6 @@ angular
             calc: calc-coupon
             show: no
             code: ''
-            normalize: ->
-              coupon.code = (coupon.code ? "").to-upper-case!
             edit: (c)->
               coupon.code = c.code
               coupon.remove c
@@ -197,6 +195,8 @@ angular
                     coupon.show = yes
             code: ""
           warning: warning
+          handle: ->
+            coupon.code = (coupon.code ? "").to-upper-case!
           coupon: coupon
           adjustment: adjustment
           addons: state.addons
