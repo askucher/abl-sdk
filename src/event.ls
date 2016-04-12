@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .directive \event, (p)->
+  .directive \event, (p, safe-apply)->
       restrict: \A
       scope: 
         event: \&
@@ -8,6 +8,8 @@ angular
         $element = $ element
         setup = (event-name)->
           $element[event-name] (event)->
-            $scope.event do
+            apply = ->
+              $scope.event do
                 event: event
+            safe-apply apply, $scope
         [\blur, \focus, \keyup] |> p.each setup
