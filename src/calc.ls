@@ -148,7 +148,6 @@ angular
             codes: prevous-charges |> p.filter(-> it.type is \coupon)
             calc: calc-coupon
             show: no
-            code: ''
             edit: (c)->
               coupon.code = c.code
               coupon.remove c
