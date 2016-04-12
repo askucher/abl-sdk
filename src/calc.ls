@@ -194,7 +194,8 @@ angular
                     coupon.show = yes
             code: ""
           warning: warning
-          handle: ->
+          handle: ($event)->
+            debug \handle, $event
             coupon.code = (coupon.code ? "").to-upper-case!
           coupon: coupon
           adjustment: adjustment
