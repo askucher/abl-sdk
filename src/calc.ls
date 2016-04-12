@@ -89,11 +89,6 @@ angular
                 | percentage is no and origin < subtotal => origin
                 | percentage is no => subtotal
                 | _  => subtotal / 100 * origin
-              debug do
-                   codes: coupon.codes
-                   origin: origin
-                   subtotal: subtotal
-                   result: result
               result * -1
           warning = (charge, name)->
               removed =
@@ -153,6 +148,9 @@ angular
             codes: prevous-charges |> p.filter(-> it.type is \coupon)
             calc: calc-coupon
             show: no
+            code: ''
+            normalize: ->
+              coupon.code = (coupon.code ? "").to-upper-case!
             edit: (c)->
               coupon.code = c.code
               coupon.remove c
