@@ -82,13 +82,15 @@ angular
           total-addons = ->
               state.addons.map(calc-addon-price) |> sum
           calc-coupon = ->
-              origin = Math.abs(coupon.codes.0?amount ? 0)
-              percentage = coupon.codes.0?percentage ? no
-              subtotal = calc-subtotal!
+              code = coupon.codes.0
+              origin = Math.abs(code?amount ? 0)
+              percentage = code?percentage ? no
+              debug \calc-coupon, code
+              current-price = if code.is-total then calc-total-without-coupon! else calc-subtotal!
               result =
-                | percentage is no and origin < subtotal => origin
-                | percentage is no => subtotal
-                | _  => subtotal / 100 * origin
+                | percentage is no and origin < current-price => origin
+                | percentage is no => current-price
+                | _  => current-price / 100 * origin
               result * -1
           warning = (charge, name)->
               removed =
@@ -104,8 +106,10 @@ angular
                 | (removed or changed) and name is \mutated => yes
                 | _ => ""
               res
+          calc-total-without-coupon = ->
+              calc-subtotal! + calc-taxes-fees!
           calc-total = ->
-              calc-subtotal! + calc-taxes-fees! + calc-coupon!
+              calc-total-without-coupon! + calc-coupon!
           calc-previous-total = ->
               prevous-charges |> p.map (.amount)
                               |> p.sum
