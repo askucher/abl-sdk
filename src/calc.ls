@@ -86,7 +86,7 @@ angular
               origin = Math.abs(code?amount ? 0)
               percentage = code?percentage ? no
               debug \calc-coupon, code
-              current-price = if code.is-total then calc-total-without-coupon! else calc-subtotal!
+              current-price = if code?is-total then calc-total-without-coupon! else calc-subtotal!
               result =
                 | percentage is no and origin < current-price => origin
                 | percentage is no => current-price
