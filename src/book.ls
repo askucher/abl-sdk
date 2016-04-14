@@ -338,6 +338,7 @@ angular
                   type = event.type #focus, blur, keyup
                   value = event.target.value #input value
                   field = fields[name]
+                  return if !field?
                   switch type
                     case \keyup
                       field.normalize? value
