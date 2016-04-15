@@ -55,7 +55,7 @@ angular
                | typeof val is \undefined => no
                | typeof! val is \Number => yes
                | typeof! val is \String and val.length is 0 => no
-               | typeof! val is \String and val.match('^[0-9]$')?0?length is val.length => yes
+               | typeof! val is \String and val.match('^[0-9]+$')?0?length is val.length => yes
                | _ => no
            quantities = 
                model.calc.attendees |> p.map (.quantity) 
