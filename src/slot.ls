@@ -53,6 +53,7 @@ angular
            correct = (val)->
                | typeof! val is \Number => yes
                | typeof! val is \String and val.length > 0 => yes
+               | typeof! val is \String and val.match('^[0-9]$').0.length is val.length => yes
                | _ => no
            quantities = 
                model.calc.attendees |> p.map (.quantity) 
