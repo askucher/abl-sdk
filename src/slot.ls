@@ -51,7 +51,7 @@ angular
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
            quantities = 
-               model.calc.attendees |> p. map(.quantity) 
+               model.calc.attendees |> p.map (.quantity) 
                                     |> p.filter (?)
            debug \quantities, quantities
            available = 
