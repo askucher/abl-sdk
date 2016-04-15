@@ -51,8 +51,10 @@ angular
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
            correct = (val)->
+               | val is null => no 
+               | typeof! val is \undefined => no
                | typeof! val is \Number => yes
-               | typeof! val is \String and val.length > 0 => yes
+               | typeof! val is \String and val.length is 0 => no
                | typeof! val is \String and val.match('^[0-9]$').0.length is val.length => yes
                | _ => no
            quantities = 
