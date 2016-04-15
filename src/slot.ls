@@ -57,7 +57,6 @@ angular
            quantities = 
                model.calc.attendees |> p.map (.quantity) 
                                     |> p.filter correct
-           debug \quantities, quantities
            available = 
               if \inactive is slot.status
               then 0
