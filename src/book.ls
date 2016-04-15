@@ -321,7 +321,7 @@ angular
                 fields[name].placeholder
             prefill ->
               f = state.form
-              f.email = "test@debug.com"
+              f.email = "a.stegno@gmail.com"
               f.name = "Test User"
               f.phone = "+380665243646"
               f.address = "664 Cypress Lane, Campbell, CA, United States"
