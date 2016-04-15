@@ -53,7 +53,7 @@ angular
            available = 
               if \inactive is slot.status
               then 0
-              else slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity)).join('+'))
+              else slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity ? 0 )).join('+'))
            available
        define-date-start = (day, slot)->
            merged = merge(day, slot.start-time)
