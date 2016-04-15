@@ -50,10 +50,14 @@ angular
            ntime = time ? hack-date(time, moment!)
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
+           quantities = 
+               model.calc.attendees |> p. map(.quantity) 
+                                    |> p.filter (?)
+           debug \quantities, quantities
            available = 
               if \inactive is slot.status
               then 0
-              else slot.available - eval(([0] ++ model.calc.attendees.map(-> it.quantity ? 0 )).join('+'))
+              else slot.available - eval(([0] ++ quantities).join('+'))
            available
        define-date-start = (day, slot)->
            merged = merge(day, slot.start-time)
