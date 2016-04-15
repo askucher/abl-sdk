@@ -50,9 +50,13 @@ angular
            ntime = time ? hack-date(time, moment!)
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
+           correct = (val)->
+               | typeof! val is \Number => yes
+               | typeof! val is \String and val.length > 0 => yes
+               | _ => no
            quantities = 
                model.calc.attendees |> p.map (.quantity) 
-                                    |> p.filter (?)
+                                    |> p.filter correct
            debug \quantities, quantities
            available = 
               if \inactive is slot.status
