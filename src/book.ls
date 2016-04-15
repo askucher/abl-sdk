@@ -153,6 +153,7 @@ angular
                               * req
                             .success (data)->
                               if data.booking-id?
+                                 f.booking-id = data.booking-id
                                  reset-idenpotency-key!
                                  callback data
                               else
