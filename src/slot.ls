@@ -80,9 +80,11 @@ angular
            
            define-date-start day, slot
            transform = abldate activity.time-zone
+           
            model.date.origin =
                 transform.backendify(model.date.start).replace(/[\:-]/ig,'')
            model.date.end = slot.end-time
+           model.title = slot.title ? activity.title
            model.charges = slot.charges
            model.calc = ablcalc(slot.charges ++ activity.charges)
            if !slot._id?
@@ -129,6 +131,7 @@ angular
                charges: slot.charges
                price: formula.get-visual-price(timeslots: [slot])
                available: if event?status is \inactive then 0 else available
+               title: event?title
                _id: slot._id
                duration: 
                  moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
