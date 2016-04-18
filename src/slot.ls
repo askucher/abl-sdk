@@ -24,7 +24,7 @@ angular
          year = d.year!
          month = d.month!
          to-date = (number)->
-           new-date([year, month, number])
+           new-date([year, month, number + 1])
          last-day = d.endOf(\month).date!
          debug \generate-calendar, date, new-date(date), last-day
          days = [1 to last-day] |> p.map to-date
