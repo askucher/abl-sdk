@@ -13,11 +13,11 @@ angular
               if date?format?
                 date
               else
-                moment(date)
+                moment(date, activity.time-zone)
              res.format(\YYYYMMDD) |> parse-int
           else null
        new-date = ->
-          d = moment.apply(null, arguments).tz(activity.time-zone)
+          d = moment.apply(null, arguments)
           d
        generate-calendar = (date, callback)->
          d = new-date(date)
