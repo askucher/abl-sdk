@@ -26,7 +26,7 @@ angular
          to-date = (number)->
            new-date(moment.tz([year, month, number], activity.time-zone))
          last-day = d.endOf(\month).date!
-         debug \generate-calendar, date, new-date(date).format(), last-day, to-date(0).format(), to-date(1).format()
+         #debug \generate-calendar, date, new-date(date).format(), last-day, to-date(0).format(), to-date(1).format()
          days = [1 to last-day] |> p.map to-date
          day = new-date(days.0).day!
          dummies = [1 to day] |> p.map (-> null)

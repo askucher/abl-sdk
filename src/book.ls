@@ -197,9 +197,8 @@ angular
               show = 
                 | state.tried-checkout => yes
                 | !s.touched and !state.tried-checkout => no
-                | s.active and !state.tried-checkout => no
+                |  s.active and !state.tried-checkout => no
                 | !s.active and s.touched => yes
-                
                 | _ => no
               #debug do 
               #  * "!s.touched and !state.tried-checkout": !s.touched and !state.tried-checkout
@@ -222,6 +221,7 @@ angular
                   example: 'nickname@email.com'
                   placeholder: 'Email'
                   state: 
+                    index: 1
                     touched: no
                     active: no
               name:
@@ -229,6 +229,7 @@ angular
                   example: 'Your name'
                   placeholder: 'Name'
                   state: 
+                    index: 2
                     touched: no
                     active: no
               phone:
@@ -236,6 +237,7 @@ angular
                   placeholder: "Phone +1 123-456-1234"
                   example: "+1 123-456-1234"
                   state: 
+                    index: 3
                     touched: no
                     active: no
               address:
@@ -243,6 +245,7 @@ angular
                   example: 'Address'
                   placeholder: 'Home address'
                   state: 
+                    index: 4
                     touched: no
                     active: no
               notes:
@@ -250,6 +253,7 @@ angular
                   example: "Notes"
                   placeholder: "Notes"
                   state: 
+                    index: 5
                     touched: no
                     active: no
               address_zip:
@@ -259,6 +263,7 @@ angular
                   normalize: (value)->
                     value
                   state: 
+                    index: 6
                     touched: no
                     active: no
               card:
@@ -272,6 +277,7 @@ angular
                              |> p.fold cardify, ""
                              |> (-> it.substr(0, 19))
                   state: 
+                    index: 7
                     touched: no
                     active: no
               exp-date:
@@ -287,6 +293,7 @@ angular
                        | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
                        | _ => e
                   state: 
+                    index: 8
                     touched: no
                     active: no
               start-date: {}
@@ -295,6 +302,7 @@ angular
                   example: "000"
                   placeholder: "CVV"
                   state: 
+                    index: 9
                     touched: no
                     active: no
               agreed: 
@@ -302,6 +310,7 @@ angular
                   message: 
                     required: "Please accept the terms and conditions"
                   state: 
+                    index: 10
                     touched: no
                     active: no
             try-checkout = ->
@@ -309,7 +318,7 @@ angular
                 #debug \change-to-tried-checkout, \try-checkout
                 state.tried-checkout = yes
             message = (form, name)->
-              for field of fields
+              for field of fields |> p.sort-by (.state.index)
                 if fields.has-own-property field
                    val = form[field]?$error
                    if val and is-error(val)
@@ -339,6 +348,7 @@ angular
                   type = event.type #focus, blur, keyup
                   value = event.target.value #input value
                   field = fields[name]
+                  #if event.target.tabindex=
                   return if !field?
                   switch type
                     case \keyup
@@ -348,6 +358,11 @@ angular
                       field.state.touched = yes
                     case \blur 
                       field.state.active = no
+              ..set-index = (name, index)->
+                field = fields[name]
+                return if !field?
+                field.state.index = index
+                index
               ..investigate-date = investigate-date
               ..get-event-instance-id = get-event-instance-id
               ..placeholder = placeholder
