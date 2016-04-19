@@ -296,7 +296,11 @@ angular
                     index: 8
                     touched: no
                     active: no
-              start-date: {}
+              start-date: 
+                  state: 
+                    index: 11
+                    touched: no
+                    active: no
               cvv:
                   pattern: /[0-9]{3,4}/i
                   example: "000"
