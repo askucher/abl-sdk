@@ -13,7 +13,7 @@ angular
               if date?format?
                 date
               else
-                moment(date, activity.time-zone)
+                moment(date)
              res.format(\YYYYMMDD) |> parse-int
           else null
        new-date = ->
@@ -24,7 +24,7 @@ angular
          year = d.year!
          month = d.month!
          to-date = (number)->
-           new-date([year, month, number])
+           new-date(moment.tz([year, month, number], activity.time-zone))
          last-day = d.endOf(\month).date!
          debug \generate-calendar, date, new-date(date).format(), last-day, to-date(0).format(), to-date(1).format()
          days = [1 to last-day] |> p.map to-date
