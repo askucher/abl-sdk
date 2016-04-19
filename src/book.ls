@@ -319,7 +319,7 @@ angular
                 state.tried-checkout = yes
             message = (form, name)->
               sorted = 
-                fields |> p.obj-to-pairs |> p.sort-by (.state.index) |> p.pairs-to-obj
+                fields |> p.obj-to-pairs |> p.sort-by (.1.state.index) |> p.pairs-to-obj
               for field of sorted
                 if fields.has-own-property field
                    val = form[field]?$error
