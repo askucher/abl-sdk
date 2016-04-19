@@ -1,0 +1,6 @@
+git checkout -b temp
+git branch -D debug
+git checkout -b debug
+git branch -D temp
+git push origin debug
+sh push "$1"
