@@ -360,7 +360,7 @@ angular
                       field.state.active = no
               ..set-index = (name, index)->
                 field = fields[name]
-                return if !field?
+                return index if !field?
                 field.state.index = index
                 index
               ..investigate-date = investigate-date
