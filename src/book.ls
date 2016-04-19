@@ -318,7 +318,9 @@ angular
                 #debug \change-to-tried-checkout, \try-checkout
                 state.tried-checkout = yes
             message = (form, name)->
-              for field of fields |> p.sort-by (.state.index)
+              sorted = 
+                fields |> p.obj-to-pairs |> p.sort-by (.state.index) |> p.pairs-to-obj
+              for field of sorted
                 if fields.has-own-property field
                    val = form[field]?$error
                    if val and is-error(val)
