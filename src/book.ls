@@ -84,16 +84,16 @@ angular
                   | val.length is 19 => val + " "
                   | _ => val
               newval + val2
-            
+
             get-event-instance-id = ->
               if !state.calendar._id?
                 throw "Cannot get event instance id because calendar._id is not defined"
-              event-id = 
-                 activity.timeslots |> p.find(-> it._id is state.calendar._id) 
+              event-id =
+                 activity.timeslots |> p.find(-> it._id is state.calendar._id)
                                     |> (-> it?event-id)
               if !event-id?
-                 throw "event id is not found by id #{state.calendar._id} in [#{activity.timeslots.map(-> it._id).join(',')}]" 
-                  
+                 throw "event id is not found by id #{state.calendar._id} in [#{activity.timeslots.map(-> it._id).join(',')}]"
+
               event-id + \_ + state.calendar.date.origin
             stripe-process = (key, callback)->
                if typeof key is \undefined
@@ -110,7 +110,7 @@ angular
                  address_zip: cc.address_zip
                  exp_month: exp-date.0
                  exp_year: "20#{exp-date.1}"
-                 full-name: f.name
+                 full-name: f.full-name ? f.name
                  location: f.location
                  state: f.state
                stripe
@@ -121,13 +121,13 @@ angular
                             state.loading = no
                             return error err
                           a = activity
-                          
+
                           make-nulls = (total)->
                             [1 to total] |> p.map (-> null)
                           #debug state.calendar.calc.attendees
                           req =
                             stripe-token: token
-                            coupon-id: if state.calendar.calc.coupon.codes.length > 0 
+                            coupon-id: if state.calendar.calc.coupon.codes.length > 0
                                     then state.calendar.calc.coupon.codes.0.coupon-id
                                     else undefined
                             payment-method: \credit
@@ -180,7 +180,7 @@ angular
                   .success (data)->
                       stripe-process data.public-key, (booking)->
                         state.booking = booking
-                        
+
                         global-callback \success, booking
                   .error (err)->
                       state.loading = no
@@ -194,18 +194,18 @@ angular
             show-error-logical = (name, v)->
               #if state.tried-checkout is yes
               s = fields[name].state
-              show = 
+              show =
                 | state.tried-checkout => yes
                 | !s.touched and !state.tried-checkout => no
                 |  s.active and !state.tried-checkout => no
                 | !s.active and s.touched => yes
                 | _ => no
-              #debug do 
+              #debug do
               #  * "!s.touched and !state.tried-checkout": !s.touched and !state.tried-checkout
               #    "s.active and !state.tried-checkout": s.active and !state.tried-checkout
               #    "!s.active and s.touched": !s.active and s.touched
               #    "state.tried-checkout": state.tried-checkout
-              if show 
+              if show
               then show-error name, v
               else ""
             show-error = (name, v) ->
@@ -220,7 +220,7 @@ angular
                   pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
                   example: 'nickname@email.com'
                   placeholder: 'Email'
-                  state: 
+                  state:
                     index: 1
                     touched: no
                     active: no
@@ -228,7 +228,7 @@ angular
                   pattern: ''
                   example: 'Your name'
                   placeholder: 'Name'
-                  state: 
+                  state:
                     index: 2
                     touched: no
                     active: no
@@ -236,7 +236,7 @@ angular
                   pattern: /^[0-9]{3}[-][0-9]{3}[-][0-9]{3,5}$/i
                   placeholder: "Phone +1 123-456-1234"
                   example: "+1 123-456-1234"
-                  state: 
+                  state:
                     index: 3
                     touched: no
                     active: no
@@ -244,7 +244,7 @@ angular
                   pattern: ''
                   example: 'Address'
                   placeholder: 'Home address'
-                  state: 
+                  state:
                     index: 4
                     touched: no
                     active: no
@@ -252,7 +252,7 @@ angular
                   pattern: ''
                   example: "Notes"
                   placeholder: "Notes"
-                  state: 
+                  state:
                     index: 5
                     touched: no
                     active: no
@@ -262,7 +262,7 @@ angular
                   placeholder: "Postal Code"
                   normalize: (value)->
                     value
-                  state: 
+                  state:
                     index: 6
                     touched: no
                     active: no
@@ -276,7 +276,7 @@ angular
                        value |> (.split(' ').join(''))
                              |> p.fold cardify, ""
                              |> (-> it.substr(0, 19))
-                  state: 
+                  state:
                     index: 7
                     touched: no
                     active: no
@@ -292,12 +292,12 @@ angular
                        | e.length is 2 => e.0 + e.1 + \/
                        | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
                        | _ => e
-                  state: 
+                  state:
                     index: 8
                     touched: no
                     active: no
-              start-date: 
-                  state: 
+              start-date:
+                  state:
                     index: 11
                     touched: no
                     active: no
@@ -305,24 +305,24 @@ angular
                   pattern: /[0-9]{3,4}/i
                   example: "000"
                   placeholder: "CVV"
-                  state: 
+                  state:
                     index: 9
                     touched: no
                     active: no
-              agreed: 
+              agreed:
                   pattern: \true
-                  message: 
+                  message:
                     required: "Please accept the terms and conditions"
-                  state: 
+                  state:
                     index: 10
                     touched: no
                     active: no
             try-checkout = ->
-              if state.form.agreed 
+              if state.form.agreed
                 #debug \change-to-tried-checkout, \try-checkout
                 state.tried-checkout = yes
             message = (form, name)->
-              sorted = 
+              sorted =
                 fields |> p.obj-to-pairs |> p.sort-by (.1.state.index) |> p.pairs-to-obj
               for field of sorted
                 if fields.has-own-property field
@@ -362,7 +362,7 @@ angular
                     case \focus
                       field.state.active = yes
                       field.state.touched = yes
-                    case \blur 
+                    case \blur
                       field.state.active = no
               ..set-index = (name, index)->
                 field = fields[name]
