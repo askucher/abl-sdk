@@ -110,7 +110,7 @@ angular
                  address_zip: cc.address_zip
                  exp_month: exp-date.0
                  exp_year: "20#{exp-date.1}"
-                 full-name: f.full-name ? f.name
+                 name: f.full-name ? f.name
                  location: f.location
                  state: f.state
                stripe
