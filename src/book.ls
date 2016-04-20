@@ -209,14 +209,15 @@ angular
               then show-error name, v
               else ""
             show-error = (name, v) ->
-              | v.required => fields[name]?message?required ? "#name is required"
+              | v.required => "#{fields[name].title} is required"
               | v.pattern => "Please follow the example #{fields[name].example}"
-              | v.minlength => "#name is too short"
-              | v.maxlength => "#name is too long"
-              | v.phone => "#name is not valid phone number"
-              | _ => "please check #name"
+              | v.minlength => "#{fields[name].title} is too short"
+              | v.maxlength => "#{fields[name].title} is too long"
+              | v.phone => "#{fields[name].title} is not valid phone number"
+              | _ => "please check #{fields[name].title}"
             fields =
               email:
+                  title: "Email"
                   pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
                   example: 'nickname@email.com'
                   placeholder: 'Email'
@@ -226,6 +227,7 @@ angular
                     active: no
               name:
                   pattern: ''
+                  title: "Name"
                   example: 'Your name'
                   placeholder: 'Name'
                   state: 
@@ -233,6 +235,7 @@ angular
                     touched: no
                     active: no
               phone:
+                  title: "Phone"
                   pattern: /^[0-9]{3}[-][0-9]{3}[-][0-9]{3,5}$/i
                   placeholder: "Phone +1 123-456-1234"
                   example: "+1 123-456-1234"
@@ -242,6 +245,7 @@ angular
                     active: no
               address:
                   pattern: ''
+                  title: "Address"
                   example: 'Address'
                   placeholder: 'Home address'
                   state: 
@@ -250,6 +254,7 @@ angular
                     active: no
               notes:
                   pattern: ''
+                  title: "Notes"
                   example: "Notes"
                   placeholder: "Notes"
                   state: 
@@ -259,9 +264,8 @@ angular
               address_zip:
                   pattern: ''
                   example: '12345'
+                  title: "Postal Code"
                   placeholder: "Postal Code"
-                  message:
-                    required: "Postal Code is required"
                   normalize: (value)->
                     value
                   state: 
@@ -271,6 +275,7 @@ angular
               card:
                   pattern: /[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}/i
                   example: '0000 0000 0000 0000'
+                  title: "Credit Card"
                   placeholder: "Credit Card Number"
                   normalize: (value)->
                     return if typeof value is \undefined
@@ -285,6 +290,7 @@ angular
               exp-date:
                   pattern: /[0-9]{2}\/[0-9]{2}/i
                   example: "05/15"
+                  title: "Exp Date"
                   placeholder: 'Exp Date (MM/YY)'
                   normalize: (value)->
                      e = value?replace(\/,'') ? ""
@@ -306,12 +312,14 @@ angular
               cvv:
                   pattern: /[0-9]{3,4}/i
                   example: "000"
+                  title: "CVV"
                   placeholder: "CVV"
                   state: 
                     index: 9
                     touched: no
                     active: no
               agreed: 
+                  title: "Confirmation"
                   pattern: \true
                   message: 
                     required: "Please accept the terms and conditions"
