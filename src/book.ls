@@ -260,6 +260,8 @@ angular
                   pattern: ''
                   example: '12345'
                   placeholder: "Postal Code"
+                  message:
+                    required: "Postal Code is required"
                   normalize: (value)->
                     value
                   state: 
