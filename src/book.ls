@@ -112,8 +112,8 @@ angular
                 coupon-id: if coupon
                            then state.calendar.calc.coupon.codes.0.coupon-id
                            else undefined
-                payment-method: | free is 0 and coupon => \gift
-                                | free is 0 => \cash
+                payment-method: | free and coupon => \gift
+                                | free => \cash
                                 | _ => \credit
                 event-instance-id: get-event-instance-id!
                 addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, make-nulls a.quantity])
