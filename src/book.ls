@@ -95,7 +95,7 @@ angular
                  throw "event id is not found by id #{state.calendar._id} in [#{activity.timeslots.map(-> it._id).join(',')}]" 
                   
               event-id + \_ + state.calendar.date.origin
-            stripe-process = (key, callback)->
+            stripe-process = (key,more-data, callback)->
                if typeof key is \undefined
                  state.loading = no
                  return error "Stripe key is not defined"
@@ -150,7 +150,7 @@ angular
                           $xabl
                             .post do
                               * \bookings
-                              * req
+                              * angular.extend {}, more-data ? {}, req
                             .success (data)->
                               if data.booking-id?
                                  f.booking-id = data.booking-id
@@ -173,12 +173,12 @@ angular
               if not is-valid
                  error issue(form)
               is-valid
-            checkout = (form)->
+            checkout = (form, more-data)->
               if validate(form)
                 state.loading = yes
                 payment-setup!
                   .success (data)->
-                      stripe-process data.public-key, (booking)->
+                      stripe-process data.public-key, more-data, (booking)->
                         state.booking = booking
                         
                         global-callback \success, booking
