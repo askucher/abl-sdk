@@ -96,6 +96,7 @@ angular
                   
               event-id + \_ + state.calendar.date.origin
             booking-process = (token, callback)->
+              f = state.form
               a = activity
               
               make-nulls = (total)->
