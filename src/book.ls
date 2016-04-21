@@ -95,7 +95,7 @@ angular
                  throw "event id is not found by id #{state.calendar._id} in [#{activity.timeslots.map(-> it._id).join(',')}]" 
                   
               event-id + \_ + state.calendar.date.origin
-            stripe-process = (key, more-data, callback)->
+            stripe-process = (key, callback)->
                if typeof key is \undefined
                  state.loading = no
                  return error "Stripe key is not defined"
@@ -126,6 +126,7 @@ angular
                             [1 to total] |> p.map (-> null)
                           #debug state.calendar.calc.attendees
                           req =
+                            is-mobile: f.is-mobile ? no
                             stripe-token: token
                             coupon-id: if state.calendar.calc.coupon.codes.length > 0 
                                     then state.calendar.calc.coupon.codes.0.coupon-id
@@ -147,13 +148,10 @@ angular
                             currency: \usd
                             _custom-headers:
                               "Idempotency-Key" : state.idenpotency-key
-                          debug \more-data, more-data
                           $xabl
                             .post do
                               * \bookings
-                              * angular.extend do 
-                                  * more-data ? {}
-                                  * req
+                              * req
                             .success (data)->
                               if data.booking-id?
                                  f.booking-id = data.booking-id
