@@ -95,6 +95,56 @@ angular
                  throw "event id is not found by id #{state.calendar._id} in [#{activity.timeslots.map(-> it._id).join(',')}]" 
                   
               event-id + \_ + state.calendar.date.origin
+            booking-process = (token, callback)->
+              a = activity
+              
+              make-nulls = (total)->
+                [1 to total] |> p.map (-> null)
+              #debug state.calendar.calc.attendees
+              coupon = 
+                  state.calendar.calc.coupon.codes.length > 0
+              free = 
+                  state.calendar.calc.calc-total! is 0
+              req =
+                is-mobile: f.is-mobile ? no
+                stripe-token: token
+                coupon-id: coupon
+                        then state.calendar.calc.coupon.codes.0.coupon-id
+                        else undefined
+                payment-method: | free is 0 and coupon => \gift
+                                | free is 0 => \cash
+                                | _ => \credit
+                event-instance-id: get-event-instance-id!
+                addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, make-nulls a.quantity])
+                                                   |> p.pairs-to-obj
+                attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a._id, make-nulls a.quantity])
+                                                          |> p.pairs-to-obj
+                answers: state.calendar.questions |> p.map ((a)-> [a._id, a.answer])
+                                                  |> p.pairs-to-obj
+                adjustments: state.calendar.calc.adjustment.list
+                full-name: f.name
+                email: f.email
+                phone-number: f.phone
+                notes: f.notes
+                location: f.location
+                currency: \usd
+                _custom-headers:
+                  "Idempotency-Key" : state.idenpotency-key
+              $xabl
+                .post do
+                  * \bookings
+                  * req
+                .success (data)->
+                  if data.booking-id?
+                     f.booking-id = data.booking-id
+                     reset-idenpotency-key!
+                     callback data
+                  else
+                     error(e.errors?0 ? "Server error")
+                .error (e)->
+                     error(e.errors?0 ? "Server error")
+                .finally ->
+                   state.loading = no
             stripe-process = (key, callback)->
                if typeof key is \undefined
                  state.loading = no
@@ -119,50 +169,8 @@ angular
                       * (err, token)->
                           if err?
                             state.loading = no
-                            return error err
-                          a = activity
-                          
-                          make-nulls = (total)->
-                            [1 to total] |> p.map (-> null)
-                          #debug state.calendar.calc.attendees
-                          req =
-                            is-mobile: f.is-mobile ? no
-                            stripe-token: token
-                            coupon-id: if state.calendar.calc.coupon.codes.length > 0 
-                                    then state.calendar.calc.coupon.codes.0.coupon-id
-                                    else undefined
-                            payment-method: \credit
-                            event-instance-id: get-event-instance-id!
-                            addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, make-nulls a.quantity])
-                                                               |> p.pairs-to-obj
-                            attendees:  state.calendar.calc.attendees |> p.map ((a)-> [a._id, make-nulls a.quantity])
-                                                                      |> p.pairs-to-obj
-                            answers: state.calendar.questions |> p.map ((a)-> [a._id, a.answer])
-                                                              |> p.pairs-to-obj
-                            adjustments: state.calendar.calc.adjustment.list
-                            full-name: f.name
-                            email: f.email
-                            phone-number: f.phone
-                            notes: f.notes
-                            location: f.location
-                            currency: \usd
-                            _custom-headers:
-                              "Idempotency-Key" : state.idenpotency-key
-                          $xabl
-                            .post do
-                              * \bookings
-                              * req
-                            .success (data)->
-                              if data.booking-id?
-                                 f.booking-id = data.booking-id
-                                 reset-idenpotency-key!
-                                 callback data
-                              else
-                                 error(e.errors?0 ? "Server error")
-                            .error (e)->
-                                 error(e.errors?0 ? "Server error")
-                            .finally ->
-                               state.loading = no
+                          return error err
+                          booking-process token, callback
             payment-setup = ->
               $xabl
                   .get \payments/setup
@@ -174,19 +182,22 @@ angular
               if not is-valid
                  error issue(form)
               is-valid
+            booking-success = (booking)->
+              state.booking = booking
+              global-callback \success, booking
             checkout = (form, more-data)->
               if validate(form)
                 state.loading = yes
-                payment-setup!
-                  .success (data)->
-                      stripe-process data.public-key, more-data, (booking)->
-                        state.booking = booking
-                        
-                        global-callback \success, booking
-                  .error (err)->
-                      state.loading = no
-                      error err
-                      global-callback \error, error
+                if state.calendar.calc.calcTotal! > 0
+                  payment-setup!
+                    .success (data)->
+                        stripe-process data.public-key, booking-success
+                    .error (err)->
+                        state.loading = no
+                        error err
+                        global-callback \error, error
+                else 
+                  booking-process "", booking-success
             agree = ->
               state.form.agreed = !state.form.agreed
               try-checkout!
