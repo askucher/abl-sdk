@@ -169,7 +169,7 @@ angular
                       * (err, token)->
                           if err?
                             state.loading = no
-                          return error err
+                            return error err
                           booking-process token, callback
             payment-setup = ->
               $xabl
