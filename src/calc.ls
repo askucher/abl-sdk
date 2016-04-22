@@ -182,9 +182,17 @@ angular
                 #debug "activity", data.activities.0, activity
                 start-time = moment(data.start-time)
                 redeem-by = moment(data.redeem-by)
+                debug do 
+                  start-time: start-time.format!
+                  redeem-by: redeem-by.format!
+                  check: start-time.diff(moment!, 'minutes')
+                  check1: start-time.diff(redeem-by, 'minutes')
+                  status: data.status
+                  redemptions: data.max-redemptions isnt 0 and data.max-redemptions <= data.redemptions
+                  expired: moment!.diff(redeem-by, \minutes)
+                  activity: data.activities.length > 0 and data.activities.0 isnt activity
                 coupon.error =
                   | start-time.diff(moment!, 'minutes') > 0 => "Coupon is not valid yet"
-                  | start-time.diff(redeem-by, 'minutes') > 0 => "Coupon is not valid"
                   | data.status is \inactive => "Coupon is inactive"
                   | data.max-redemptions isnt 0 and data.max-redemptions <= data.redemptions => "This coupon has been fully redeemed."
                   | moment!.diff(redeem-by, \minutes) > 0 => "This coupon is expired"
