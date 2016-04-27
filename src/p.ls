@@ -100,6 +100,26 @@ angular
               for til n
                 result += str
               result
+            maximum: (xs) ->
+              max = xs.0
+              for x in xs.slice 1 when x > max
+                max = x
+              max
+            minimum: (xs) ->
+              min = xs.0
+              for x in xs.slice 1 when x < min
+                min = x
+              min
+            maximum-by: (f, xs) -->
+              max = xs.0
+              for x in xs.slice 1 when (f x) > (f max)
+                max = x
+              max
+            minimum-by: (f, xs) -->
+              min = xs.0
+              for x in xs.slice 1 when (f x) < (f min)
+                min = x
+              min
             capitalize: (str) ->
               (str.char-at 0).to-upper-case! + str.slice 1
             camelize: (.replace /[-_]+(.)?/g, (, c) -> (c ? '').to-upper-case!)
