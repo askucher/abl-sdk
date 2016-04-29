@@ -117,7 +117,9 @@ angular
                  |> (.length is 0)       
        
        
-       transform-slot = (actual, slot)-->
+       transform-slot = (day)->
+             actual = actual-event day
+             (slot)->
                start = merge(day, slot.start-time)
                duration = slot.end-time - slot.start-time
                event = slot.events |> p.find(actual)
@@ -138,13 +140,11 @@ angular
                taken: slot.max-occ - available    
        
        slots-by-day-without-filters = (day)->
-           actual = actual-event day
-           slots |> p.map transform-slot actual
+           slots |> p.map transform-slot day
                  |> p.sort-by (.time)
        slots-by-day = (day)->
-           actual = actual-event day
            slots |> p.filter (is-fit-to-slot day)
-                 |> p.map transform-slot actual
+                 |> p.map transform-slot day
                  |> p.sort-by (.time)
        select = (day)->
            model.value = day
