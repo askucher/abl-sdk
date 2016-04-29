@@ -115,9 +115,9 @@ angular
            actual = actual-event day
            slots |> p.filter (is-fit-to-slot day)
                  |> (.length is 0)       
-       slots-by-day = (day)->
-           actual = actual-event day
-           transform-slot = (slot)->
+       
+       
+       transform-slot = (actual, slot)-->
                start = merge(day, slot.start-time)
                duration = slot.end-time - slot.start-time
                event = slot.events |> p.find(actual)
@@ -135,14 +135,24 @@ angular
                _id: slot._id
                duration: 
                  moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
-               taken: slot.max-occ - available
+               taken: slot.max-occ - available    
+       
+       slots-by-day-without-filters = (day)->
+           actual = actual-event day
+           slots |> p.map transform-slot actual
+                 |> p.sort-by (.time)
+       slots-by-day = (day)->
+           actual = actual-event day
            slots |> p.filter (is-fit-to-slot day)
-                 |> p.map transform-slot
+                 |> p.map transform-slot actual
                  |> p.sort-by (.time)
        select = (day)->
            model.value = day
            
            active-slots.length = 0
+           possible-slots.length = 0
+           slots-by-day-without-filters(day).for-each (slot)->
+               possible-slots.push slot
            slots-by-day(day).for-each (slot)->
                active-slots.push slot
        is-fit-to-slot = (date, slot) -->
@@ -327,6 +337,7 @@ angular
        slots = []
        calendars = []
        active-slots = []
+       possible-slots = []
        model 
           ..date =
               start: null
@@ -355,6 +366,7 @@ angular
           find-chosen-event!
        model: model
        active-slots: active-slots
+       possible-slots: possible-slots
        move: move
        select-day: select-day
        calendars: calendars
