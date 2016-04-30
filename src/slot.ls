@@ -302,6 +302,9 @@ angular
            return if not-available-slot(slot)
            perform-choose-slot slot
            close yes
+       choose-slot-anyway = (slot)->
+           perform-choose-slot slot
+           close yes
        is-active-day = (date)->
            get-day(date) is get-day(model.value)
        is-disabled-month = (date)->
@@ -382,6 +385,7 @@ angular
        is-active-day: is-active-day
        not-selected: not-selected
        choose-slot: choose-slot
+       choose-slot-anyway: choose-slot-anyway
        not-available-slot: not-available-slot
        disabled-slot: disabled-slot
         

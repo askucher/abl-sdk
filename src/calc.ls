@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \ablcalc, ($xabl, $timeout, p, debug, test, typecheck)->
+  .service \ablcalc, ($xabl, $timeout, p, debug, test)->
       
       
       sum = (arr)->
