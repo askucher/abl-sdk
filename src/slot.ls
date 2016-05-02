@@ -140,7 +140,8 @@ angular
                taken: slot.max-occ - available    
        
        slots-by-day-without-filters = (day)->
-           slots |> p.map transform-slot day
+           slots |> p.filter (is-fit-to-slot-full yes, day)
+                 |> p.map transform-slot day
                  |> p.sort-by (.time)
        slots-by-day = (day)->
            slots |> p.filter (is-fit-to-slot day)
@@ -155,12 +156,14 @@ angular
                possible-slots.push slot
            slots-by-day(day).for-each (slot)->
                active-slots.push slot
-       is-fit-to-slot = (date, slot) -->
+       
+           
+       is-fit-to-slot-full = (include-past, date, slot) -->
           single = slot.days-running.length is 0
           a = activity
           out-of-activity-interval =
               | get-day(slot.start-time) isnt get-day(date) and  single => yes
-              | get-day(slot.start-time)   >  get-day(date) and !single => yes
+              | get-day(slot.start-time)   >  get-day(date) and !single or include-past => yes
               | get-day(slot.until-time)   <  get-day(date) and !single => yes
               | _ => no
           day = (date)->
@@ -176,6 +179,7 @@ angular
               | out-of-activity-interval => no
               | _ => yes
           check
+       is-fit-to-slot = is-fit-to-slot-full no
        is-not-fit-to-any-slot = (date)->
           | slots-by-day(date) |> p.not-any(-> it.available > 0)  => yes
           | slots |> p.not-any (is-fit-to-slot date) => yes
