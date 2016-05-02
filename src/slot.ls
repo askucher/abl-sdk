@@ -163,7 +163,7 @@ angular
           a = activity
           out-of-activity-interval =
               | get-day(slot.start-time) isnt get-day(date) and  single => yes
-              | get-day(slot.start-time)   >  get-day(date) and !single or include-past => yes
+              | (get-day(slot.start-time)   >  get-day(date) and !single) or include-past => yes
               | get-day(slot.until-time)   <  get-day(date) and !single => yes
               | _ => no
           day = (date)->
