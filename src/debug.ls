@@ -3,11 +3,15 @@ angular
     * \ablsdk
   .factory do
       * \debug
-      * (enabledDebug)->
+      * (enabledDebug, $window)->
           (input)->
             if enabled-debug
-              switch typeof! input
-                case \Function
-                  input!
-                else
-                  console?log?apply console, arguments
+              match = input.match('<<[a-z]+>>')
+              if match and $window.catch is match.0.replace('<<','').replace('>>','')
+                 debugger
+              else
+                switch typeof! input
+                  case \Function
+                    input!
+                  else
+                    console?log?apply console, arguments
