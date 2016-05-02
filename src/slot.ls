@@ -284,11 +284,13 @@ angular
            | in-past(date) => yes
            | is-not-fit-to-any-slot(date) => yes
            | _ => no
-       select-day = (day)->
-           return if is-disabled-day(day)
+       select-day-anyway = (day)->
            select day
            define-date-start day, slots.0
            #slots.0 |> perform-choose-slot
+       select-day = (day)->
+           return if is-disabled-day(day)
+           select-day-anyway day
        not-selected = ->
            | model.date.start is null => yes
            | model.chosen is no => yes
@@ -380,6 +382,7 @@ angular
        possible-slots: possible-slots
        move: move
        select-day: select-day
+       select-day-anyway: select-day-anyway
        calendars: calendars
        create-event-instance-id: create-event-instance-id
        calendar-up: calendar-up
