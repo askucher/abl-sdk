@@ -161,11 +161,15 @@ angular
        is-fit-to-slot-full = (include-past, date, slot) -->
           single = slot.days-running.length is 0
           a = activity
+          
           out-of-activity-interval =
-              | get-day(slot.start-time) isnt get-day(date) and  single => yes
-              | (get-day(slot.start-time)   >  get-day(date) and !single) or include-past => yes
-              | get-day(slot.until-time)   <  get-day(date) and !single => yes
+              | single => get-day(slot.start-time) isnt get-day(date) #allow when single event match to current day
+              | get-day(slot.until-time)  >  get-day(date) => no #block when multi-event is finished
+              | include-past => yes #allow mult-event if include-past options is provided
+              | get-day(slot.start-time) >= get-day(date) => yes #return if current day between slot's start-time and end-time (2 rule)
               | _ => no
+          
+          
           day = (date)->
               d = date?day?!
               _ =
