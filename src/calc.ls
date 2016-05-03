@@ -148,7 +148,7 @@ angular
               #adjustment.code = c.code
               adjustment.remove c
           observers = {}
-          on =  (event, func)->
+          on-event =  (event, func)->
             observers[event] =  observers[event] ? []
             observers[event].push func
           notify = (event, data)->
@@ -218,7 +218,7 @@ angular
                     coupon.show = yes
             code: ""
           warning: warning
-          on: on
+          on: on-event
           handle: ($event)->
             debug \handle, $event
             coupon.code = (coupon.code ? "").to-upper-case!
