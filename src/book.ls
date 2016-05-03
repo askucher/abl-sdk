@@ -104,6 +104,7 @@ angular
               #debug state.calendar.calc.attendees
               coupon = 
                   state.calendar.calc.coupon.codes.length > 0
+                  
               free = 
                   state.calendar.calc.calc-total! is 0
               req =

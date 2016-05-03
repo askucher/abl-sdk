@@ -147,7 +147,14 @@ angular
               adjustment.is-edit = yes
               #adjustment.code = c.code
               adjustment.remove c
-
+          observers = {}
+          on =  (event, func)->
+            observers[event] =  observers[event] ? []
+            observers[event].push func
+          notify = (event, data)->
+            list =
+              observers[event] ? []
+            list |> p.each (-> it data)
           coupon =
             codes: prevous-charges |> p.filter(-> it.type is \coupon)
             calc: calc-coupon
@@ -171,6 +178,7 @@ angular
               apply = (data)->
                 success = ->
                   coupon.codes.push data
+                  notify \coupon-added, data
                   coupon.code = ""
                   coupon.success = "Coupon #{data.couponId} added successfully"
                   coupon.show = no
@@ -181,7 +189,7 @@ angular
                   ""
                 #debug "activity", data.activities.0, activity
                 start-time = moment(data.start-time)
-                redeem-by = moment(data.redeem-by)
+                redeem-by = moment(data.end-time)
                 debug do 
                   start-time: start-time.format!
                   redeem-by: redeem-by.format!
@@ -210,6 +218,7 @@ angular
                     coupon.show = yes
             code: ""
           warning: warning
+          on: on
           handle: ($event)->
             debug \handle, $event
             coupon.code = (coupon.code ? "").to-upper-case!
