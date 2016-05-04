@@ -55,8 +55,8 @@ angular
              is-default = arr |> p.filter (.is-default)
              arr2 = arr |> p.filter (-> is-default.index-of(it) is -1) |> p.sort-by (.amount)
              if is-default.length is 0
-                arr |> sort-by (.amount) 
-                    |> reverse
+                arr |> p.sort-by (.amount) 
+                    |> p.reverse
              else
                 is-default ++ arr2
           test ->
