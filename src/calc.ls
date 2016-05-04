@@ -46,7 +46,17 @@ angular
                          |> p.filter exclude type
                          |> p.sort-with by-price
           get-amounts = (type)->
-             [old-amounts, available-amounts] |> p.map (-> it type) |> p.concat
+             arr = 
+                   [old-amounts, available-amounts] |> p.map (-> it type) 
+                                                    |> p.concat 
+                                                    |> p.sort-by (.amount)
+             is-default = arr |> filter (.is-default)
+             arr2 = arr |> p.filter (-> is-default.index-of(it) is -1) |> p.sort-by (.amount)
+             if is-default.length is 0
+                arr |> sort-by (.amount) 
+                    |> reverse
+             else
+                is-default ++ arr2
           test ->
              get-amounts(\aap).length > 0
             
