@@ -247,6 +247,8 @@ angular
               else 
                 visual-slot = 
                    slots-by-day(day) |> p.find (._id is slot._id)
+                if !slot?
+                   observer.notify \event-not-found
                 if not-available-slot(visual-slot)
                    observer.notify \event-sold-out
                 else if in-past(day)
