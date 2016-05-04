@@ -52,7 +52,7 @@ angular
                    [old-amounts, available-amounts] |> p.map (-> it type) 
                                                     |> p.concat 
                                                     |> p.sort-by (.amount)
-             is-default = arr |> filter (.is-default)
+             is-default = arr |> p.filter (.is-default)
              arr2 = arr |> p.filter (-> is-default.index-of(it) is -1) |> p.sort-by (.amount)
              if is-default.length is 0
                 arr |> sort-by (.amount) 
