@@ -243,7 +243,15 @@ angular
            if slot? 
               if not is-disabled-day(day)
                   select-day day
-                  active-slots |> p.find (._id is slot._id) |> choose-slot
+                  debug do 
+                       active-slots: active-slots
+                       possible-slots: possible-slots
+                       current-slot: slot._id
+                  slot = active-slots |> p.find (._id is slot._id)
+                  if !slot?
+                    slot |> choose-slot
+                  else 
+                    observer.notify \event-not-found
               else 
                 visual-slot = 
                    slots-by-day(day) |> p.find (._id is slot._id)
