@@ -17,7 +17,7 @@ angular
           #   input-prevous-charges: input-prevous-charges
           make-new-charge = (charge)->
             name: charge.name
-            is-default: change.is-default
+            is-default: charge.is-default
             quantity: 0
             amount: charge.amount
             _id: charge._id
@@ -25,7 +25,7 @@ angular
             b.amount - a.amount
           make-old-charge = (arr)->
             name: arr.0.name
-            is-default: change.is-default
+            is-default: arr.0.is-default
             amount: arr.0.amount
             quantity: arr.length
             _ids: arr |> p.map (._id)
