@@ -189,7 +189,7 @@ angular
           | slots |> p.not-any (is-fit-to-slot date) => yes
           | _ => no
        in-past = (date, flags)->
-           if flags.index-of('include_nearest') > -1
+           if flags? and flags.index-of('include_nearest') > -1
              get-day(date) < get-day(new-date!) 
            else
              get-day(date) < get-day(new-date!) or date.diff(new-date!, \hours) < 48
