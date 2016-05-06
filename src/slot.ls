@@ -188,8 +188,11 @@ angular
           | slots-by-day(date) |> p.not-any(-> it.available > 0)  => yes
           | slots |> p.not-any (is-fit-to-slot date) => yes
           | _ => no
-       in-past = (date)->
-           get-day(date) < get-day(new-date!) or date.diff(new-date!, \hours) < 48
+       in-past = (date, flags)->
+           if flags.index-of('include_nearest') > -1
+             get-day(date) < get-day(new-date!) 
+           else
+             get-day(date) < get-day(new-date!) or date.diff(new-date!, \hours) < 48
        
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  
@@ -288,10 +291,10 @@ angular
        is-dummy = (date)->
            | date is null => yes
            | _ => no
-       is-disabled-day = (date)->
+       is-disabled-day = (date, flags)->
            | is-dummy(date) => yes
            | is-empty(date) => yes
-           | in-past(date) => yes
+           | in-past(date, flags) => yes
            | is-not-fit-to-any-slot(date) => yes
            | _ => no
        select-day-anyway = (day)->
