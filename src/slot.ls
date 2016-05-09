@@ -168,7 +168,7 @@ angular
           out-of-activity-interval =
               | single => get-day(slot.start-time) isnt get-day(date) #allow when single event match to current day
               | get-day(slot.until-time)  >  get-day(date) => no #block when multi-event is finished
-              | include-past is yes => yes #allow mult-event if include-past options is provided
+              | include-past is yes => no #allow mult-event if include-past options is provided
               | get-day(slot.start-time) >= get-day(date) => yes #return if current day between slot's start-time and end-time (2 rule)
               | _ => no
           
