@@ -126,6 +126,7 @@ angular
                available =
                   event?available ? slot.max-occ
                debug event?status
+               native-slot: slot
                status: event?status
                start-time: start
                time: start.value-of!
@@ -156,12 +157,13 @@ angular
                possible-slots.push slot
            slots-by-day(day).for-each (slot)->
                active-slots.push slot
+               debug \active-slot, slot
        
            
        is-fit-to-slot-full = (include-past, date, slot) -->
           single = slot.days-running.length is 0
           a = activity
-          debug "<<is-fit-to-slot-full>>"
+          #debug "<<is-fit-to-slot-full>>"
           out-of-activity-interval =
               | single => get-day(slot.start-time) isnt get-day(date) #allow when single event match to current day
               | get-day(slot.until-time)  >  get-day(date) => no #block when multi-event is finished
