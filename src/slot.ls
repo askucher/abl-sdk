@@ -1,6 +1,6 @@
 angular
  .module \ablsdk
- .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl)->
+ .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl, $root-scope)->
     (activity, input-model)->
        transform-charge = (item)->
          _id: item._id
@@ -190,11 +190,15 @@ angular
           | slots-by-day(date) |> p.not-any(-> it.available > 0)  => yes
           | slots |> p.not-any (is-fit-to-slot date) => yes
           | _ => no
+       cutoff = 
+           | $root-scope.user?preferences?widget?display?events?isSiteWide is yes =>  $root-scope.user.preferences.widget.display.events.cutoff
+           | (activity.cutoff ? 0) > 0 => activity.cutoff
+           | _=> 48 * 60
        in-past = (date, flags)->
            if flags? and flags.index-of('include_nearest') > -1
              get-day(date) < get-day(new-date!) 
            else
-             get-day(date) < get-day(new-date!) or date.diff(new-date!, \hours) < 48
+             get-day(date) < get-day(new-date!) or date.diff(new-date!, \minutes) < cutoff
        
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  
