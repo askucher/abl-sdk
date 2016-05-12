@@ -255,13 +255,15 @@ angular
            if slot? 
               debug \is-disabled-day, is-disabled-day(day)
               if not is-disabled-day(day)
+                  debug \select-day
                   select-day day
-                  
+                  debug \after-select-day
                   debug do 
                        active-slots: active-slots
                        possible-slots: possible-slots
                        current-slot: slot._id
                   slot = active-slots |> p.find (._id is slot._id)
+                  debug \find-active-slot, slot
                   if !slot?
                     slot |> choose-slot
                   else 
