@@ -321,6 +321,7 @@ angular
        not-available-slot = (slot)->
            slot.available <= 0
        close = (chosen)->
+           debug \close-calendar, model.closed
            set-default = (attendee)->
                     if attendee.quantity is 0 and attendee.name is \Adult
                         attendee.quantity = 1
@@ -329,6 +330,7 @@ angular
            model.visible = no
            model.closed? chosen
        choose-slot = (slot)->
+           debug \choose-slot, not-available-slot(slot)
            return if not-available-slot(slot)
            perform-choose-slot slot
            close yes

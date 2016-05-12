@@ -7,7 +7,7 @@ angular
                typing: ''
                braintree-client: null
                loading: no
-               idenpotency-key: null
+               idempotency-key: null
                form:
                   error: ""
                   agreed: no
@@ -30,6 +30,7 @@ angular
                  visible: no
                  current-activity: activity
                  closed: (chosen)->
+                   debug \closed-calendar, chosen
                    state.form.date.start = state.calendar.date.start
                    state.form.date.end = state.calendar.date.end
                    global-callback \slot-chosen, chosen
@@ -61,12 +62,12 @@ angular
               state.form.error = message
             close-error = ->
               error ""
-            reset-idenpotency-key = ->
-               state.idenpotency-key = do
+            reset-idempotency-key = ->
+               state.idempotency-key = do
                   s = ->
                     Math.floor((1 + Math.random!) * 0x10000).toString(16).substring(1)
                   s! + s! + \- + s! + \- + s! + \- + s! + \- + s! + s! + s!
-            reset-idenpotency-key!
+            reset-idempotency-key!
             few = (arr)->
               arr?filter?(-> it.quantity > 0) ? []
             sum = (arr)->
@@ -131,7 +132,7 @@ angular
                 location: f.location
                 currency: \usd
                 _custom-headers:
-                  "Idempotency-Key" : state.idenpotency-key
+                  "Idempotency-Key" : state.idempotency-key
               $xabl
                 .post do
                   * \bookings
@@ -139,7 +140,7 @@ angular
                 .success (data)->
                   if data.booking-id?
                      f.booking-id = data.booking-id
-                     reset-idenpotency-key!
+                     reset-idempotency-key!
                      callback data
                   else
                      error(e.errors?0 ? "Server error")
