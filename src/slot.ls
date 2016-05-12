@@ -242,6 +242,7 @@ angular
            up: ->
              calendar.move -1
        find-chosen-event = ->
+           debug \find-chosen-event
            return if (state.chosen-event ? "").length is 0
            return if slots.length is 0
            pairs = state.chosen-event.split(\_)
@@ -250,9 +251,12 @@ angular
            day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
            slot =
              slots |> p.find (.event-id is id)
+           debug \try-to-find-slot, id, slot, slots
            if slot? 
+              debug \is-disabled-day, is-disabled-day(day)
               if not is-disabled-day(day)
                   select-day day
+                  
                   debug do 
                        active-slots: active-slots
                        possible-slots: possible-slots
@@ -265,6 +269,7 @@ angular
               else 
                 visual-slot = 
                    slots-by-day(day) |> p.find (._id is slot._id)
+                debug \visual-slot, visual-slot
                 if !slot?
                    observer.notify \event-not-found
                 if not-available-slot(visual-slot)
