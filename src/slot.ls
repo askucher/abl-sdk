@@ -157,14 +157,11 @@ angular
                possible-slots.push slot
            slots-by-day(day).for-each (slot)->
                active-slots.push slot
-               debug \active-slot, slot
        
            
        is-fit-to-slot-full = (include-past, date, slot) -->
           single = slot.days-running.length is 0
           a = activity
-          #debug \include-past, include-past
-          #debug "<<is-fit-to-slot-full>>"
           out-of-activity-interval =
               | single => get-day(slot.start-time) isnt get-day(date) #allow when single event match to current day
               | get-day(slot.until-time) < get-day(date) => yes #block when multi-event is finished
@@ -194,7 +191,6 @@ angular
            | $root-scope.user?preferences?widget?display?event?isSiteWide is yes =>  $root-scope.user.preferences.widget.display.event.cutoff
            | (activity.cutoff ? 0) > 0 => activity.cutoff
            | _=> 48 * 60
-       debug \cutoff, cutoff, $root-scope.user?preferences
        in-past = (date, flags)->
            if flags? and flags.index-of('include_nearest') > -1
              get-day(date) < get-day(new-date!) 
@@ -242,7 +238,6 @@ angular
            up: ->
              calendar.move -1
        find-chosen-event = ->
-           debug \find-chosen-event
            return if (state.chosen-event ? "").length is 0
            return if slots.length is 0
            pairs = state.chosen-event.split(\_)
@@ -251,27 +246,21 @@ angular
            day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
            slot =
              slots |> p.find (.event-id is id)
-           debug \try-to-find-slot, id, slot, slots
            if slot? 
-              debug \is-disabled-day, is-disabled-day(day)
               if not is-disabled-day(day)
-                  debug \select-day
                   select-day day
-                  debug \after-select-day
-                  debug do 
+                  debug do
                        active-slots: active-slots
                        possible-slots: possible-slots
                        current-slot: slot._id
                   slot = active-slots |> p.find (._id is slot._id)
-                  debug \find-active-slot, slot
-                  if !slot?
+                  if slot?
                     slot |> choose-slot
                   else 
                     observer.notify \event-not-found
               else 
                 visual-slot = 
                    slots-by-day(day) |> p.find (._id is slot._id)
-                debug \visual-slot, visual-slot
                 if !slot?
                    observer.notify \event-not-found
                 if not-available-slot(visual-slot)
