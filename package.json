@@ -18,7 +18,8 @@
     "karma-chrome-launcher": "^1.0.1"
   },
   "scripts": {
-    "test": "lsc -c ./test/* ./test  && ./node_modules/karma/bin/karma start karma.conf.js"
+    "lsc": "lsc -cw ./test/*.ls ./test",
+    "test": "./node_modules/karma/bin/karma start karma.conf.js"
   },
   "repository": {
     "type": "git",

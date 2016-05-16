@@ -34,16 +34,13 @@ methods:
 
 Calculates activity price includes add-ons, coupons, etc.
 
-```
-methods:
 
-* totalWithoutTaxesfees()
-* calcTaxFee()
-* calcTaxesFees()
-* showPrice()
-* calcPrice()
-* showAddonPrice()
-* calcAddonPrice()
-* totalAddons()
-* calcTotal()
+###How to run tests 
+
 ```
+npm run test 
+
+#if you need to modify tests on fly - run
+#npm run lsc
+```
+

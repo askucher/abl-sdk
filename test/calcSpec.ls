@@ -1,5 +1,8 @@
 describe 'calc', ->
   beforeEach module('ablsdk')
-  describe 'Constructor', ->
-    it 'assigns a name', ->
-      expect(new Person('Ben')).to.have.property 'name', 'Ben'
+    
+  services =
+    ablcalc: {}
+  beforeEach inject (_ablcalc_)->
+     ablcalc = _ablcalc_
+  console.log services.ablcalc
