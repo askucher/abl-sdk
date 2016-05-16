@@ -159,7 +159,7 @@ angular
                active-slots.push slot
            pref = 
              $root-scope.user?preferences?widget?display?timeslot ? {}
-           if pref.duration + price.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
+           if pref.duration + pref.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
               choose-slot active-slots.0
               
              
