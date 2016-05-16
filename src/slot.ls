@@ -194,7 +194,7 @@ angular
           | _ => no
        cutoff = 
            | $root-scope.user?preferences?widget?display?event?isSiteWide is yes =>  $root-scope.user.preferences.widget.display.event.cutoff
-           | (activity.cutoff ? 0) > 0 => activity.cutoff
+           | (activity.cutoff ? -1) > -1 => activity.cutoff
            | _=> 48 * 60
        in-past = (date, flags)->
            if flags? and flags.index-of('include_nearest') > -1
