@@ -157,7 +157,12 @@ angular
                possible-slots.push slot
            slots-by-day(day).for-each (slot)->
                active-slots.push slot
-       
+           pref = 
+             $root-scope.user?preferences?widget?display?timeslot ? {}
+           if pref.duration + price.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
+              choose-slot active-slots.0
+              
+             
            
        is-fit-to-slot-full = (include-past, date, slot) -->
           single = slot.days-running.length is 0
