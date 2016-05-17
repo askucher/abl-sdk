@@ -112,7 +112,7 @@ angular
        actual-event = (day, event)-->
             get-day(event.start-time) is get-day(day) 
        is-empty = (day)->  
-           actual = actual-event day
+           #actual = actual-event day
            slots |> p.filter (is-fit-to-slot day)
                  |> (.length is 0)       
        
@@ -159,7 +159,7 @@ angular
                active-slots.push slot
            pref = 
              $root-scope.user?preferences?widget?display?timeslot ? {}
-           if pref.duration + price.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
+           if pref.duration + pref.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
               choose-slot active-slots.0
               
              
@@ -173,6 +173,8 @@ angular
               | get-day(slot.start-time) > get-day(date) => yes #return if current day between slot's start-time and end-time (2 rule)
               | _ => no
           
+          in-past =
+              slot.start-time.diff(new-date!, \minutes) < cutoff
           
           day = (date)->
               d = date?day?!
@@ -185,6 +187,7 @@ angular
           check =
               | out-of-week => no
               | out-of-activity-interval => no
+              | in-past => no
               | _ => yes
           check
        is-fit-to-slot = is-fit-to-slot-full no
@@ -200,7 +203,7 @@ angular
            if flags? and flags.index-of('include_nearest') > -1
              get-day(date) < get-day(new-date!) 
            else
-             get-day(date) < get-day(new-date!) or date.diff(new-date!, \minutes) < cutoff
+             get-day(date) < get-day(new-date!) or slots-by-day(date).length is 0
        
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  

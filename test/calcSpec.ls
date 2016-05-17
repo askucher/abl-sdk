@@ -1,8 +1,5 @@
-describe 'calc', ->
-  beforeEach module('ablsdk')
+describe \calc , ->
+  before-each module \ablsdk
+  before-each inject (ablslot)->
+     console.log 1
     
-  services =
-    ablcalc: {}
-  beforeEach inject (_ablcalc_)->
-     ablcalc = _ablcalc_
-  console.log services.ablcalc
