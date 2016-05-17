@@ -177,8 +177,8 @@ angular
           
           today = merge(date, slot.start-time)
           
-          in-past =
-            today.diff(new-date!, \minutes) - cutoff
+          in-past = today.diff(new-date!, \minutes) - cutoff
+            
           
           
           day = (date)->
@@ -192,7 +192,7 @@ angular
           check =
               | out-of-week => no
               | out-of-activity-interval => no
-              | in-past <= 0 => no 
+              | include-past is no and in-past <= 0 => no 
               | _ => yes
           check
        is-fit-to-slot = is-fit-to-slot-full no
