@@ -173,8 +173,13 @@ angular
               | get-day(slot.start-time) > get-day(date) => yes #return if current day between slot's start-time and end-time (2 rule)
               | _ => no
           
+         
+          
+          today = merge(date, slot.start-time)
+          
           in-past =
-              slot.start-time.diff(new-date!, \minutes) < cutoff
+            today.diff(new-date!, \minutes) - cutoff
+          
           
           day = (date)->
               d = date?day?!
@@ -187,7 +192,7 @@ angular
           check =
               | out-of-week => no
               | out-of-activity-interval => no
-              | in-past => no
+              | in-past <= 0 => no 
               | _ => yes
           check
        is-fit-to-slot = is-fit-to-slot-full no
