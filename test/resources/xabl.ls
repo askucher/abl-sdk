@@ -1,4 +1,4 @@
-angular.module('ablsdk').service do 
+angular.module('test').service do 
   * \$xabl
   * ($http)->
       ENV =

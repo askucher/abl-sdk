@@ -16,10 +16,11 @@
     "minify": "^2.0.9"
   },
   "devDependencies": {
-    "karma-chrome-launcher": "^1.0.1"
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-htmlfile-reporter": "^0.2.2"
   },
   "scripts": {
-    "lsc": "lsc -cw ./test/*.ls ./test",
+    "lsc": "lsc -cw ./test/tests/*.ls ./test/tests/",
     "test": "./node_modules/karma/bin/karma start karma.conf.js"
   },
   "repository": {

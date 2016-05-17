@@ -1,5 +1,5 @@
 angular
-  .module \ablsdk
+  .module \test
   .service \loader, ($xabl)->
       load: (callback)->
             config = $.param do

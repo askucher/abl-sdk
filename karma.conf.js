@@ -21,10 +21,9 @@ module.exports = function(config) {
     files: [
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'test/resources/*.js',
       'main.js',
-      'test/xabl.js',
-      'test/loader.js',
-      'test/**/*Spec.js'
+      'test/tests/*.js'
     ],
 
 
