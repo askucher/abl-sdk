@@ -203,7 +203,7 @@ angular
            if flags? and flags.index-of('include_nearest') > -1
              get-day(date) < get-day(new-date!) 
            else
-             get-day(date) < get-day(new-date!) or slots-by-day(date).length is 0
+             get-day(date) < get-day(new-date!)
        
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  
