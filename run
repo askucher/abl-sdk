@@ -1,4 +1,5 @@
 rm main.js
+lsc -c test/resources/*.ls test/resources
 #npm install -g livescript
 lsc -cpb abl-sdk-module.ls >> main.js
 lsc -cpb src/*.ls >> main.js
