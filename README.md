@@ -9,15 +9,19 @@ bower install abl-sdk
 ```
 
 ```Javascript
+
+
 angular
   .module("app", [ablsdk])
   .controller("yourCtrl", function(ablsdk) {
   
-    //use abldate and ablcalc services here
+    //Your code here
   
   })
 ```
 
+
+##Book activity example
 
 ```Livescript
 angular
@@ -26,7 +30,7 @@ angular
   
     ablsdk.activity.load ->
        
-       //Working with activity model
+       #Working with activity model
        
        all-activities =  ablsdk.activity.all 
        
@@ -36,7 +40,7 @@ angular
        
        console.log ablsdk.activity.current //=> chosen activity
        
-       //Working with slots model
+       #Working with slots model
        
        for calendar in ablsdk.slot.calendars
          for day in calendar.days
@@ -52,7 +56,7 @@ angular
        
        ablsdk.slot.choose-slot ablsdk.slot.active-slots.0
        
-       //Working with book model
+       #Working with book model
        
        
        form = ablsdk.book.form
@@ -66,7 +70,7 @@ angular
        calc.coupon.code = "COUPONCODE"
        calc.coupon.add!
        
-       //when you change the model in angular view please add attributes event="book.handle(event)" and name="email" or appropriate in order to show inline errors to user
+       #when you change the model in angular view please add attributes event="book.handle(event)" and name="email" or appropriate in order to show inline errors to user
        
        form.email = "yourEmail@gmail.com"
        form.name = "Your Name"
