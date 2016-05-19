@@ -12,6 +12,7 @@ angular
          state =
             book: null
             slot: null
+            calc: null
          user =
             preferences: null
          activity =
@@ -34,6 +35,7 @@ angular
                         #   widget.change \pricing
                  state.slot =
                     ablslot item, state.book.calendar
+                 state.calc = state.book.calendar.calc
                  state.slot.observe (name)->
                     notify name
          activity: activity
@@ -44,3 +46,4 @@ angular
              user.preferences = null
              state.slot = null
              state.book = null
+             state.calc = null

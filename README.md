@@ -60,15 +60,14 @@ angular
        
        
        form = ablsdk.book.form
-       calc = ablsdk.book.calendar.calc
        
-       console.log "Available Slots", ablsdk.book.calendar.available!
+       console.log "Available Slots", ablsdk.book.available!
        
-       calc.attendees.0.quontaty = 5
-       calc.addons.0.quontaty = 5
+       ablsdk.calc.attendees.0.quontaty = 5
+       ablsdk.calc.addons.0.quontaty = 5
        
-       calc.coupon.code = "COUPONCODE"
-       calc.coupon.add!
+       ablsdk.calc.coupon.code = "COUPONCODE"
+       ablsdk.calc.coupon.add!
        
        #when you change the model in angular view please add attributes event="book.handle(event)" and name="email" or appropriate in order to show inline errors to user
        
@@ -83,10 +82,10 @@ angular
        
        ablsdk.book.agree! # => Agree with terms and conditions
        
-       console.log "Subtotal", calc.calcSubtotal! 
-       console.log "Taxes / Fees", calc.calcTaxesFees! 
-       console.log "Coupon", calc.calcCoupon!
-       console.log "Total", calc.calcTotal! 
+       console.log "Subtotal", ablsdk.calc.calcSubtotal! 
+       console.log "Taxes / Fees", ablsdk.calc.calcTaxesFees! 
+       console.log "Coupon", ablsdk.calc.calcCoupon!
+       console.log "Total", ablsdk.calc.calcTotal! 
        
        ablsdk.book.checkout!
        

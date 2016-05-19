@@ -6,7 +6,8 @@ angular.module('ablsdk').service('ablsdk', function(ablslot, ablbook, loader, th
     var state, user, activity;
     state = {
       book: null,
-      slot: null
+      slot: null,
+      calc: null
     };
     user = {
       preferences: null
@@ -30,6 +31,7 @@ angular.module('ablsdk').service('ablsdk', function(ablslot, ablbook, loader, th
           return notify(status, data);
         });
         state.slot = ablslot(item, state.book.calendar);
+        state.calc = state.book.calendar.calc;
         return state.slot.observe(function(name){
           return notify(name);
         });
@@ -43,7 +45,8 @@ angular.module('ablsdk').service('ablsdk', function(ablslot, ablbook, loader, th
         activity.current = null;
         user.preferences = null;
         state.slot = null;
-        return state.book = null;
+        state.book = null;
+        return state.calc = null;
       }
     };
   });
