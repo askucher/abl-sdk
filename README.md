@@ -21,7 +21,7 @@ angular
 ```
 
 
-##Book activity example
+##Book an activity example
 
 ```Livescript
 angular
