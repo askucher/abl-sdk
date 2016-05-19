@@ -94,8 +94,5 @@ angular
 
 ```
 npm run test 
-
-#if you need to modify tests on fly - run
-#npm run lsc
 ```
 
