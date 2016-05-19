@@ -34,25 +34,25 @@ angular
        
        all-activities =  ablsdk.activity.all 
        
-       console.log all-activities //=> a loaded activities 
+       console.log all-activities #=> a loaded activities 
        
-       ablsdk.activity.choose all-activities.0  //=> choose a first activity
+       ablsdk.activity.choose all-activities.0  #=> choose a first activity
        
-       console.log ablsdk.activity.current //=> chosen activity
+       console.log ablsdk.activity.current #=> chosen activity
        
        #Working with slots model
        
        for calendar in ablsdk.slot.calendars
          for day in calendar.days
             statuses = 
-              chosen: ablsdk.slot.isActiveDay(day) //=> user chosen that day
-              enabled: ablsdk.slot.isDisabledDay(day)  //=> this day can be chosen
-              empty: ablsdk.slot.isDummy(day) //=> this is not a day but free space reserved by previous month
+              chosen: ablsdk.slot.isActiveDay(day) #=> user chosen that day
+              enabled: ablsdk.slot.isDisabledDay(day)  #=> this day can be chosen
+              empty: ablsdk.slot.isDummy(day) #=> this is not a day but free space reserved by previous month
             if statuses.enabled 
                ablsdk.slot.select-day day
                return
             
-       console.log ablsdk.slot.active-slots //=> show all active slots available for this day
+       console.log ablsdk.slot.active-slots #=> show all active slots available for this day
        
        ablsdk.slot.choose-slot ablsdk.slot.active-slots.0
        
@@ -81,7 +81,7 @@ angular
        form.creditCard.cvv = "123"
        form.creditCard.exp-date = "12/07"
        
-       ablsdk.book.agree! // => Agree with terms and conditions
+       ablsdk.book.agree! # => Agree with terms and conditions
        
        console.log "Subtotal", calc.calcSubtotal! 
        console.log "Taxes / Fees", calc.calcTaxesFees! 
