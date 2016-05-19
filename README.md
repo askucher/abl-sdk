@@ -19,7 +19,7 @@ angular
 ```
 
 
-```Javascript
+```Livescript
 angular
   .module "app", [ablsdk]
   .controller "yourCtrl", (ablsdk)->

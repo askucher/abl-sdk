@@ -4,4 +4,4 @@ lsc -c test/resources/*.ls test/resources
 lsc -cpb abl-sdk-module.ls >> main.js
 lsc -cpb src/*.ls >> main.js
 #npm install -g minifier
-minify main.js main.js
+#minify main.js main.js
