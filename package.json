@@ -13,6 +13,7 @@
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-jasmine": "^1.0.2",
+    "karma-livescript-preprocessor": "^0.1.0",
     "minify": "^2.0.9"
   },
   "devDependencies": {
@@ -20,8 +21,8 @@
     "karma-htmlfile-reporter": "^0.2.2"
   },
   "scripts": {
-    "lsc": "lsc -cw ./test/tests/*.ls ./test/tests/",
-    "test": "./node_modules/karma/bin/karma start karma.conf.js"
+    
+    "test": "killall -9 node; ./node_modules/karma/bin/karma start karma.conf.js"
   },
   "repository": {
     "type": "git",

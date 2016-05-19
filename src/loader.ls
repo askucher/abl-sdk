@@ -1,11 +1,11 @@
 angular
-  .module \test
+  .module \ablsdk
   .service \loader, ($xabl)->
-      load: (callback)->
+      activities: (options, callback)->
             config = $.param do
-              location: state.location
+              location: options.location ? ""
               page-size: 100
-              page: state.page
+              page: options.page ? 0
               no-empty: no
               date-range: 
                 * moment!.start-of(\day).format!

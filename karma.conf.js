@@ -19,15 +19,19 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'https://js.stripe.com/v2/',
+      'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone.js',
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'test/resources/_modules.js',
-      'test/resources/enabledDebug.js',
-      'test/resources/xabl.js',
-      'test/resources/loader.js',
+      'test/resources/_modules.ls',
+      'test/resources/enabledDebug.ls',
+      'test/resources/xabl.ls',
       'main.js',
-      'test/tests/*.js'
+      'test/tests/*.ls'
     ],
+
 
 
     // list of files to exclude
@@ -38,6 +42,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+       '**/*.ls': ['livescript']
     },
 
 
