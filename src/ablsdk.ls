@@ -7,43 +7,39 @@
 #
 angular
   .module \ablsdk
-  .service \ablsdk, (ablslot, ablbook, loader, through, p, observ)->
+  .service \ablsdk, (ablslot, ablbook, loader, through, p, observ, types)->
       observ (notify)->
-         state =
+         widget =
             book: null
             slot: null
             calc: null
-         user =
+            activities: []
+            current-activity: null
             preferences: null
-         activity =
-             all: []
-             load: (config)->
+            choose: (item)->
+                | item instanceof types.Day => widget.slot.select-day item
+                | item instanceof types.Timeslot => widget.slot.choose-slot item
+                | item instanceof types.Activity => choose-activity item
+                | _ => throw "Type of object is not supported"
+            
+         choose-activity = (item)->
+             widget.current-activity = item
+             widget.book =
+                ablbook item, (status, data)->
+                    notify status, data
+             widget.slot =
+                ablslot item, widget.book.calendar
+             widget.calc = widget.book.calendar.calc
+             widget.slot.observe (name)->
+                notify name
+         widget.load = (config)->
                  through (cb)->
                      loader.activities (scope)->
-                        scope.list |> p.each activity.all~push 
-                        user.preferences = scope.preferences
-                        cb scope
-             current: null
-             choose: (item)->
-                 activity.current = item
-                 state.book =
-                    ablbook item, (status, data)->
-                        notify status, data
-                        #if status is \success
-                        #   widget.change \success
-                        #if status is \slot-chosen and data
-                        #   widget.change \pricing
-                 state.slot =
-                    ablslot item, state.book.calendar
-                 state.calc = state.book.calendar.calc
-                 state.slot.observe (name)->
-                    notify name
-         activity: activity
-         user: user
+                        widget.activities.length = 0
+                        scope.list |> p.each widget.activities~push 
+                        widget.preferences = scope.preferences
+            
+         widget: widget
          destoy: ->
-             activity.all.length = 0
-             activity.current = null
-             user.preferences = null
-             state.slot = null
-             state.book = null
-             state.calc = null
+             widget.activities.length = 0
+             

@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \loader, ($xabl)->
+  .service \loader, ($xabl, types, p)->
       activities: (options, callback)->
             config = $.param do
               location: options.location ? ""
@@ -18,8 +18,9 @@ angular
                    $xabl
                       .get "activities?#config"
                       .success (resp)->
+                        
                         callback do 
-                            activities: resp.list
+                            activities: resp.list |> p.map types.cast (.Activity)
                             preferences: resp.preferences
                             info: info
                                 
