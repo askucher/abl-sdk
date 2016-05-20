@@ -1,6 +1,6 @@
 angular
  .module \ablsdk
- .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl, $root-scope)->
+ .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl, $root-scope, types)->
     (activity, input-model)->
        transform-charge = (item)->
          _id: item._id
@@ -27,7 +27,7 @@ angular
            new-date(moment.tz([year, month, number], activity.time-zone))
          last-day = d.endOf(\month).date!
          #debug \generate-calendar, date, new-date(date).format(), last-day, to-date(0).format(), to-date(1).format()
-         days = [1 to last-day] |> p.map to-date
+         days = [1 to last-day] |> p.map to-date |> p.map types.cast (.Day)
          day = new-date(days.0).day!
          dummies = [1 to day] |> p.map (-> null)
          time: d
@@ -115,7 +115,10 @@ angular
            #actual = actual-event day
            slots |> p.filter (is-fit-to-slot day)
                  |> (.length is 0)       
-       
+       #slot = ->
+       #abbit = new slot
+       #alert( abbit instanceof slot )
+       #class Timeslot
        
        transform-slot = (day)->
              actual = actual-event day
@@ -125,9 +128,8 @@ angular
                event = slot.events |> p.find(actual)
                available =
                   event?available ? slot.max-occ
-               debug event?status
                native-slot: slot
-               status: event?status
+               status:  event?status
                start-time: start
                time: start.value-of!
                end-time: start.clone!.add(duration, \milliseconds)
@@ -136,17 +138,19 @@ angular
                available: if event?status is \inactive then 0 else available
                title: event?title
                _id: slot._id
-               duration: 
+               duration:
                  moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
-               taken: slot.max-occ - available    
+               taken: slot.max-occ - available
        
        slots-by-day-without-filters = (day)->
            slots |> p.filter (is-fit-to-slot-full yes, day)
                  |> p.map transform-slot day
+                 |> p.map types.cast (.Timeslot)
                  |> p.sort-by (.time)
        slots-by-day = (day)->
            slots |> p.filter (is-fit-to-slot day)
                  |> p.map transform-slot day
+                 |> p.map types.cast (.Timeslot)
                  |> p.sort-by (.time)
        select = (day)->
            model.value = day

@@ -28,46 +28,46 @@ angular
   .module "app", [ablsdk]
   .controller "yourCtrl", (ablsdk)->
   
-    ablsdk.activity.load ->
+    ablsdk.widget.load ->
        
        #Working with activity model
        
-       all-activities =  ablsdk.activity.all 
+       widget = ablsdk.widget
        
-       console.log all-activities #=> a loaded activities 
+       console.log widget.activities #=> a loaded activities 
        
-       ablsdk.activity.choose all-activities.0  #=> choose a first activity
+       ablsdk.choose widget.activities.0  #=> choose a first activity
        
-       console.log ablsdk.activity.current #=> chosen activity
+       console.log widget.current-activity #=> chosen activity
        
        #Working with slots model
        
-       for calendar in ablsdk.slot.calendars
+       for calendar in widget.slot.calendars
          for day in calendar.days
             statuses = 
-              chosen: ablsdk.slot.isActiveDay(day) #=> user chosen that day
-              enabled: ablsdk.slot.isDisabledDay(day)  #=> this day can be chosen
-              empty: ablsdk.slot.isDummy(day) #=> this is not a day but free space reserved by previous month
+              chosen: widget.slot.isActiveDay(day) #=> user chosen that day
+              enabled: widget.slot.isDisabledDay(day)  #=> this day can be chosen
+              empty: widget.slot.isDummy(day) #=> this is not a day but free space reserved by previous month
             if statuses.enabled 
-               ablsdk.slot.select-day day
+               widget.choose day
                return
             
-       console.log ablsdk.slot.active-slots #=> show all active slots available for this day
+       console.log widget.slot.active-slots #=> show all active slots available for this day
        
-       ablsdk.slot.choose-slot ablsdk.slot.active-slots.0
+       widget.choose widget.slot.active-slots.0
        
        #Working with book model
        
        
-       form = ablsdk.book.form
+       form = widget.book.form
        
-       console.log "Available Slots", ablsdk.book.available!
+       console.log "Available Slots", widget.book.available!
        
-       ablsdk.calc.attendees.0.quontaty = 5
-       ablsdk.calc.addons.0.quontaty = 5
+       widget.calc.attendees.0.quontaty = 5
+       widget.calc.addons.0.quontaty = 5
        
-       ablsdk.calc.coupon.code = "COUPONCODE"
-       ablsdk.calc.coupon.add!
+       widget.calc.coupon.code = "COUPONCODE"
+       widget.calc.coupon.add!
        
        #when you change the model in angular view please add attributes event="book.handle(event)" and name="email" or appropriate in order to show inline errors to user
        
@@ -80,14 +80,14 @@ angular
        form.creditCard.cvv = "123"
        form.creditCard.exp-date = "12/07"
        
-       ablsdk.book.agree! # => Agree with terms and conditions
+       widget.book.agree! # => Agree with terms and conditions
        
-       console.log "Subtotal", ablsdk.calc.calcSubtotal! 
-       console.log "Taxes / Fees", ablsdk.calc.calcTaxesFees! 
-       console.log "Coupon", ablsdk.calc.calcCoupon!
-       console.log "Total", ablsdk.calc.calcTotal! 
+       console.log "Subtotal", widget.calc.calcSubtotal! 
+       console.log "Taxes / Fees", widget.calc.calcTaxesFees! 
+       console.log "Coupon", widget.calc.calcCoupon!
+       console.log "Total", widget.calc.calcTotal! 
        
-       ablsdk.book.checkout!
+       widget.book.checkout!
        
        
 ```
