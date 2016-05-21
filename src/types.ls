@@ -1,6 +1,6 @@
 angular
-  .module \app
-  .service \types, ->
+  .module \ablsdk
+  .service \types, (p)->
       types =
           Day: class Day
           Activity: class Activity

@@ -27,8 +27,9 @@ angular
 angular
   .module "app", [ablsdk]
   .controller "yourCtrl", (ablsdk)->
-  
-    ablsdk.widget.load ->
+    widget = ablsdk.widget
+    
+    widget.load!.then ->
        
        #Working with activity model
        

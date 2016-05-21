@@ -1,6 +1,6 @@
 angular
   .module \ablsdk
-  .service \through, (p)->
+  .service \through, (p, $timeout)->
       (func)-> 
             state = 
                 result: null
