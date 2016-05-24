@@ -230,15 +230,15 @@ angular
               then show-error name, v
               else ""
             show-error = (name, v) ->
-              | v.required => "#{fields[name].title} is required"
-              | v.pattern => "Please follow the example #{fields[name].example}"
-              | v.minlength => "#{fields[name].title} is too short"
-              | v.maxlength => "#{fields[name].title} is too long"
-              | v.phone => "#{fields[name].title} is not valid phone number"
+              | v.required => fields[name].messages?required ? "#{fields[name].title} is required"
+              | v.pattern => fields[name].messages?pattern ? "Please follow the example #{fields[name].example}"
+              | v.minlength => fields[name].messages?minlength ?  "#{fields[name].title} is too short"
+              | v.maxlength => fields[name].messages?maxlength ? "#{fields[name].title} is too long"
+              | v.phone => fields[name].messages?phone ? "#{fields[name].title} is not valid phone number"
               | _ => "please check #{fields[name].title}"
             fields =
               email:
-                  title: "Email"
+                  title: "Email Address"
                   pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
                   example: 'nickname@email.com'
                   placeholder: 'Email'
@@ -248,7 +248,7 @@ angular
                     active: no
               name:
                   pattern: ''
-                  title: "Name"
+                  title: "Full Name"
                   example: 'Your name'
                   placeholder: 'Name'
                   state: 
@@ -256,7 +256,7 @@ angular
                     touched: no
                     active: no
               phone:
-                  title: "Phone"
+                  title: "Phone Number"
                   pattern: /^[0-9]{3}[-][0-9]{3}[-][0-9]{3,5}$/i
                   placeholder: "Phone +1 123-456-1234"
                   example: "+1 123-456-1234"
@@ -296,7 +296,7 @@ angular
               card:
                   pattern: /([0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4})|([0-9]{4} [0-9]{6} [0-9]{5})/i
                   example: 'Card Number'
-                  title: "Credit Card"
+                  title: "Credit Card Number"
                   placeholder: "Credit Card Number"
                   normalize: (value)->
                     return if typeof value is \undefined
@@ -304,6 +304,7 @@ angular
                     return if strip-value.length < 15
                     cvv = (number)->
                       fields.cvv.pattern = fields.cvv.patterns[number]
+                      fields.cvv.messages.pattern = fields.cvv.messages.patterns[number]
                     mask = (func)->
                       state.form.credit-card.card =
                          strip-value |> p.fold func, ""
@@ -346,6 +347,9 @@ angular
                   patterns = 
                     3 : /^[0-9]{3}$/i 
                     4 : /^[0-9]{4}$/i
+                  message-patterns =
+                    3 : "CVV must be 3 digits (e.g. 123)"
+                    4 : "CVV must be 4 digits (e.g. 1234)"
                   pattern: patterns.3
                   patterns: patterns
                   example: "000"
@@ -355,6 +359,10 @@ angular
                     index: 9
                     touched: no
                     active: no
+                  messages: 
+                    pattern: message-patterns.3
+                    patterns: message-patterns
+                    
               agreed: 
                   title: "Confirmation"
                   pattern: \true
