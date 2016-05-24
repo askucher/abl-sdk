@@ -85,6 +85,12 @@ angular
                   | val.length is 19 => val + " "
                   | _ => val
               newval + val2
+            cardify2 = (val, val2)->
+              const newval =
+                  | val.length is 4 => val + " "
+                  | val.length is 11 => val + " "
+                  | _ => val
+              newval + val2
             
             get-event-instance-id = ->
               if !state.calendar._id?
@@ -288,16 +294,28 @@ angular
                     touched: no
                     active: no
               card:
-                  pattern: /[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}/i
-                  example: '0000 0000 0000 0000'
+                  pattern: /([0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4})|([0-9]{4} [0-9]{6} [0-9]{5})/i
+                  example: 'Card Number'
                   title: "Credit Card"
                   placeholder: "Credit Card Number"
                   normalize: (value)->
                     return if typeof value is \undefined
-                    state.form.credit-card.card =
-                       value |> (.split(' ').join(''))
-                             |> p.fold cardify, ""
-                             |> (-> it.substr(0, 19))
+                    strip-value = value.split(' ').join('')
+                    return if strip-value.length < 15
+                    cvv = (number)->
+                      fields.cvv.pattern = fields.cvv.patterns[number]
+                    mask = (func)->
+                      state.form.credit-card.card =
+                         strip-value |> p.fold func, ""
+                                     |> (-> it.substr(0, 19))
+                    debug \strip-value, strip-value.length, strip-value
+                    if strip-value.length is 15
+                      mask cardify2
+                      cvv 4
+                    else if strip-value.length is 16
+                      mask cardify
+                      cvv 3
+                      
                   state: 
                     index: 7
                     touched: no
@@ -324,8 +342,12 @@ angular
                     index: 11
                     touched: no
                     active: no
-              cvv:
-                  pattern: /[0-9]{3,4}/i
+              cvv: do 
+                  patterns = 
+                    3 : /^[0-9]{3}$/i 
+                    4 : /^[0-9]{4}$/i
+                  pattern: patterns.3
+                  patterns: patterns
                   example: "000"
                   title: "CVV"
                   placeholder: "CVV"
@@ -379,6 +401,7 @@ angular
                   type = event.type #focus, blur, keyup
                   value = event.target.value #input value
                   field = fields[name]
+                  
                   #if event.target.tabindex=
                   return if !field?
                   switch type
