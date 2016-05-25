@@ -329,10 +329,11 @@ angular
            | model.chosen is no => yes
            | _ => no
        disabled-slot = (slot)->
+           | !slot? => "Event Not Found"
            | slot.available is 0 => "This event is full"
            | _ => "" 
        not-available-slot = (slot)->
-           slot.available <= 0
+          !slot? or slot.available <= 0
        close = (chosen)->
            set-default = (attendee)->
                     if attendee.quantity is 0 and attendee.name is \Adult
