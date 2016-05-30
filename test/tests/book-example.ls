@@ -8,8 +8,8 @@ describe \preferences ,  (...)->
   after-each ->
     state.sdk.destoy!
    
-  it \available , (done)->
-    #console.log state.sdk
-    state.sdk.widget.load!.then ->
-      #console.log state.sdk.user.preferences
-      expect(state.sdk.widget.preferences).to.not.equal(null)
+  #it \available , (done)->
+  #  #console.log state.sdk
+  #  state.sdk.widget.load!.then ->
+  #    #console.log state.sdk.user.preferences
+  #    expect(state.sdk.widget.preferences).to.not.equal(null)
