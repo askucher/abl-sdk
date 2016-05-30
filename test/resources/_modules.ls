@@ -1,3 +1,3 @@
 angular.module do 
   * "test" 
-  * [\ablsdk]
+  * [\ablsdk, \ngMaterial]
