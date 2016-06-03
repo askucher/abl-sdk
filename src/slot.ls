@@ -411,6 +411,8 @@ angular
        choose-event:  (id)->
           state.chosen-event = id
           find-chosen-event!
+       is-chosen-event: ->
+           (state.chosen-event ? "").length > 0
        model: model
        active-slots: active-slots
        possible-slots: possible-slots
