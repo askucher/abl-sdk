@@ -152,6 +152,10 @@ angular
                  |> p.map transform-slot day
                  |> p.map types.cast (.Timeslot)
                  |> p.sort-by (.time)
+       skip-slots = ->
+           pref = 
+             $root-scope.user?preferences?widget?display?timeslot ? {}
+           pref.duration + pref.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
        select = (day)->
            model.value = day
            
@@ -161,9 +165,8 @@ angular
                possible-slots.push slot
            slots-by-day(day).for-each (slot)->
                active-slots.push slot
-           pref = 
-             $root-scope.user?preferences?widget?display?timeslot ? {}
-           if pref.duration + pref.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
+           
+           if skip-slots!
               choose-slot active-slots.0
               
              
@@ -435,4 +438,5 @@ angular
        choose-slot-anyway: choose-slot-anyway
        not-available-slot: not-available-slot
        disabled-slot: disabled-slot
+       skip-slots: skip-slots
         
