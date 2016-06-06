@@ -4,11 +4,11 @@
   angular.module('test').service('$xabl', function($http){
     var ENV, appliedOptions, apiUrl, req;
     ENV = {
-      apiUrl: 'https://staging-api.adventurebucketlist.com/api/v1/'
+      apiUrl: 'https://staging-api.adventurebucketlist.com/'
     };
     appliedOptions = {
       key: "475e2a00b7f6cb4008bbe0b98df460c82d19d83d7c55eb36f5001b78d414ff6374ea7d2360f3c3bd1988f82c109f6d569273611fddc753ad263b6d9d7482c4d3",
-      secure: true
+      secure: false
     };
     apiUrl = ENV.apiUrl;
     req = curry$(function(method, request, data){

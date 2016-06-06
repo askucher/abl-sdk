@@ -439,4 +439,3 @@ angular
        not-available-slot: not-available-slot
        disabled-slot: disabled-slot
        skip-slots: skip-slots
-        

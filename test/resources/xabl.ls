@@ -2,10 +2,10 @@ angular.module('test').service do
   * \$xabl
   * ($http)->
       ENV =
-          api-url: \https://staging-api.adventurebucketlist.com/api/v1/
+          api-url: \https://staging-api.adventurebucketlist.com/
       const applied-options = 
         key: "475e2a00b7f6cb4008bbe0b98df460c82d19d83d7c55eb36f5001b78d414ff6374ea7d2360f3c3bd1988f82c109f6d569273611fddc753ad263b6d9d7482c4d3"
-        secure: yes
+        secure: no
       const api-url = ENV.api-url
       const req = (method, request, data) -->
           const json = 

@@ -2,8 +2,10 @@ describe \crud ,  (...)->
   before-each module \test
   state =
      crud: null
-  before-each inject (_crud_)->
+     httpBackend: null
+  before-each inject (_crud_, $injector)->
     window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+    state.httpBackend = $injector.get(\$httpBackend)
     state.crud = _crud_
     #jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
   after-each ->
@@ -28,9 +30,34 @@ describe \crud ,  (...)->
      * [\fetch, \Function]
      * [\remove, \Function]
      * [\splice, \Function]
-    expect(activities).toBeDefined!
+    expect(activities).to-be-defined!
     fields.for-each (field)->
-      console.log field.0
-      expect(activities[field.0]).toBeDefined!
+      expect(activities[field.0]).to-be-defined!
+      expect(typeof! activities[field.0]).to-equal field.1
     
     done "ok"
+  
+  
+    
+  it \converter , (done)->
+      converter = 
+        frontendify: (server-data)->
+           server-data: server-data
+           somefield: \somefield
+        backendify: (frontend-data)->
+          
+      activities = state.crud(\activities).converter(converter)
+      expect(activities).to-be-defined!
+      state.httpBackend
+        .when \GET, \https://staging-api.adventurebucketlist.com/api/v1/activities
+        .respond 200, {list: []}
+      state.httpBackend.flush!
+      set-timeout do 
+        * ->
+            expect(activities.somefield).to-equal \somefield
+            done "ok"
+        * 2000
+      
+    
+      
+      
