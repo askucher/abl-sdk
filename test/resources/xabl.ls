@@ -37,7 +37,9 @@ angular.module('test').service do
               | applied-options.secure => \endpoint 
               | _ => "#{api-url}api/v1/#{request}"
           $http do
-              * method: method
+              * method: | method is \UPDATE => \PUT
+                        | method is \CREATE => \POST
+                        | _ => method
                 url: url
                 headers: final-headers
                 data: post
@@ -47,3 +49,8 @@ angular.module('test').service do
         applied-options.secure = options.secure
       post: req \POST
       get: req \GET, _, null
+      create: req \CREATE
+      update: req \UPDATE
+      put: req \PUT
+      patch: req \PATCH
+      delete: req \DELETE

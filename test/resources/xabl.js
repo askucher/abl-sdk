@@ -67,7 +67,16 @@
         }
       }());
       return $http({
-        method: method,
+        method: (function(){
+          switch (false) {
+          case method !== 'UPDATE':
+            return 'PUT';
+          case method !== 'CREATE':
+            return 'POST';
+          default:
+            return method;
+          }
+        }()),
         url: url,
         headers: finalHeaders,
         data: post
@@ -80,7 +89,12 @@
         return appliedOptions.secure = options.secure;
       },
       post: req('POST'),
-      get: partialize$.apply(this, [req, ['GET', void 8, null], [1]])
+      get: partialize$.apply(this, [req, ['GET', void 8, null], [1]]),
+      create: req('CREATE'),
+      update: req('UPDATE'),
+      put: req('PUT'),
+      patch: req('PATCH'),
+      'delete': req('DELETE')
     };
   });
   function compose$() {
