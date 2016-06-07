@@ -5,6 +5,16 @@ angular
       * -> 
             flatten = (xs) -->
               [].concat.apply [], [(if typeof! x is 'Array' then flatten x else x) for x in xs]
+            take:(n, xs) -->
+              if n <= 0
+                xs.slice 0, 0
+              else
+                xs.slice 0, n
+            drop: (n, xs) -->
+              if n <= 0
+                xs
+              else
+                xs.slice n
             head: first = (xs) ->
               xs.0
             each: (f, xs) -->
