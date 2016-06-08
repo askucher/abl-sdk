@@ -90,9 +90,9 @@ angular
            if !slot._id?
              throw "Slot doesn't have required field '_id'"
            model._id = slot._id
-           
+           debug "slots", slots
            timeslot =
-             activity.timeslots |> p.find (._id is slot._id) 
+             slots |> p.find (._id is slot._id) 
            if !timeslot?
              throw "Slot has not been found by id #{slot._id} in [#{activity.timeslots.map(-> it._id).join(',')}]"
            if !timeslot?event-id?
