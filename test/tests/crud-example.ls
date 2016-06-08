@@ -22,18 +22,21 @@ describe \crud ,  (...)->
           .respond do 
              * 200
              * response
+    #state.httpBackend.flush!
   post = (response)->
     state.httpBackend
           .when \POST, "#url/activities"
           .respond do 
              * 200
              * response
+    #state.httpBackend.flush!
   put = (response)->
     state.httpBackend
           .when \PUT, "#url/activities"
           .respond do 
              * 200
              * response
+    #state.httpBackend.flush!
   get = (response)->
     state.httpBackend
           .when \GET, "#url/activities"
@@ -245,7 +248,7 @@ describe \crud ,  (...)->
         wait ->
           expect(activities.0.item).to-equal 5
           done!
-      
+  return
   #Insert object into server and memory
   it \push-test , (done)->
       activities = state.crud(\activities)
