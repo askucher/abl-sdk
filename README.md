@@ -26,7 +26,7 @@ angular
 ```Livescript
 angular
   .module "app", [ablsdk]
-  .controller "yourCtrl", (ablsdk)->
+  .controller "yourCtrl", (ablsdk, $timeout)->
     widget = ablsdk.widget
     
     widget.load!.then ->
@@ -43,52 +43,54 @@ angular
        
        #Working with slots model
        
-       for calendar in widget.slot.calendars
-         for day in calendar.days
-            statuses = 
-              chosen: widget.slot.isActiveDay(day) #=> user chosen that day
-              enabled: widget.slot.isDisabledDay(day)  #=> this day can be chosen
-              empty: widget.slot.isDummy(day) #=> this is not a day but free space reserved by previous month
-            if statuses.enabled 
-               widget.choose day
-               return
-            
-       console.log widget.slot.active-slots #=> show all active slots available for this day
+       $timeout ->
        
-       widget.choose widget.slot.active-slots.0
-       
-       #Working with book model
-       
-       
-       form = widget.book.form
-       
-       console.log "Available Slots", widget.book.available!
-       
-       widget.calc.attendees.0.quontaty = 5
-       widget.calc.addons.0.quontaty = 5
-       
-       widget.calc.coupon.code = "COUPONCODE"
-       widget.calc.coupon.add!
-       
-       #when you change the model in angular view please add attributes event="book.handle(event)" and name="email" or appropriate in order to show inline errors to user
-       
-       form.email = "yourEmail@gmail.com"
-       form.name = "Your Name"
-       form.phone = "+1XXXXXXXXX" 
-       form.address = "New York City, ..." 
-       form.notes = "New York City, ..." 
-       form.creditCard.card = "0000 0000 0000 0000"
-       form.creditCard.cvv = "123"
-       form.creditCard.exp-date = "12/07"
-       
-       widget.book.agree! # => Agree with terms and conditions
-       
-       console.log "Subtotal", widget.calc.calcSubtotal! 
-       console.log "Taxes / Fees", widget.calc.calcTaxesFees! 
-       console.log "Coupon", widget.calc.calcCoupon!
-       console.log "Total", widget.calc.calcTotal! 
-       
-       widget.book.checkout!
+           for calendar in widget.slot.calendars
+             for day in calendar.days
+                statuses = 
+                  chosen: widget.slot.isActiveDay(day) #=> user chosen that day
+                  enabled: not widget.slot.isDisabledDay(day)  #=> this day can be chosen
+                  empty: widget.slot.isDummy(day) #=> this is not a day but free space reserved by previous month
+                if statuses.enabled 
+                   widget.choose day
+                   return
+                
+           console.log widget.slot.active-slots #=> show all active slots available for this day
+           
+           widget.choose widget.slot.active-slots.0
+           
+           #Working with book model
+           
+           
+           form = widget.book.form
+           
+           console.log "Available Slots", widget.book.calendar.available!
+           calc = widget.calc!
+           calc.attendees.0.quantity = 5
+           calc.addons.0.quantity = 5
+           
+           calc.coupon.code = "COUPONCODE"
+           calc.coupon.add!
+           
+           #when you change the model in angular view please add attributes event="book.handle(event)" and name="email" or appropriate in order to show inline errors to user
+           
+           form.email = "yourEmail@gmail.com"
+           form.name = "Your Name"
+           form.phone = "+1XXXXXXXXX" 
+           form.address = "New York City, ..." 
+           form.notes = "New York City, ..." 
+           form.creditCard.card = "0000 0000 0000 0000"
+           form.creditCard.cvv = "123"
+           form.creditCard.exp-date = "12/07"
+           
+           widget.book.agree! # => Agree with terms and conditions
+           
+           console.log "Subtotal", calc.calcSubtotal! 
+           console.log "Taxes / Fees", calc.calcTaxesFees! 
+           console.log "Coupon", calc.calcCoupon!
+           console.log "Total", calc.calcTotal! 
+           
+           widget.book.checkout {$valid: yes} #pass the real angular form object here
        
        
 ```

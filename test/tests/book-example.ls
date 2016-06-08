@@ -1,15 +1,94 @@
 describe \preferences ,  (...)->
   before-each module \test
   state =
-     sdk: null
-  before-each inject (_ablsdk_)->
-    state.sdk = _ablsdk_
+     widget: null
+  wait = (func)->
+            set-timeout do 
+                * func
+                * 50
+  
+  before-each inject (_ablsdk_, $injector)->
+    state.widget = _ablsdk_.widget
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+    state.httpBackend = $injector.get(\$httpBackend)
+    state.httpBackend
+      .when \GET, \https://staging-api.adventurebucketlist.com/api/v1/operators/475e2a00b7f6cb4008bbe0b98df460c82d19d83d7c55eb36f5001b78d414ff6374ea7d2360f3c3bd1988f82c109f6d569273611fddc753ad263b6d9d7482c4d3
+      .respond do 
+         * 200
+         * {"_id":"572ca72ce39a2bf144ed8841","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","email":"a.stegno@gmail.com","fullName":"Andrey Stegno 0","companyName":"Company0","phoneNumber":"+380664253012","domainName":"http://domain0.com","location":"572ca72ce39a2bf144ed8840","preferences":{"widget":{"display":{"timeslot":{"startTime":true,"price":true,"duration":false,"availability":false},"event":{"isSiteWide":true,"cutoff":0}}},"customFields":{"prior":15,"notes":"Notes"},"features":{"coupons":true,"questions":true,"guides":true}},"created":"2016-05-06T14:16:12.866Z","isActive":true,"isEmailVerified":true,"apiKeys":["572ca732e39a2bf144ed8842","572ca732e39a2bf144ed8843"],"companyImage":"","payment":"573f28f49611664c609b4528","lang":"en"}
+    state.httpBackend
+      .when \GET, \https://staging-api.adventurebucketlist.com/api/v1/activities?location=&pageSize=100&page=0&noEmpty=false&dateRange%5B%5D=2016-06-08T00%3A00%3A00%2B03%3A00&dateRange%5B%5D=2017-06-08T23%3A59%3A59%2B03%3A00
+      .respond do 
+         * 200
+         * {"list":[{"_id":"572ca8a8e39a2bf144ed884a","operator":"572ca72ce39a2bf144ed8841","location":null,"image":"http://dev-images.ablsolution.com/xuDPRsDtLZ2g8OnVLG57.jpg","created":"2016-05-06T14:22:32.347Z","status":"active","isListed":false,"images":["http://dev-images.ablsolution.com/xuDPRsDtLZ2g8OnVLG57.jpg"],"color":"336633","whatIncluded":[],"requirements":[],"whatToBring":[],"timeZone":"Europe/Helsinki","description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","questions":[],"charges":[{"_id":"575020180dfcc687c3a26c47","amount":12,"name":"10P","type":"tax","created":"2016-06-02T12:01:28.820Z","status":"active","isDefault":false,"percentage":true},{"_id":"575020180dfcc687c3a26c48","amount":2200,"name":"Fee","type":"fee","created":"2016-06-02T12:01:28.821Z","status":"active","isDefault":false,"percentage":false},{"_id":"575020180dfcc687c3a26c49","amount":2300,"name":"Addon","type":"addon","created":"2016-06-02T12:01:28.821Z","status":"active","isDefault":false,"percentage":false},{"_id":"575020180dfcc687c3a26c4a","amount":121200,"name":"Fsd","type":"addon","created":"2016-06-02T12:01:28.822Z","status":"active","isDefault":false,"percentage":false}],"timeslots":[{"_id":"572ca8bae39a2bf144ed884d","eventId":"nuh83k6u3lqncc85l7tq9ak3po","originalUntilTime":"2016-06-30T20:59:00.000Z","originalEndTime":"2016-05-06T09:00:00.000Z","originalStartTime":"2016-05-06T07:00:00.000Z","originalMaxOcc":12,"originalMinOcc":1,"originalDescription":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","originalTitle":"Test Activity","endTime":"2016-05-06T09:00:00.000Z","maxOcc":12,"startTime":"2016-05-06T07:00:00.000Z","activity":"572ca8a8e39a2bf144ed884a","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","operator":"572ca72ce39a2bf144ed8841","created":"2016-05-06T14:22:50.403Z","status":"active","minOcc":1,"untilTime":"2016-06-30T20:59:00.000Z","description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","daysRunning":[0,1,2,3,4,5,6],"originalDaysRunning":[0,1,2,3,4,5,6],"single":false,"timeZone":"Europe/Helsinki","discounts":[],"charges":[{"_id":"572ca8bae39a2bf144ed884c","amount":1200,"name":"Adult","type":"aap","created":"2016-05-06T14:22:50.173Z","status":"active","isDefault":false,"percentage":false}],"events":["5731afaffeb9ff16cf7bdb59","57349a17f147cf9427c091a1","573b7cb0ef4a6b8a5984be5d","573f370b390c782b2615973b","5742f948080538725e737038","5745bcaad2c2d6750584af82","574618242f2d19556b553f76","5748409ad626a8a07bb46a8d","574ac8f3bf238bd7288124a6","574d731ae55b0b7d50ce64d3","574d73f9e55b0b7d50ce64e7","574ed4abafba87cbe3588939","574efa87afba87cbe358897c","5751632fabb31dc376c8a8c0","575163bfabb31dc376c8a8d5","57553d0331c0622b1a1f0268","5756978bf974dd2316ef4d85","57572390a293ffecbe17eef1","575833a6dbd30778224fb903"],"guides":[]}],"cutoff":0}],"preferences":{"features":{"coupons":true,"guides":true,"questions":true},"customFields":{"notes":"Notes","prior":15},"widget":{"display":{"event":{"cutoff":0,"isSiteWide":true},"theme":"blue","timeslot":{"availability":false,"duration":false,"price":true,"startTime":true}}}}}
+    state.httpBackend
+      .when \GET, \https://staging-api.adventurebucketlist.com/api/v1/timeslots?activity=572ca8a8e39a2bf144ed884a&status%5Bevent%5D=all&dateRange%5B%5D=2016-05-31T21%3A00%3A00.000Z&dateRange%5B%5D=2016-07-31T20%3A59%3A59.999Z
+      .respond do 
+        * 200
+        * {"list":[{"_id":"572ca8bae39a2bf144ed884d","eventId":"nuh83k6u3lqncc85l7tq9ak3po","originalUntilTime":"2016-06-30T20:59:00.000Z","originalEndTime":"2016-05-06T09:00:00.000Z","originalStartTime":"2016-05-06T07:00:00.000Z","originalMaxOcc":12,"originalMinOcc":1,"originalDescription":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","originalTitle":"Test Activity","endTime":"2016-05-06T09:00:00.000Z","maxOcc":12,"startTime":"2016-05-06T07:00:00.000Z","activity":"572ca8a8e39a2bf144ed884a","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","operator":"572ca72ce39a2bf144ed8841","created":"2016-05-06T14:22:50.403Z","status":"active","minOcc":1,"untilTime":"2016-06-30T20:59:00.000Z","description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","daysRunning":[0,1,2,3,4,5,6],"originalDaysRunning":[0,1,2,3,4,5,6],"single":false,"timeZone":"Europe/Helsinki","discounts":[],"charges":[{"_id":"572ca8bae39a2bf144ed884c","amount":1200,"name":"Adult","type":"aap","created":"2016-05-06T14:22:50.173Z","status":"active","isDefault":false,"percentage":false}],"events":[{"_id":"574d731ae55b0b7d50ce64d3","originalEndTime":"2016-06-03T09:00:00.000Z","originalStartTime":"2016-06-03T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-03T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160603T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-03T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-05-31T11:18:50.862Z","status":"active","minOcc":1,"attendees":3,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["574d731de55b0b7d50ce64d7","574d733ae55b0b7d50ce64e1","574eda55afba87cbe3588948","574edbc1afba87cbe3588955","574edd88afba87cbe3588960","575135e4c6ecf4075303683c"],"guides":["574ed91eafba87cbe3588943","574ed928afba87cbe3588944","574ed930afba87cbe3588945"],"available":9},{"_id":"574ed4abafba87cbe3588939","originalEndTime":"2016-06-01T09:00:00.000Z","originalStartTime":"2016-06-01T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-01T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160601T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-01T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-01T12:27:23.935Z","status":"active","minOcc":1,"attendees":0,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["574ed4aeafba87cbe358893d","574ee31dafba87cbe3588967","574ee618afba87cbe3588972"],"guides":[],"available":12},{"_id":"574efa87afba87cbe358897c","originalEndTime":"2016-06-02T09:00:00.000Z","originalStartTime":"2016-06-02T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-02T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160602T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-02T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-01T15:08:55.279Z","status":"active","minOcc":1,"attendees":6,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["574efa8aafba87cbe3588980","574f1af4034bc232190607c8","575013a60dfcc687c3a26c36","575013e50dfcc687c3a26c3f","575024140dfcc687c3a26c94"],"guides":[],"available":6},{"_id":"5751632fabb31dc376c8a8c0","originalEndTime":"2016-06-04T09:00:00.000Z","originalStartTime":"2016-06-04T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-04T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160604T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-04T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-03T10:59:59.233Z","status":"active","minOcc":1,"attendees":4,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["5751632fabb31dc376c8a8c6","57516aefabb31dc376c8a910","5752c0767cc4c11f0eed5fc1","5752c7b87cc4c11f0eed5fce","5752c7d77cc4c11f0eed5fda","5752c7f47cc4c11f0eed5fe6","5752cfc17cc4c11f0eed5ff1"],"guides":[],"available":8},{"_id":"575163bfabb31dc376c8a8d5","originalEndTime":"2016-06-30T09:00:00.000Z","originalStartTime":"2016-06-30T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-30T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160630T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-30T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-03T11:02:23.391Z","status":"active","minOcc":1,"attendees":3,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["575163bfabb31dc376c8a8db","57516445abb31dc376c8a8eb","57572393a293ffecbe17eef9"],"guides":[],"available":9},{"_id":"57553d0331c0622b1a1f0268","originalEndTime":"2016-06-07T09:00:00.000Z","originalStartTime":"2016-06-07T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-07T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160607T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-07T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-06T09:06:11.386Z","status":"active","minOcc":1,"attendees":1,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["57553d0331c0622b1a1f026e","5756975ef974dd2316ef4d73"],"guides":[],"available":11},{"_id":"5756978bf974dd2316ef4d85","originalEndTime":"2016-06-25T09:00:00.000Z","originalStartTime":"2016-06-25T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-25T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160625T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-25T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-07T09:44:43.812Z","status":"active","minOcc":1,"attendees":12,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["57569776f974dd2316ef4d7f","5757e3aa8a1dc6fa0c45d035","575801f4b870f4ee24c5bb4f"],"guides":[],"available":0},{"_id":"57572390a293ffecbe17eef1","originalEndTime":"2016-06-08T09:00:00.000Z","originalStartTime":"2016-06-08T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-08T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160608T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-08T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-07T19:42:08.484Z","status":"active","minOcc":1,"attendees":1,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["5757e4048a1dc6fa0c45d043","5757fa1ab870f4ee24c5bb3b"],"guides":[],"available":11},{"_id":"575833a6dbd30778224fb903","originalEndTime":"2016-06-11T09:00:00.000Z","originalStartTime":"2016-06-11T07:00:00.000Z","calendarId":"rvoegsfkndd9cvqbaic727uavg@group.calendar.google.com","endTime":"2016-06-11T09:00:00.000Z","eventInstanceId":"nuh83k6u3lqncc85l7tq9ak3po_20160611T070000Z","maxOcc":12,"operator":"572ca72ce39a2bf144ed8841","startTime":"2016-06-11T07:00:00.000Z","timeZone":"Europe/Helsinki","created":"2016-06-08T15:03:02.924Z","status":"active","minOcc":1,"attendees":1,"description":"Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors. Yanis Varoufakis had threatened to quit if voters approved a referendum on a European bailout, but his move after a no vote may help Greece in any new talks with creditors","title":"Test Activity","bookings":["575833a7dbd30778224fb909"],"guides":[],"available":11}],"guides":[]}]}
   after-each ->
-    state.sdk.destoy!
+    #state.sdk.destoy!
+    
+  
    
-  #it \available , (done)->
-  #  #console.log state.sdk
-  #  state.sdk.widget.load!.then ->
-  #    #console.log state.sdk.user.preferences
-  #    expect(state.sdk.widget.preferences).to.not.equal(null)
+  it \available , (done)->
+    widget = state.widget
+    widget.load!.then ->
+      expect(widget.activities.length).to-equal 1
+      expect(widget.current-activity).to-equal null
+      widget.choose widget.activities.0
+      expect(widget.current-activity).to-equal widget.activities.0
+      expect(widget.slot.calendars.length).to-equal 2
+      #wait because it is loading timeslots
+      
+      wait ->
+        for calendar in widget.slot.calendars
+          for day in calendar.days
+              statuses =
+                chosen: widget.slot.isActiveDay(day) #=> user chosen that day
+                enabled: not widget.slot.isDisabledDay(day)  #=> this day can be chosen
+                empty: widget.slot.isDummy(day) #=> this is not a day but free space reserved by previous month
+              if statuses.enabled
+                 widget.choose day
+                 break
+        expect(widget.slot.active-slots.length).to-equal 1
+        
+        widget.choose widget.slot.active-slots.0
+        
+        form = widget.book.form
+        calc = widget.calc!
+        expect(widget.book.calendar.available!).to-equal 12
+        
+        expect(calc.attendees.length).to-equal 1
+        
+        calc.attendees.0.quantity = 5
+        expect(widget.book.calendar.available!).to-equal 7
+        
+        form.email = "yourEmail@gmail.com"
+        form.name = "Your Name"
+        form.phone = "+1XXXXXXXXX" 
+        form.address = "New York City, ..." 
+        form.notes = "New York City, ..." 
+        form.creditCard.card = "0000 0000 0000 0000"
+        form.creditCard.cvv = "123"
+        form.creditCard.exp-date = "12/07"
+
+        widget.book.agree! # => Agree with terms and conditions
+        expect(calc.calcSubtotal!).to-equal 6000
+        expect(calc.calcTaxesFees!).to-equal 11720
+        expect(calc.calcCoupon!).to-equal -0
+        expect(calc.calcTotal!).to-equal 17720
+        
+        widget.book.checkout {$valid: yes}
+        
+        wait ->
+          expect(form.booking-id).to-equal \BOOKINGID
+          done!
+        
+        
+        
+        
+        
+      
+    state.httpBackend.flush!
+    

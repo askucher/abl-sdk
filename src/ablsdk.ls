@@ -29,15 +29,17 @@ angular
                     notify status, data
              widget.slot =
                 ablslot item, widget.book.calendar
-             widget.calc = widget.book.calendar.calc
+             widget.calc = ->
+                widget.book.calendar.calc
              widget.slot.observe (name)->
                 notify name
          widget.load = (config)->
                  through (cb)->
-                     loader.activities (scope)->
+                     loader.activities {page: 0, location: ""}, (scope)->
                         widget.activities.length = 0
-                        scope.list |> p.each widget.activities~push 
+                        scope.activities |> p.each widget.activities~push 
                         widget.preferences = scope.preferences
+                        cb scope
             
          widget: widget
          destoy: ->

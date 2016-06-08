@@ -18,6 +18,10 @@ angular
                    $xabl
                       .get "activities?#config"
                       .success (resp)->
+                        if typeof! resp.list isnt \Array 
+                          throw ".list is not Array"
+                        if typeof! resp.preferences isnt \Object 
+                          throw ".preferences is not Object"
                         
                         callback do 
                             activities: resp.list |> p.map types.cast (.Activity)

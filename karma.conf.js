@@ -23,6 +23,7 @@ module.exports = function(config) {
       'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js',
       'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js',
       'https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/1.3.0/moment-duration-format.js',
       'node_modules/angular/angular.js',
       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js',
       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js',
