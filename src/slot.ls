@@ -75,7 +75,7 @@ angular
              throw "Slot is undefined"
            if !slot.available?
              throw "Slot doesn't have required 'available' field"
-           return if slot.available is 0
+           #return if slot.available is 0
            day = model.value
            
            define-date-start day, slot
