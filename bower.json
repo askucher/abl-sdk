@@ -4,7 +4,7 @@
   "description": "Adventure bucket list sdk",
   "main": ["main.js"],
 
-  "version": "0.0.12",
+  "version": "0.1.1",
   "uperversion": "0.0",
   "subversion": 2,
 
