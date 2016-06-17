@@ -7,5 +7,9 @@ angular
          #debug \padding-top, label.height!
          set-timeout do 
            * ->
-              $($element.0).css \margin-top, label.height!
+              $($element.0).css do 
+                * \margin-top, 
+                * | label.height! is 0 => 0
+                  | label.height! is 20 => 0
+                  | _ => label.height!
            * 100
