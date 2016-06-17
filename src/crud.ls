@@ -5,7 +5,7 @@ angular
         
         parsed-url = url.split(\@)
         url = parsed-url.0
-        
+         
         state =
           loading: no
           frontendify: (data, url)->
@@ -171,7 +171,7 @@ angular
           return if state.loading
           default-options =
             title: "Confirm Delete"
-            content: "Are you sure you want to delete this item?"
+            content: "Deleting this pricing level will remove all prices associated with it in the timeslot section and on your booking widgets. This action cannot be undone, are you sure you want to delete this pricing level?"
             ok: \Confirm
             cancel: \Cancel
           confirm = $md-dialog.confirm do 
