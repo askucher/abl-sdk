@@ -410,7 +410,7 @@ angular
             notify: (name, data)->
               observer.list |> p.each (watch)->
                 watch name, data
-       day-has-bookable-slot (day)->
+       day-has-bookable-slot = (day)->
            slots-by-day-without-filters(day).length > 0
        observe: observer.observe
        choose-event:  (id)->
