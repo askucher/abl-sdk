@@ -8,6 +8,8 @@ angular
             debug ->
               $window.prefill = ->
                  params = Array.prototype.slice.call(arguments)
+                 STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg
+                 ARGUMENT_NAMES = /([^\s,]+)/g
                  get-params = (func)->
                     const fnStr = func.toString!.replace(STRIP_COMMENTS, '')
                     const result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES)
