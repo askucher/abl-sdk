@@ -164,8 +164,8 @@ angular
            slots-by-day-without-filters(day).for-each (slot)->
                possible-slots.push slot
            slots-by-day(day).for-each (slot)->
-               if slot.available > 0
-                  active-slots.push slot
+               #if slot.available > 0
+               active-slots.push slot
            
            if skip-slots!
               choose-slot active-slots.0
