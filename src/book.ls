@@ -326,11 +326,13 @@ angular
                   example: "05/15"
                   title: "Exp Date"
                   placeholder: 'Exp Date (MM/YY)'
-                  normalize: (value)->
+                  normalize: (value, key-code)->
+                     
                      e = value?replace(\/,'') ? ""
                      t = ->
                        it ? ""
                      state.form.credit-card.exp-date =
+                       | e.length is 2 and key-code is 8 => e.0  + e.1
                        | e.length is 2 => e.0 + e.1 + \/
                        | e.length > 2 => e.0 + e.1 + \/ + t(e.2) + t(e.3)
                        | _ => e
@@ -409,12 +411,13 @@ angular
                   type = event.type #focus, blur, keyup
                   value = event.target.value #input value
                   field = fields[name]
+                   
                   
                   #if event.target.tabindex=
                   return if !field?
                   switch type
                     case \keyup
-                      field.normalize? value
+                      field.normalize? value, event.key-code
                     case \focus
                       field.state.active = yes
                       field.state.touched = yes
