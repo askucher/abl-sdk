@@ -1,7 +1,7 @@
 angular
  .module \ablsdk
  .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl, $root-scope, types)->
-    (activity, input-model)->
+    (activity, input-model, options)->
        transform-charge = (item)->
          _id: item._id
          name: item.name
@@ -237,7 +237,10 @@ angular
                if step is 0 then start
                else up step
              is-active = (step)->
-               typeof (get(step).days |> p.find(-> !is-disabled-day(it))) isnt \undefined
+               func = 
+                   | options?active-day-strategy is 'dayHasBookableSlot' => day-has-bookable-slot
+                   | _=> is-disabled-day
+               typeof (get(step).days |> p.find(-> !func(it))) isnt \undefined
              scroll-to = (i)->
                [1 to i].for-each calendar~down
              active = [0 to 6] |> p.find(is-active)
