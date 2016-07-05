@@ -294,7 +294,7 @@ angular
                     touched: no
                     active: no
               card:
-                  pattern: /([0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4})|([0-9]{4} [0-9]{6} [0-9]{5})/i
+                  pattern: /(^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$)|(^[0-9]{4} [0-9]{6} [0-9]{5}$)/i
                   example: 'Card Number'
                   title: "Credit Card Number"
                   placeholder: "Credit Card Number"
