@@ -155,7 +155,7 @@ angular
        skip-slots = ->
            pref = 
              $root-scope.user?preferences?widget?display?timeslot ? {}
-           pref.duration + pref.price + pref.availability + pref.startTime is 0 and active-slots.length > 0
+           pref.availability + pref.startTime is 0 and active-slots.length > 0
        select = (day)->
            model.value = day
            
