@@ -231,7 +231,7 @@ angular
               else ""
             show-error = (name, v) ->
               | v.required => fields[name].messages?required ? "#{fields[name].title} is required"
-              | v.pattern => fields[name].messages?pattern ? "Please follow the example #{fields[name].example}"
+              | v.pattern => fields[name].messages?pattern ? "Please enter a valid #{fields[name].example}"
               | v.minlength => fields[name].messages?minlength ?  "#{fields[name].title} is too short"
               | v.maxlength => fields[name].messages?maxlength ? "#{fields[name].title} is too long"
               | v.phone => fields[name].messages?phone ? "#{fields[name].title} is not valid phone number"
