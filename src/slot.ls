@@ -263,7 +263,9 @@ angular
              calendar.move -1
        find-chosen-event = ->
            return if (state.chosen-event ? "").length is 0
-           return if slots.length is 0
+           #return if slots.length is 0
+           if slots.length is 0
+             return observer.notify \event-not-found 
            pairs = state.chosen-event.split(\_)
            id = pairs.0
            date-transform = abldate activity.time-zone
