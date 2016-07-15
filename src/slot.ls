@@ -263,9 +263,7 @@ angular
              calendar.move -1
        find-chosen-event = ->
            return if (state.chosen-event ? "").length is 0
-           #return if slots.length is 0
-           if slots.length is 0
-             return observer.notify \event-not-found 
+           return if slots.length is 0
            pairs = state.chosen-event.split(\_)
            id = pairs.0
            date-transform = abldate activity.time-zone
@@ -275,13 +273,14 @@ angular
            if slot? 
               if not is-disabled-day(day)
                   select-day day
-                  debug do
-                       active-slots: active-slots
-                       possible-slots: possible-slots
-                       current-slot: slot._id
                   slot = active-slots |> p.find (._id is slot._id)
+                  debug \slot, slot 
                   if slot?
-                    slot |> choose-slot
+                    debug \choose-slot, slot
+                    if not-available-slot(slot)
+                       observer.notify \event-sold-out
+                    else
+                       slot |> choose-slot
                   else 
                     observer.notify \event-not-found
               else 
@@ -296,6 +295,7 @@ angular
                 else
                    observer.notify \event-not-found
            else 
+              
               observer.notify \event-not-found  
        load-events = (callback)->
          ablapi
@@ -304,6 +304,7 @@ angular
                end-time: calendars.1.time
                activity-id: activity._id
            .success (loaded-slots)->
+                 debug \loaded-slots, loaded-slots
                  transform = abldate activity.time-zone
                  comp = transform.frontendify >> moment
                  transform-date = (slot)->
@@ -312,11 +313,20 @@ angular
                      slot.until-time = comp slot.until-time
                      slot
                  slots.length = 0
-                 loaded-slots.list.map(transform-date).for-each (item)->
-                     slots.push item
+                 if loaded-slots.length is 0
+                    debug \event-not-found
+                    observer.notify \event-not-found 
+                 else
+                    loaded-slots.list.map(transform-date).for-each (item)->
+                       debug \add-slot
+                       slots.push item
+                 debug \find-chosen-event
                  find-chosen-event!
                  scroll.active-date!
                  callback?!
+           .error ->
+                 observer.notify \event-not-found 
+           
        is-dummy = (date)->
            | date is null => yes
            | _ => no
