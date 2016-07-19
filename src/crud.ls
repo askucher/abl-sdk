@@ -8,6 +8,7 @@ angular
          
         state =
           loading: no
+          id: "_id"
           frontendify: (data, url)->
               parts = url.split(\/)
               part = parts[parts.length - 1]
@@ -36,13 +37,13 @@ angular
            backend: 
               remove: (item)->
                 $xabl
-                  .delete "#{url}/#{item._id}"
+                  .delete "#{url}/#{item[state.id]}"
                   .success ->
                      remove-from-memory item
               update: (item, callback)->
                 $xabl
                    .update do
-                      * "#{url}/#{item._id}"
+                      * "#{url}/#{item[state.id]}"
                       * item
                    .success (data)->
                       state.loading = no
@@ -113,7 +114,7 @@ angular
           if index > -1
               Array.prototype.splice.call i, index, 1
         save = (item, callback)->
-            if item._id? 
+            if item[state.id]? 
             then
               update item, callback
             else
@@ -141,6 +142,9 @@ angular
         i.converter = (converter)->
             state.frontendify = converter.frontendify
             state.backendify = converter.backendify
+            i
+        i.id = (id)->
+            state.id = id
             i
         i.get-options = -> 
           i.options
