@@ -35,9 +35,9 @@ angular
              fetch: ->
                state.loading = no
            backend: 
-              remove: (item)->
+              remove: (item, options)->
                 $xabl
-                  .delete "#{url}/#{item[state.id]}"
+                  .delete "#{options.url ? url}/#{item[state.id]}"
                   .success ->
                      remove-from-memory item
               update: (item, callback)->
@@ -187,7 +187,7 @@ angular
           
           $mdDialog.show(confirm).then (result)->
               if result is yes 
-                 provider.remove(item)
+                 provider.remove(item, options)
           
         watchers = []
         improve = (source)->
