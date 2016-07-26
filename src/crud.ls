@@ -39,7 +39,11 @@ angular
                 $xabl
                   .delete "#{options.url ? url}/#{item[state.id]}"
                   .success ->
-                     remove-from-memory item
+                     on-item-removed-default = ->
+                         remove-from-memory item
+                     on-item-removed = 
+                       options.on-item-removed ? on-item-removed-default
+                     on-item-removed!
               update: (item, callback)->
                 $xabl
                    .update do
