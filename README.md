@@ -20,6 +20,42 @@ angular
   })
 ```
 
+###DEBUG service example
+
+```Livescript 
+angular
+  .module "app", [ablsdk]
+  .controller "yourCtrl", ($scope, debug)->
+    console.log \show
+    debug \show #console.log analogue but prints only when constant enabledDebug=true  
+    
+    debug ->
+       console.log "Run this script only in debug mode"
+    
+```
+
+
+###CRUD example
+
+```Livescript 
+angular
+  .module "app", [ablsdk]
+  .controller "yourCtrl", ($scope, crud)->
+    activities = crud \activities  #=> use ng:repeat="activity in activities"
+    
+    #activity will be removed from activities array and DELETE /api/activities will be produced
+    remove = (activity)->
+      activities.remove activity
+    
+    #activity will be added to activities array and POST /api/activities will be produced
+    add = (new-activity)->
+      activities.push new-activity
+    
+    $scope.add = add 
+    $scope.remove = remove
+    $scope.activities = activities  
+    
+```
 
 ##Book an activity example
 
