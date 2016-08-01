@@ -128,8 +128,9 @@ angular
                event = slot.events |> p.find(actual)
                available =
                   event?available ? slot.max-occ
+               
                native-slot: slot
-               status:  event?status
+               status:  event?status ? slot.status
                start-time: start
                time: start.value-of!
                end-time: start.clone!.add(duration, \milliseconds)
@@ -165,7 +166,8 @@ angular
                possible-slots.push slot
            slots-by-day(day).for-each (slot)->
                #if slot.available > 0
-               active-slots.push slot
+               if slot.status is \active
+                  active-slots.push slot
            
            if skip-slots!
               choose-slot active-slots.0
