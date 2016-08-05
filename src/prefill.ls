@@ -5,8 +5,9 @@ angular
       * \prefill
       * (debug, safe-apply, $window)->
           (func)->
+            return 
             debug ->
-              $window.prefill = ->
+              angular.prefill = ->
                  params = Array.prototype.slice.call(arguments)
                  STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg
                  ARGUMENT_NAMES = /([^\s,]+)/g
