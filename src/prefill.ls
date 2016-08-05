@@ -3,11 +3,12 @@ angular
     * \ablsdk
   .factory do
       * \prefill
-      * (debug, safe-apply, $window)->
+      * (debug, safe-apply)->
           (func)->
             return 
             debug ->
-              angular.prefill = ->
+              return 
+              $.prefill = ->
                  params = Array.prototype.slice.call(arguments)
                  STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg
                  ARGUMENT_NAMES = /([^\s,]+)/g
