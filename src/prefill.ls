@@ -25,5 +25,5 @@ angular
                       params[i] = prompt "Put value for required #i param"
                  safe-apply ->
                     func.apply null, params
-              if $window.parent?
-                 $window.parent.prefill = $window.prefill
+              #if $window.parent?
+              #   $window.parent.prefill = $window.prefill
