@@ -379,6 +379,16 @@ angular
            get-month(date) is get-month(model.value)
        is-calendar-up-disabled = ->
            get-month(calendars.0.time) < get-month(new-date!)
+       
+       set-month = (date)->
+         current = get-month calendars.0.time
+         desired = get-month date
+         if current > desired
+            calendar.down!
+            set-month date
+         else if current < desired
+            calendar.up!
+            set-month date
        calendar-up = ->
            return if is-calendar-up-disabled!
            calendar.up!
@@ -436,6 +446,7 @@ angular
           find-chosen-event!
        is-chosen-event: ->
            (state.chosen-event ? "").length > 0
+       set-month: set-month
        model: model
        active-slots: active-slots
        possible-slots: possible-slots
