@@ -306,7 +306,6 @@ angular
                end-time: calendars.1.time
                activity-id: activity._id
            .success (loaded-slots)->
-                 debug \loaded-slots, loaded-slots
                  transform = abldate activity.time-zone
                  comp = transform.frontendify >> moment
                  transform-date = (slot)->
@@ -322,9 +321,9 @@ angular
                     loaded-slots.list.map(transform-date).for-each (item)->
                        debug \add-slot
                        slots.push item
-                 debug \find-chosen-event
                  find-chosen-event!
                  scroll.active-date!
+                 observer.notify \load-slot-list-complete
                  callback?!
            .error ->
                  observer.notify \event-not-found 
@@ -380,15 +379,19 @@ angular
        is-calendar-up-disabled = ->
            get-month(calendars.0.time) < get-month(new-date!)
        
-       set-month = (date)->
+       set-month = (date, max)->
+         iter = max ? 99
+         iter = iter - 1
+         return if iter < 0
          current = get-month calendars.0.time
          desired = get-month date
+         debug \set-month, current, desired
          if current > desired
-            calendar.down!
-            set-month date
-         else if current < desired
             calendar.up!
-            set-month date
+            set-month date, iter
+         else if current < desired
+            calendar.down!
+            set-month date, iter
        calendar-up = ->
            return if is-calendar-up-disabled!
            calendar.up!
