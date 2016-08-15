@@ -68,11 +68,16 @@ angular
             return yes if !top
             return no  if !top.amount? or !top.quantity? or !top.name?
           
+          service-fee =
+            amount: 3
           
+           
+            
           
           state =
             attendees: get-amounts \aap 
             addons: get-amounts \addon
+          
           total-adjustment = ->
              adjustment.list |> p.map (.amount) |> p.sum
           calc-subtotal = ->
@@ -120,8 +125,13 @@ angular
               res
           calc-total-without-coupon = ->
               calc-subtotal! + calc-taxes-fees!
-          calc-total = ->
+          calc-total-without-service = ->
               calc-total-without-coupon! + calc-coupon!
+          calc-service-fee = ->
+              calc-total-without-service! / 100 * service-fee.amount
+          
+          calc-total = ->
+              calc-total-without-service! + calc-service-fee!
           calc-previous-total = ->
               prevous-charges |> p.map (.amount)
                               |> p.sum
@@ -235,6 +245,7 @@ angular
             debug \handle, $event
             coupon.code = (coupon.code ? "").to-upper-case!
           coupon: coupon
+          calc-service-fee: calc-service-fee
           adjustment: adjustment
           addons: state.addons
           attendees: state.attendees
