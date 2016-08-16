@@ -87,7 +87,7 @@ angular
             | charge.type is \fee => (state.attendees.map(-> it.quantity) |> sum) * charge.amount
             | _ => 0
           calc-taxes-fees = ->
-              new-charges.map(calc-tax-fee) |> sum
+              new-charges.map(calc-tax-fee) |> sum 
           show-price = (attendee)->
               (new-charges.filter(-> it.type is \aap and it.name is attendee.name)?0?amount ? 0)
           calc-price = (attendee)->
@@ -259,7 +259,8 @@ angular
              code = coupon.codes.0
              code?couponId ? code?name ? "UNKNOWN"
           calc-tax-fee: calc-tax-fee
-          calc-taxes-fees: calc-taxes-fees
+          calc-taxes-fees: ->
+            calc-taxes-fees! + calc-service-fee!
           show-price: show-price
           calc-price: calc-price
           show-addon-price: show-addon-price
