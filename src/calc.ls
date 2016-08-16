@@ -259,6 +259,8 @@ angular
              code = coupon.codes.0
              code?couponId ? code?name ? "UNKNOWN"
           calc-tax-fee: calc-tax-fee
+          set-service-fee: (amount)->
+            service-fee.amount = amount
           calc-taxes-fees: ->
             calc-taxes-fees! + calc-service-fee!
           show-price: show-price
