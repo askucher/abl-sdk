@@ -2,4 +2,6 @@ angular
   .module \ablsdk
   .filter \mdate, (debug)->
       (obj, mask)->
-        if obj? then obj.format(mask) else null 
+        | not obj? => null 
+        | obj.format? => obj.format(mask)
+        | _ => moment(obj).format(mask)
