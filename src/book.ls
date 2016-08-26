@@ -368,7 +368,7 @@ angular
               agreed: 
                   title: "Confirmation"
                   pattern: \true
-                  message: 
+                  messages: 
                     required: "Please accept the terms and conditions"
                   state: 
                     index: 10
