@@ -118,7 +118,7 @@ angular
           if index > -1
               Array.prototype.splice.call i, index, 1
         save = (item, callback)->
-            if item[state.id]? 
+            if item[state.id]? or item[state._id]?
             then
               update item, callback
             else
