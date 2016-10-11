@@ -2,7 +2,8 @@ angular
  .module \ablsdk
  .service \ablslot, (abldate, ablcalc, ablapi, formula, p, debug, $xabl, $root-scope, types)->
     (activity, input-model, options)->
-       throw "Activity is Not Defined for Ablslot " if not activity?
+       debug ->
+        throw "Activity is Not Defined for Ablslot " if not activity?
        transform-charge = (item)->
          _id: item._id
          name: item.name
