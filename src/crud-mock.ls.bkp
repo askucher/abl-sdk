@@ -1,0 +1,27 @@
+angular 
+  .module \ablsdk
+  .service \crudMock, ($http-backend)->
+    (name, input-items)->
+      items = input-items ? []
+      guid = ->
+        s4 = ->
+          Math.floor((1 + Math.random()) * 0x10000).toString(16).substring 1
+        s4! + s4! + '-' + s4! + '-' + s4! + '-' + s4! + '-' + s4! + s4! + s4!
+      $http-backend.whenGET(name).respond (method,url,data)->
+        return [200, items, {}]
+      $http-backend.whenPOST(name).respond (method,url,data)->
+        item = data 
+        if not item._id?
+          item._id = guid!
+          items.push item
+          return [200, item, {}]
+        else 
+          return [400, item, {}]
+      $http-backend.whenPUT(name).respond (method,url,data)->
+        item = data
+        index = items.index-of(items.filter(-> it._id is item._id).0)
+        if index > -1
+          items[index] = item
+          return [200, item, {}]
+        else 
+          return [400, item, {}]
