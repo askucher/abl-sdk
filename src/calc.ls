@@ -231,7 +231,7 @@ angular
 
               
               $xabl
-                .get "coupon/#{coupon.code}"
+                .get "coupons/#{coupon.code}"
                 .success (data)->
                     apply data
                 .error (data)->
