@@ -4,7 +4,7 @@ angular
       * \p
       * -> 
             flatten = (xs) -->
-              [].concat.apply [], [(if typeof! x is 'Array' then flatten x else x) for x in xs]
+              [].concat.apply [], [(if typeof! x is \Array then flatten x else x) for x in xs]
             take:(n, xs) -->
               if n <= 0
                 xs.slice 0, 0

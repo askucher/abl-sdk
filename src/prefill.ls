@@ -1,6 +1,5 @@
 angular
-  .module do
-    * \ablsdk
+  .module \ablsdk
   .factory do
       * \prefill
       * (debug, safe-apply)->
