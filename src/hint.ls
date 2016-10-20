@@ -27,7 +27,10 @@ angular.module(\ablsdk).directive do
                         .css("opacity", "0")
                         .css("bottom", offset.bottom)
                     state.hint.css("top", offset.top - state.hint.height! * 2)
-                    state.hint.css("left", offset.left - width / 2)
+                    left = offset.left - width / 2
+                    state.hint.css do
+                        * \left
+                        * Math.max(left, 0)
                     state.hint.animate {opacity: 1}, 500
                     debug "mouseover", offset
                     $(document.body).append(state.hint)
