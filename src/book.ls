@@ -137,6 +137,7 @@ angular
                 notes: f.notes
                 location: f.location
                 currency: \usd
+                operator: activity.operator._id || activity.operator
                 _custom-headers:
                   "Idempotency-Key" : state.idempotency-key
               $xabl
@@ -182,7 +183,7 @@ angular
                           booking-process token, callback
             payment-setup = ->
               $xabl
-                  .get \payments/setup
+                  .get "payments/setup?operator=#{activity.operator._id || activity.operator}"
             validate = (form)->
               return no if state.loading is yes
               #debug \change-to-tried-checkout, \validate
