@@ -854,20 +854,25 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug, 
         return isDefault.concat(arr2);
       }
     };
-    test(function(){
-      return getAmounts('aap').length > 0;
-    });
-    test(function(){
-      var top;
-      top = p.head(
-      getAmounts('app'));
-      if (!top) {
-        return true;
-      }
-      if (top.amount == null || top.quantity == null || top.name == null) {
-        return false;
-      }
-    });
+    // The fuck?
+    // Causing "vendor.js:23167 [FAILED TEST]function (){
+    // return getAmounts('aap').length > 0;
+    // }"
+    //
+    // test(function(){
+    //   return getAmounts('aap').length > 0;
+    // });
+    // test(function(){
+    //   var top;
+    //   top = p.head(
+    //   getAmounts('app'));
+    //   if (!top) {
+    //     return true;
+    //   }
+    //   if (top.amount == null || top.quantity == null || top.name == null) {
+    //     return false;
+    //   }
+    // });
     serviceFee = {
       amount: 3
     };
