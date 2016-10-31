@@ -2002,6 +2002,8 @@ angular.module('ablsdk').service('p', function(){
     head: first = function(xs){
       return xs[0];
     },
+    // Needs check for xs exists && len > 0 or will continue to break production code
+    // **More fixes needed for the rest of these helper functions as well
     each: curry$(function(f, xs){
       var i$, len$, x;
       for (i$ = 0, len$ = xs.length; i$ < len$; ++i$) {
