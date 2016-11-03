@@ -1,8 +1,8 @@
 angular
   .module \ablsdk
-  .service \ablcalc, ($xabl, $timeout, p, debug, test)->
-      
-      
+  .service \ablcalc, ($xabl, $timeout, p, debug)->
+
+
       sum = (arr)->
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
@@ -32,7 +32,7 @@ angular
           old-amounts = (type)->
             prevous-charges |> p.filter (.type is type)
                             |> p.group-by (-> it.name + it.amount)
-                            |> p.obj-to-pairs 
+                            |> p.obj-to-pairs
                             |> p.map (.1)
                             |> p.map make-old-charge
                             |> p.sort-with by-price
@@ -48,36 +48,28 @@ angular
                          |> p.filter exclude type
                          |> p.sort-with by-price
           get-amounts = (type)->
-             arr = 
-                   [old-amounts, available-amounts] |> p.map (-> it type) 
-                                                    |> p.concat 
+             arr =
+                   [old-amounts, available-amounts] |> p.map (-> it type)
+                                                    |> p.concat
                                                     |> p.sort-by (.amount)
              is-default = arr |> p.filter (.is-default)
              arr2 = arr |> p.filter (-> is-default.index-of(it) is -1) |> p.sort-by (.amount)
              if is-default.length is 0
-                arr |> p.sort-by (.amount) 
+                arr |> p.sort-by (.amount)
                     |> p.reverse
              else
                 is-default ++ arr2
-          test ->
-             get-amounts(\aap).length > 0
-            
-          test ->
-            top =
-               get-amounts(\app) |> p.head
-            return yes if !top
-            return no  if !top.amount? or !top.quantity? or !top.name?
-          
+
           service-fee =
             amount: 3
-          
-           
-            
-          
+
+
+
+
           state =
-            attendees: get-amounts \aap 
+            attendees: get-amounts \aap
             addons: get-amounts \addon
-          
+
           total-adjustment = ->
              adjustment.list |> p.map (.amount) |> p.sum
           calc-subtotal = ->
@@ -87,7 +79,7 @@ angular
             | charge.type is \fee => (state.attendees.map(-> it.quantity) |> sum) * charge.amount
             | _ => 0
           calc-taxes-fees = ->
-              new-charges.map(calc-tax-fee) |> sum 
+              new-charges.map(calc-tax-fee) |> sum
           show-price = (attendee)->
               (new-charges.filter(-> it.type is \aap and it.name is attendee.name)?0?amount ? 0)
           calc-price = (attendee)->
@@ -114,10 +106,10 @@ angular
                 charge.status is \inactive
               type = charge.type
               changed = charge.old
-              name = 
+              name =
                 | type is \aap => "pricing level"
                 | type is \addon => "add-on"
-              res = 
+              res =
                 | removed and name is \removed => "Warning: This #name no longer exists. You can only reduce the quantity at this #name. If you wish to offer another #name at this price, please create on Adjustment to currect the price."
                 | changed and name is \changed => "Warning: This #name has changed since the booking was created. You can only reduce the quantity at this #name. If you wish to offer the old #name, please create an Adjustment."
                 | (removed or changed) and name is \mutated => yes
@@ -129,7 +121,7 @@ angular
               calc-total-without-coupon! + calc-coupon!
           calc-service-fee = ->
               calc-total-without-service! / 100 * service-fee.amount
-          
+
           calc-total = ->
               calc-total-without-service! + calc-service-fee!
           calc-previous-total = ->
@@ -139,14 +131,14 @@ angular
                                 |> p.sum
           calc-balance-due = ->
               -(calc-total! - deposit)
-          adjustment = 
+          adjustment =
             list: prevous-charges |> p.filter(-> it.type is \adjustment)
             name: ""
             amount: ""
             is-edit: no
             show: no
             add: ->
-              new-item = 
+              new-item =
                 name: adjustment.name
                 amount: adjustment.amount
               new-item.amount *= 100
@@ -192,7 +184,7 @@ angular
             add: (activity)->
               return if (coupon.code ? "").length is 0
               coupon.code = coupon.code.to-upper-case!
-              coupon.error = 
+              coupon.error =
                  | coupon.code.length is 0 => "Code is required"
                  | coupon.code.length < 6 => "6 chars are required"
                  | _ => ""
@@ -204,7 +196,7 @@ angular
                   coupon.code = ""
                   coupon.success = "Coupon #{data.couponId} added successfully"
                   coupon.show = no
-                  $timeout do 
+                  $timeout do
                      * ->
                          delete coupon.success
                      * 3000
@@ -212,7 +204,7 @@ angular
                 #debug "activity", data.activities.0, activity
                 start-time = moment(data.start-time)
                 redeem-by = moment(data.end-time)
-                debug do 
+                debug do
                   start-time: start-time.format!
                   redeem-by: redeem-by.format!
                   check: start-time.diff(moment!, 'minutes')
@@ -229,7 +221,7 @@ angular
                   | data.activities.length > 0 and data.activities.0 isnt activity => "This coupon is not valid for this activity."
                   | _ => success!
 
-              
+
               $xabl
                 .get "coupons/#{coupon.code}"
                 .success (data)->
