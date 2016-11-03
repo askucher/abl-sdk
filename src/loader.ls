@@ -7,9 +7,9 @@ angular
               page-size: 100
               page: options.page ? 0
               no-empty: no
-              date-range: 
+              date-range:
                 * moment!.start-of(\day).format!
-                * moment!.clone!.add(12, \months).end-of(\day).format!
+                * moment!.clone!.add(18, \months).end-of(\day).format!
             $xabl
                 .get "operators/#{$xabl.options.key}"
                 .error ->
@@ -18,15 +18,12 @@ angular
                    $xabl
                       .get "activities?#config"
                       .success (resp)->
-                        if typeof! resp.list isnt \Array 
+                        if typeof! resp.list isnt \Array
                           throw ".list is not Array"
-                        if typeof! resp.preferences isnt \Object 
+                        if typeof! resp.preferences isnt \Object
                           throw ".preferences is not Object"
-                        
-                        callback do 
+
+                        callback do
                             activities: resp.list |> p.map types.cast (.Activity)
                             preferences: resp.preferences
                             info: info
-                                
-                    
-                
