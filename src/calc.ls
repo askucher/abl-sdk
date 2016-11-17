@@ -119,11 +119,11 @@ angular
               calc-subtotal! + calc-taxes-fees!
           calc-total-without-service = ->
               calc-total-without-coupon! + calc-coupon!
-          calc-service-fee = ->
-              calc-total-without-service! / 100 * service-fee.amount
+          calc-service-fee = (opts) ->
+              calc-total-without-service! / 100 * (if opts?.applicationFee != null then opts.applicationFee else service-fee.amount)
 
-          calc-total = ->
-              calc-total-without-service! + calc-service-fee!
+          calc-total = (opts) ->
+              calc-total-without-service! + calc-service-fee opts
           calc-previous-total = ->
               prevous-charges |> p.map (.amount)
                               |> p.sum
@@ -253,8 +253,8 @@ angular
           calc-tax-fee: calc-tax-fee
           set-service-fee: (amount)->
             service-fee.amount = amount
-          calc-taxes-fees: ->
-            calc-taxes-fees! + calc-service-fee!
+          calc-taxes-fees: (opts) ->
+            calc-taxes-fees! + calc-service-fee opts
           show-price: show-price
           calc-price: calc-price
           show-addon-price: show-addon-price
