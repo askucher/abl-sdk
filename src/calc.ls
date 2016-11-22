@@ -120,7 +120,7 @@ angular
           calc-total-without-service = ->
               calc-total-without-coupon! + calc-coupon!
           calc-service-fee = (opts) ->
-              calc-total-without-service! / 100 * (if (opts && opts.applicationFee != null) then opts.applicationFee else service-fee.amount)
+              (calc-total-without-service! / 100) * (if (opts && opts.applicationFee != null) then opts.applicationFee else service-fee.amount)
 
           calc-total = (opts) ->
               calc-total-without-service! + calc-service-fee opts
