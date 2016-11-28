@@ -136,5 +136,8 @@ angular
 
 ```
 npm run test 
-```
 
+###How to compile
+
+```
+./run
