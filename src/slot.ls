@@ -129,7 +129,7 @@ angular
                duration = slot.end-time - slot.start-time
                event = slot.events |> p.find(actual)
                available =
-                  event?available ? slot.max-occ
+                  event?available ? slot.max-occ - ( if event then event.attendees else 0)
                
                native-slot: slot
                status:  event?status ? slot.status
