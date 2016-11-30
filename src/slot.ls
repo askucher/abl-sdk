@@ -128,8 +128,18 @@ angular
                start = merge(day, slot.start-time)
                duration = slot.end-time - slot.start-time
                event = slot.events |> p.find(actual)
+               maxOcc = null
+               if slot.events.length > 0 && event
+                 if event
+                   angular.for-each slot.events, (v, k) !->
+                     if moment(v.start-time).format(\YYYYMMDDHHmmss) is moment(start).format(\YYYYMMDDHHmmss)
+                       maxOcc := v.maxOcc
+                 if maxOcc == null
+                   maxOcc = slot.maxOcc
+               else
+                 maxOcc = slot.maxOcc
                available =
-                  event?available ? slot.max-occ - ( if event then event.attendees else 0)
+                  event?available ? max-occ - ( if event then event.attendees else 0)
                
                native-slot: slot
                status:  event?status ? slot.status
@@ -143,7 +153,7 @@ angular
                _id: slot._id
                duration:
                  moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
-               taken: slot.max-occ - available
+               taken: max-occ - available
        
        slots-by-day-without-filters = (day)->
            slots |> p.filter (is-fit-to-slot-full yes, day)
