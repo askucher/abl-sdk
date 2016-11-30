@@ -129,11 +129,12 @@ angular
                duration = slot.end-time - slot.start-time
                event = slot.events |> p.find(actual)
                maxOcc = null
+               title = event?title
                if slot.events.length > 0 && event
-                 if event
-                   angular.for-each slot.events, (v, k) !->
-                     if moment(v.start-time).format(\YYYYMMDDHHmmss) is moment(start).format(\YYYYMMDDHHmmss)
-                       maxOcc := v.maxOcc
+                 angular.for-each slot.events, (v, k) !->
+                   if moment(v.start-time).format(\YYYYMMDDHHmmss) is moment(start).format(\YYYYMMDDHHmmss)
+                     maxOcc := v.maxOcc
+                     title := v.title
                  if maxOcc == null
                    maxOcc = slot.maxOcc
                else
@@ -149,7 +150,7 @@ angular
                charges: slot.charges
                price: formula.get-visual-price(timeslots: [slot])
                available: if event?status is \inactive then 0 else available
-               title: event?title
+               title: title
                _id: slot._id
                duration:
                  moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
