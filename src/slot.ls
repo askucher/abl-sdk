@@ -258,7 +258,7 @@ angular
                typeof (get(step).days |> p.find(-> !func(it))) isnt \undefined
              scroll-to = (i)->
                [1 to i].for-each calendar~down
-             active = [0 to 6] |> p.find(is-active)
+             active = [0 to 18] |> p.find(is-active)
              scroll-to(active) if active > 0
        next-month = (d, x) ->
          date.clone!.add(x, \months)
