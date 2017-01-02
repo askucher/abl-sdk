@@ -313,6 +313,7 @@ angular
               
               observer.notify \event-not-found  
        load-events = (callback)->
+         slots.length = 0
          ablapi
            .timeslots do
                start-time: calendars.0.time
