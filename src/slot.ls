@@ -304,14 +304,16 @@ angular
                 if !slot?
                    observer.notify \event-not-found
                 if not-available-slot(visual-slot)
+                   status-slot = \sold-out
                    observer.notify \event-sold-out
                 else if in-past(day)
                    observer.notify \event-too-close
                 else
                    observer.notify \event-not-found
            else 
-              if location.search.index-of(\event=) === -1 
-                observer.notify \event-not-found
+              
+              observer.notify \event-not-found  
+       status-slot = null
        load-events = (callback)->
          slots.length = 0
          ablapi
@@ -335,7 +337,8 @@ angular
                     loaded-slots.list.map(transform-date).for-each (item)->
                        debug \add-slot
                        slots.push item
-                 find-chosen-event!
+                 if status-slot is not \sold-out
+                   find-chosen-event!
                  scroll.active-date!
                  observer.notify \load-slot-list-complete
                  callback?!
