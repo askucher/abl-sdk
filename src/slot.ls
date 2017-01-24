@@ -305,7 +305,7 @@ angular
                 if !slot?
                    observer.notify \event-not-found
                 if not-available-slot(visual-slot)
-                   status-slot != \sold-out
+                   status-slot := \sold-out
                    observer.notify \event-sold-out
                 else if in-past(day)
                    observer.notify \event-too-close
