@@ -310,7 +310,7 @@ angular
                 else
                    observer.notify \event-not-found
            else 
-              if location.search.index-of! === -1 
+              if location.search.index-of(\event=) === -1 
                 observer.notify \event-not-found
        load-events = (callback)->
          slots.length = 0
