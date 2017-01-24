@@ -276,6 +276,7 @@ angular
              calendar.move 1
            up: ->
              calendar.move -1
+       status-slot = null
        find-chosen-event = ->
            return if (state.chosen-event ? "").length is 0
            return if slots.length is 0
@@ -304,7 +305,7 @@ angular
                 if !slot?
                    observer.notify \event-not-found
                 if not-available-slot(visual-slot)
-                   status-slot = \sold-out
+                   status-slot != \sold-out
                    observer.notify \event-sold-out
                 else if in-past(day)
                    observer.notify \event-too-close
@@ -313,7 +314,7 @@ angular
            else 
               
               observer.notify \event-not-found  
-       status-slot = null
+       
        load-events = (callback)->
          slots.length = 0
          ablapi
