@@ -294,10 +294,13 @@ angular
                   if slot?
                     debug \choose-slot, slot
                     if not-available-slot(slot)
+                       debug \not-available, slot
                        observer.notify \event-sold-out
                     else
+                       debug \available, slot
                        slot |> choose-slot
                   else 
+                    debug \event-not-found
                     observer.notify \event-not-found
               else 
                 visual-slot = 
@@ -312,7 +315,6 @@ angular
                 else
                    observer.notify \event-not-found
            else 
-              
               observer.notify \event-not-found  
        
        load-events = (callback)->
