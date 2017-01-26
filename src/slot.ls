@@ -235,8 +235,17 @@ angular
        
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  
-       start-month =
-         create-month new-date!
+       
+       if location.search.index-of(\event=) is -1
+         start-month =
+           create-month new-date!
+       else
+         _eventDate = location.search.substr(location.search.index-of \event=).split \=;
+         _pairs = _event-date[1].split \_
+         _date-transform = abldate activity.time-zone
+         _month = moment(_date-transform.frontendify(moment(_pairs[1], 'YYYYMMDDHHmmssZ').to-date()))
+         startMonth = _month;
+       
        set-calendars = (f, s, callback)->
           calendars.length = 0
           calendars.push f
@@ -276,7 +285,9 @@ angular
              calendar.move 1
            up: ->
              calendar.move -1
+       status-slot = null
        find-chosen-event = ->
+           debug \find-chosen-event
            return if (state.chosen-event ? "").length is 0
            return if slots.length is 0
            pairs = state.chosen-event.split(\_)
@@ -293,10 +304,13 @@ angular
                   if slot?
                     debug \choose-slot, slot
                     if not-available-slot(slot)
+                       debug \not-available, slot
                        observer.notify \event-sold-out
                     else
+                       debug \available, slot
                        slot |> choose-slot
                   else 
+                    debug \event-not-found
                     observer.notify \event-not-found
               else 
                 visual-slot = 
@@ -304,14 +318,15 @@ angular
                 if !slot?
                    observer.notify \event-not-found
                 if not-available-slot(visual-slot)
+                   status-slot := \sold-out
                    observer.notify \event-sold-out
                 else if in-past(day)
                    observer.notify \event-too-close
                 else
                    observer.notify \event-not-found
            else 
-              
               observer.notify \event-not-found  
+       
        load-events = (callback)->
          slots.length = 0
          ablapi
@@ -335,7 +350,8 @@ angular
                     loaded-slots.list.map(transform-date).for-each (item)->
                        debug \add-slot
                        slots.push item
-                 find-chosen-event!
+                 if status-slot is not \sold-out
+                   find-chosen-event!
                  scroll.active-date!
                  observer.notify \load-slot-list-complete
                  callback?!
