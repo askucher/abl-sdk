@@ -235,8 +235,17 @@ angular
        
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  
-       start-month =
-         create-month new-date!
+       
+       if location.search.index-of(\event=) is -1
+         start-month =
+           create-month new-date!
+       else
+         _eventDate = location.search.substr(location.search.index-of \event=).split \=;
+         _pairs = _event-date[1].split \_
+         _date-transform = abldate activity.time-zone
+         _month = moment(_date-transform.frontendify(moment(_pairs[1], 'YYYYMMDDHHmmssZ').to-date()))
+         startMonth = _month;
+       
        set-calendars = (f, s, callback)->
           calendars.length = 0
           calendars.push f
