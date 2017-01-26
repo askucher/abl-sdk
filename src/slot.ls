@@ -128,17 +128,20 @@ angular
                start = merge(day, slot.start-time)
                duration = slot.end-time - slot.start-time
                event = slot.events |> p.find(actual)
-               maxOcc = null
+               max-occ = null
                title = event?title
                if slot.events.length > 0 && event
                  angular.for-each slot.events, (v, k) !->
                    if moment(v.start-time).format(\YYYYMMDDHHmmss) is moment(start).format(\YYYYMMDDHHmmss)
-                     maxOcc := v.maxOcc
+                     max-occ := v.max-occ
                      title := v.title
-                 if maxOcc == null
-                   maxOcc = slot.maxOcc
+                 if max-occ == null
+                   if event
+                     max-occ = event.max-occ
+                   else
+                     max-occ = slot.max-occ
                else
-                 maxOcc = slot.maxOcc
+                 max-occ = slot.maxOcc
                available =
                   event?available ? max-occ - ( if event then event.attendees else 0)
                
@@ -232,6 +235,8 @@ angular
              get-day(date) < get-day(new-date!) 
            else
              get-day(date) < get-day(new-date!)
+       is-too-close = (date)->
+         date.is-before moment!.add(cutoff, 'minute')
        
        create-month = (date)->
          new-date([date.year!, date.month!, 15])  
@@ -297,6 +302,12 @@ angular
            slot =
              slots |> p.find (.event-id is id)
            if slot? 
+              if inPast(day)
+                status-slot := \not-found
+                return observer.notify \event-not-found
+              if isTooClose(day)
+                status-slot := \too-close
+                return observer.notify \event-too-close
               if not is-disabled-day(day)
                   select-day day
                   slot = active-slots |> p.find (._id is slot._id)
@@ -316,12 +327,10 @@ angular
                 visual-slot = 
                    slots-by-day(day) |> p.find (._id is slot._id)
                 if !slot?
-                   observer.notify \event-not-found
+                   return observer.notify \event-not-found
                 if not-available-slot(visual-slot)
                    status-slot := \sold-out
                    observer.notify \event-sold-out
-                else if in-past(day)
-                   observer.notify \event-too-close
                 else
                    observer.notify \event-not-found
            else 
