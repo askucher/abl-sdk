@@ -278,6 +278,7 @@ angular
              calendar.move -1
        status-slot = null
        find-chosen-event = ->
+           debug \find-chosen-event
            return if (state.chosen-event ? "").length is 0
            return if slots.length is 0
            pairs = state.chosen-event.split(\_)
