@@ -307,7 +307,7 @@ angular
                 return observer.notify \event-not-found
               if isTooClose(day)
                 status-slot := \too-close
-                retun observer.notify \event-too-close
+                return observer.notify \event-too-close
               if not is-disabled-day(day)
                   select-day day
                   slot = active-slots |> p.find (._id is slot._id)
