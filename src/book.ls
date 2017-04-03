@@ -381,7 +381,7 @@ angular
                   example: 'Question example'
                   placeholder: 'Question placeholder'
                   state: 
-                    index: 2
+                    index: 11
                     touched: no
                     active: no
             try-checkout = ->
