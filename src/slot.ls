@@ -376,6 +376,7 @@ angular
            | in-past(date, flags) => yes
            | is-not-fit-to-any-slot(date) => yes
            | _ => no
+           debug \is-disabled-day, date, is-dummy(date), is-empty(date), in-past(date, flags), is-not-fit-to-any-slot(date)
        select-day-anyway = (day)->
            select day
            define-date-start day, slots.0
