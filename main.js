@@ -2933,21 +2933,16 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
     isDisabledDay = function(date, flags){
       switch (false) {
       case !isDummy(date):
-        true;
-        break;
+        return true;
       case !isEmpty(date):
-        true;
-        break;
+        return true;
       case !inPast(date, flags):
-        true;
-        break;
+        return true;
       case !isNotFitToAnySlot(date):
-        true;
-        break;
+        return true;
       default:
-        false;
+        return false;
       }
-      return debug('is-disabled-day', date, isDummy(date), isEmpty(date), inPast(date, flags), isNotFitToAnySlot(date));
     };
     selectDayAnyway = function(day){
       select(day);
