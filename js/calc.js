@@ -148,10 +148,11 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       case charge.type !== 'tax':
         return calcSubtotal() / 100 * charge.amount;
       case charge.type !== 'fee':
-        return sum(
-        state.attendees.map(function(it){
-          return it.quantity;
-        })) * charge.amount;
+        var newsum = 0;
+        state.attendees[0]['_ids'].forEach(function(e,i) {
+            newsum += charge.amount;
+        });
+        return newsum;
       default:
         return 0;
       }
