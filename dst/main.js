@@ -872,7 +872,7 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       //state.attendees.map(calcPrice)) + totalAdjustment() + totalAddons());
       //debug('ablsdk attendees', state.attendees);
       //debug('ablsdk state.attendees.map(calcPrice)', state.attendees.map(calcPrice));
-      var newsum = 0;
+      var newsum = totalAdjustment() + totalAddons();
       state.attendees[0]['_ids'].forEach(function(e,i) {
         newsum += state.attendees[0]['amount'];
       });
@@ -886,10 +886,11 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       case charge.type !== 'tax':
         return calcSubtotal() / 100 * charge.amount;
       case charge.type !== 'fee':
-        return sum(
-        state.attendees.map(function(it){
-          return it.quantity;
-        })) * charge.amount;
+        var newsum = 0;
+        state.attendees[0]['_ids'].forEach(function(e,i) {
+            newsum += charge.amount;
+        });
+        return newsum;
       default:
         return 0;
       }
