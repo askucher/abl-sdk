@@ -1,6 +1,6 @@
 {
   "name": "ablsdk",
-  "version": "1.1.0",
+  "version": "0.2.14",
   "description": "![abl-sdk](http://content.screencast.com/users/a.stegno/folders/Jing/media/24a1e61b-195a-44e9-a870-23d84e116bd1/00000337.png)",
   "main": "dst/main.js",
   "directories": {
