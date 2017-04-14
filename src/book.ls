@@ -375,6 +375,15 @@ angular
                     index: 10
                     touched: no
                     active: no
+              question:
+                  pattern: ''
+                  title: "Question title"
+                  example: 'Question example'
+                  placeholder: 'Question placeholder'
+                  state: 
+                    index: 11
+                    touched: no
+                    active: no
             try-checkout = ->
               if state.form.agreed 
                 #debug \change-to-tried-checkout, \try-checkout
