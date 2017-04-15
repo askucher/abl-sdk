@@ -15,7 +15,7 @@ gulp.task('scripts', function() {
   return gulp.src('./js/*.js')
     .pipe(concat('main.js'))
     .pipe(ngAnnotate())
-    .pipe(gulp.dest('./dst/'));
+    .pipe(gulp.dest('./'));
 });
 
  
