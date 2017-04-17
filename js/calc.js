@@ -130,18 +130,12 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       adjustment.list));
     };
     calcSubtotal = function(){
-      //debug('ablsdk calcSubtotal', sum(
-      //state.attendees.map(calcPrice)) + totalAdjustment() + totalAddons());
       //debug('ablsdk attendees', state.attendees);
-      //debug('ablsdk state.attendees.map(calcPrice)', state.attendees.map(calcPrice));
       var newsum = totalAdjustment() + totalAddons();
-      state.attendees[0]['_ids'].forEach(function(e,i) {
-        newsum += state.attendees[0]['amount'];
+      state.attendees.forEach(function(e,i) {
+        newsum += e.quantity * e.amount;
       });
-      debug('ablsdk calcSubtotal ', newsum);
       return newsum;
-      // return sum(
-      // state.attendees.map(calcPrice)) + totalAdjustment() + totalAddons();
     };
     calcTaxFee = function(charge){
       switch (false) {
@@ -149,8 +143,8 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
         return calcSubtotal() / 100 * charge.amount;
       case charge.type !== 'fee':
         var newsum = 0;
-        state.attendees[0]['_ids'].forEach(function(e,i) {
-            newsum += charge.amount;
+        state.attendees.forEach(function(e,i) {
+            newsum += e.quantity * charge.amount;
         });
         return newsum;
       default:
