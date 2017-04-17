@@ -880,9 +880,9 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
         });
       }
       else {
-        newsum += (state.attendees[0]['quantity'] * state.attendees[0].amount);
-        newsum += (state.attendees[1]['quantity'] * state.attendees[1].amount);
-
+        state.attendees.forEach(function(e,i) {
+            newsum += (state.attendees[i]['quantity'] * state.attendees[i].amount);
+        });
       }
 
       return newsum;
@@ -901,8 +901,9 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
           });
         }
         else {
-          newsum += charge.amount * state.attendees[0]['quantity'];
-          newsum += charge.amount * state.attendees[1]['quantity'];
+          state.attendees.forEach(function(e,i) {
+            newsum += charge.amount * state.attendees[i]['quantity'];
+          });
         }
         return newsum;
       default:
