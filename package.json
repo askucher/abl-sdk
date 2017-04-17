@@ -1,6 +1,6 @@
 {
   "name": "ablsdk",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "![abl-sdk](http://content.screencast.com/users/a.stegno/folders/Jing/media/24a1e61b-195a-44e9-a870-23d84e116bd1/00000337.png)",
   "main": "main.js",
   "directories": {
@@ -8,7 +8,7 @@
   },
   "author": "Adam Ralko (github.com/aralko)",
   "scripts": {
-    "build": "gulp scripts && uglifyjs ./dst/main.js --compress --mangle -o ./dst/main.min.js --source-map ./dst/main.min.js.map",
+    "build": "gulp scripts && uglifyjs ./dst/main.js --compress --mangle -o ./dst/main.min.js --source-map ./dst/main.min.js.map && cp ./dst/main.js main.js",
     "test": "karma start karma.config.js",
     "test-debug": "karma start karma.config.js --no-single-run --browsers Chrome",
     "coveralls": "cp build/coverage/PhantomJS*/lcov.info lcov.info && node node_modules/coveralls/bin/coveralls.js < lcov.info"
@@ -28,6 +28,7 @@
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
     "coveralls": "^2.10.0",
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-livescript": "^3.0.1",
     "gulp-ng-annotate": "^2.0.0",

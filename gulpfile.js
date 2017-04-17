@@ -12,10 +12,8 @@ gulp.task('ls', function() {
 });
 
 gulp.task('scripts', function() {
-  return gulp.src('./js/*.js')
+  return gulp.src(['abl-sdk-module.js', './js/*.js'])
     .pipe(concat('main.js'))
     .pipe(ngAnnotate())
     .pipe(gulp.dest('./dst'));
 });
-
- 
