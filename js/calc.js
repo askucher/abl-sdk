@@ -130,22 +130,38 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       adjustment.list));
     };
     calcSubtotal = function(){
-      //debug('ablsdk attendees', state.attendees);
+      //debug('ablsdk calcSubtotal attendees', state.attendees);
       var newsum = totalAdjustment() + totalAddons();
-      state.attendees.forEach(function(e,i) {
-        newsum += e.quantity * e.amount;
-      });
+      if(angular.isDefined(state.attendees[0]['_ids'])) {
+        state.attendees[0]['_ids'].forEach(function(e,i) {
+          newsum += state.attendees[0].amount;
+        });
+      }
+      else {
+        newsum += (state.attendees[0]['quantity'] * state.attendees[0].amount);
+        newsum += (state.attendees[1]['quantity'] * state.attendees[1].amount);
+
+      }
+
       return newsum;
     };
     calcTaxFee = function(charge){
+      //debug('ablsdk calcTaxFee attendees', state.attendees);
+
       switch (false) {
       case charge.type !== 'tax':
         return calcSubtotal() / 100 * charge.amount;
       case charge.type !== 'fee':
         var newsum = 0;
-        state.attendees.forEach(function(e,i) {
-            newsum += e.quantity * charge.amount;
-        });
+        if(angular.isDefined(state.attendees[0]['_ids'])) {
+          state.attendees[0]['_ids'].forEach(function(e,i) {
+              newsum += charge.amount;
+          });
+        }
+        else {
+          newsum += charge.amount * state.attendees[0]['quantity'];
+          newsum += charge.amount * state.attendees[1]['quantity'];
+        }
         return newsum;
       default:
         return 0;
