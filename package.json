@@ -11,7 +11,8 @@
     "build": "gulp scripts && uglifyjs ./dst/main.js --compress --mangle -o ./dst/main.min.js --source-map ./dst/main.min.js.map && cp ./dst/main.js main.js",
     "test": "karma start karma.config.js",
     "test-debug": "karma start karma.config.js --no-single-run --browsers Chrome",
-    "coveralls": "cp build/coverage/PhantomJS*/lcov.info lcov.info && node node_modules/coveralls/bin/coveralls.js < lcov.info"
+    "coveralls": "cp build/coverage/PhantomJS*/lcov.info lcov.info && node node_modules/coveralls/bin/coveralls.js < lcov.info",
+    "release": "release () { npm run pull && if [ -z $1 ]; then npm version patch; else npm version $1; fi && npm run push; }; release"
   },
   "dependencies": {
     "angular": "^1.5.5",
