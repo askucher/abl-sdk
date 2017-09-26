@@ -482,6 +482,8 @@ angular
                 watch name, data
        day-has-bookable-slot = (day)->
            slots-by-day-without-filters(day).length > 0
+       day-with-slots = (day)->
+           slots-by-day-without-filters(day)
        observe: observer.observe
        choose-event:  (id)->
           state.chosen-event = id
