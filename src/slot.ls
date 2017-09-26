@@ -505,6 +505,7 @@ angular
        is-active-month: is-active-month
        is-disabled-day: is-disabled-day
        day-has-bookable-slot: day-has-bookable-slot
+       day-with-slots: day-with-slots
        is-disabled-month: is-disabled-month
        is-calendar-up-disabled: is-calendar-up-disabled
        is-dummy: is-dummy
