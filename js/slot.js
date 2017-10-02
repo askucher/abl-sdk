@@ -1,7 +1,7 @@
 var toString$ = {}.toString;
 angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, formula, p, debug, $xabl, $rootScope, types){
   return function(activity, inputModel, options){
-    var transformCharge, getDay, newDate, generateCalendar, getMonth, hackDate, merge, makeAvailable, defineDateStart, performChooseSlot, actualEvent, isEmpty, transformSlot, slotsByDayWithoutFilters, slotsByDay, skipSlots, select, isFitToSlotFull, isFitToSlot, isNotFitToAnySlot, cutoff, inPast, isTooClose, createMonth, startMonth, _eventDate, _pairs, _dateTransform, _month, setCalendars, scroll, nextMonth, calendar, statusSlot, findChosenEvent, loadEvents, isDummy, isDisabledDay, selectDayAnyway, selectDay, notSelected, disabledSlot, notAvailableSlot, close, chooseSlot, chooseSlotAnyway, isActiveDay, isDisabledMonth, isActiveMonth, isCalendarUpDisabled, setMonth, calendarUp, calendarDown, setup, move, eventInstanceId, createEventInstanceId, model, slots, calendars, activeSlots, possibleSlots, x$, ref$, state, observer, dayHasBookableSlot;
+    var transformCharge, getDay, newDate, generateCalendar, getMonth, hackDate, merge, makeAvailable, defineDateStart, performChooseSlot, actualEvent, isEmpty, transformSlot, slotsByDayWithoutFilters, slotsByDay, skipSlots, select, isFitToSlotFull, isFitToSlot, isNotFitToAnySlot, cutoff, inPast, isTooClose, createMonth, startMonth, _eventDate, _pairs, _dateTransform, _month, setCalendars, scroll, nextMonth, calendar, statusSlot, findChosenEvent, loadEvents, isDummy, isDisabledDay, selectDayAnyway, selectDay, notSelected, disabledSlot, notAvailableSlot, close, chooseSlot, chooseSlotAnyway, isActiveDay, isDisabledMonth, isActiveMonth, isCalendarUpDisabled, setMonth, calendarUp, calendarDown, setup, move, eventInstanceId, createEventInstanceId, model, slots, calendars, activeSlots, possibleSlots, x$, ref$, state, observer, dayHasBookableSlot, dayWithSlots;
     debug(function(){
       if (activity == null) {
         return console.warn("Activity is Not Defined for Ablslot ");
@@ -750,6 +750,9 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
     dayHasBookableSlot = function(day){
       return slotsByDayWithoutFilters(day).length > 0;
     };
+    dayWithSlots = function(day){
+      return slotsByDayWithoutFilters(day)
+    };
     return {
       observe: observer.observe,
       chooseEvent: function(id){
@@ -775,6 +778,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
       isActiveMonth: isActiveMonth,
       isDisabledDay: isDisabledDay,
       dayHasBookableSlot: dayHasBookableSlot,
+      dayWithSlots: dayWithSlots,
       isDisabledMonth: isDisabledMonth,
       isCalendarUpDisabled: isCalendarUpDisabled,
       isDummy: isDummy,
