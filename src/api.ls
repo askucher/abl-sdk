@@ -1,7 +1,8 @@
 angular
   .module \ablsdk
-  .service \ablapi, ($xabl)->
+  .service \ablapi, ($xabl, debug)->
       timeslots: (options)->
+        debug \ablapi-timeslots moment(options.start-time).clone!.start-of(\day).start-of(\month).toISOString!, moment(options.end-time).clone!.start-of(\day).end-of(\month).end-of(\day).toISOString!
         req = $.param do
            activity : options.activity-id
            "status[event]" : \all

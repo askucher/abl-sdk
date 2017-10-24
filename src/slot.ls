@@ -338,6 +338,7 @@ angular
        
        load-events = (callback)->
          slots.length = 0
+         debug \calendar-dates, calendars.0, calendars.1
          ablapi
            .timeslots do
                start-time: calendars.0.time
