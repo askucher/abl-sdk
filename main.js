@@ -1878,6 +1878,7 @@ angular.module('ablsdk').service('loader', function($xabl, types, p){
         throw "An error occurred getting Operator information for key " + $xabl.options.key;
       }).success(function(info){
         return $xabl.get("activities?" + config).success(function(resp){
+
           if (toString$.call(resp.list).slice(8, -1) !== 'Array') {
             throw ".list is not Array";
           }
