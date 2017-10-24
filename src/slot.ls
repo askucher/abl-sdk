@@ -279,7 +279,7 @@ angular
        
        calendar = 
            first: start-month
-           second: start-month.clone!.add(12, \months)
+           second: start-month.clone!.add(12, \month)
            move: (direction)->
                calendar.first = calendar.first.clone!.add(direction, \month)
                calendar.second = calendar.second.clone!.add(direction, \month)
