@@ -338,7 +338,6 @@ angular
        
        load-events = (callback)->
          slots.length = 0
-         debug \calendar-dates, calendars.0, calendars.1
          ablapi
            .timeslots do
                start-time: calendars.0.time
@@ -440,7 +439,7 @@ angular
        setup = ->
          set-calendars do
              * generate-calendar start-month.clone!
-             * generate-calendar start-month.clone!.add(1, \month)
+             * generate-calendar start-month.clone!.add(12, \month)
              * ->
                  select-day model.value
        
