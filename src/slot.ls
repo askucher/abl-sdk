@@ -15,7 +15,7 @@ angular
               if date?format?
                 date
               else
-                moment(date)
+                moment(date).tz(activity.timeZone)
              res.format(\YYYYMMDD) |> parse-int
           else null
        new-date = ->
@@ -34,7 +34,7 @@ angular
          dummies = [1 to day] |> p.map (-> null)
          time: d
          days: dummies ++ days
-         headers: 
+         headers:
             * \Su
             * \M
             * \Tu
@@ -54,16 +54,16 @@ angular
            moment([ndate.year!, ndate.month!, ndate.date!, ntime.hours!, ntime.minutes!, 0])
        make-available = (slot, arg)-->
            correct = (val)->
-               | val is null => no 
+               | val is null => no
                | typeof val is \undefined => no
                | typeof! val is \Number => yes
                | typeof! val is \String and val.length is 0 => no
                | typeof! val is \String and val.match('^[0-9]+$')?0?length is val.length => yes
                | _ => no
-           quantities = 
-               model.calc.attendees |> p.map (.quantity) 
+           quantities =
+               model.calc.attendees |> p.map (.quantity)
                                     |> p.filter correct
-           available = 
+           available =
               if \inactive is slot.status
               then 0
               else slot.available - eval(([0] ++ quantities).join('+'))
@@ -79,10 +79,10 @@ angular
              throw "Slot doesn't have required 'available' field"
            #return if slot.available is 0
            day = model.value
-           
+
            define-date-start day, slot
            transform = abldate activity.time-zone
-           
+
            model.date.origin =
                 transform.backendify(model.date.start).replace(/[\:-]/ig,'')
            model.date.end = slot.end-time
@@ -94,7 +94,7 @@ angular
            model._id = slot._id
            debug "slots", slots
            timeslot =
-             slots |> p.find (._id is slot._id) 
+             slots |> p.find (._id is slot._id)
            if !timeslot?
              throw "Slot has not been found by id #{slot._id} in [#{activity.timeslots.map(-> it._id).join(',')}]"
            if !timeslot?event-id?
@@ -112,16 +112,16 @@ angular
            model.attendees = slot.charges.filter(-> it.type is \aap).map(make-attendee)
            model.available = make-available slot
        actual-event = (day, event)-->
-            get-day(event.start-time) is get-day(day) 
-       is-empty = (day)->  
+            get-day(event.start-time) is get-day(day)
+       is-empty = (day)->
            #actual = actual-event day
            slots |> p.filter (is-fit-to-slot day)
-                 |> (.length is 0)       
+                 |> (.length is 0)
        #slot = ->
        #abbit = new slot
        #alert( abbit instanceof slot )
        #class Timeslot
-       
+
        transform-slot = (day)->
              actual = actual-event day
              (slot)->
@@ -144,7 +144,7 @@ angular
                  max-occ = slot.maxOcc
                available =
                   event?available ? max-occ - ( if event then event.attendees else 0)
-               
+
                native-slot: slot
                status:  event?status ? slot.status
                start-time: start
@@ -158,7 +158,7 @@ angular
                duration:
                  moment.duration(duration).format("M[M] d[d] h[h] m[m]").replace(/((^| )0[a-z])|[ ]/ig, '')
                taken: max-occ - available
-       
+
        slots-by-day-without-filters = (day)->
            slots |> p.filter (is-fit-to-slot-full yes, day)
                  |> p.map transform-slot day
@@ -170,12 +170,12 @@ angular
                  |> p.map types.cast (.Timeslot)
                  |> p.sort-by (.time)
        skip-slots = ->
-           pref = 
+           pref =
              $root-scope.user?preferences?widget?display?timeslot ? {}
            pref.availability + pref.startTime is 0 and active-slots.length > 0
        select = (day)->
            model.value = day
-           
+
            active-slots.length = 0
            possible-slots.length = 0
            slots-by-day-without-filters(day).for-each (slot)->
@@ -184,12 +184,12 @@ angular
                #if slot.available > 0
                if slot.status is \active
                   active-slots.push slot
-           
+
            if skip-slots!
               choose-slot active-slots.0
-              
-             
-           
+
+
+
        is-fit-to-slot-full = (include-past, date, slot) -->
           single = slot.days-running.length is 0
           a = activity
@@ -198,15 +198,15 @@ angular
               | get-day(slot.until-time) < get-day(date) => yes #block when multi-event is finished
               | get-day(slot.start-time) > get-day(date) => yes #return if current day between slot's start-time and end-time (2 rule)
               | _ => no
-          
-         
-          
+
+
+
           today = merge(date, slot.start-time)
-          
+
           in-past = today.diff(new-date!, \minutes) - cutoff
-            
-          
-          
+
+
+
           day = (date)->
               d = date?day?!
               _ =
@@ -218,7 +218,7 @@ angular
           check =
               | out-of-week => no
               | out-of-activity-interval => no
-              | include-past is no and in-past <= 0 => no 
+              | include-past is no and in-past <= 0 => no
               | _ => yes
           check
        is-fit-to-slot = is-fit-to-slot-full no
@@ -226,21 +226,21 @@ angular
           | slots-by-day(date) |> p.not-any(-> it.available > 0)  => yes
           | slots |> p.not-any (is-fit-to-slot date) => yes
           | _ => no
-       cutoff = 
+       cutoff =
            | $root-scope.user?preferences?widget?display?event?isSiteWide is yes =>  $root-scope.user.preferences.widget.display.event.cutoff
            | (activity.cutoff ? -1) > -1 => activity.cutoff
            | _=> 48 * 60
        in-past = (date, flags)->
            if flags? and flags.index-of('include_nearest') > -1
-             get-day(date) < get-day(new-date!) 
+             get-day(date) < get-day(new-date!)
            else
              get-day(date) < get-day(new-date!)
        is-too-close = (date)->
          date.is-before moment!.add(cutoff, 'minute')
-       
+
        create-month = (date)->
-         new-date([date.year!, date.month!, 15])  
-       
+         new-date([date.year!, date.month!, 15])
+
        if location.search.index-of(\event=) is -1
          start-month =
            create-month new-date!
@@ -250,7 +250,7 @@ angular
          _date-transform = abldate activity.time-zone
          _month = moment(_date-transform.frontendify(moment(_pairs[1], 'YYYYMMDDHHmmssZ').to-date()))
          startMonth = _month;
-       
+
        set-calendars = (f, s, callback)->
           calendars.length = 0
           calendars.push f
@@ -266,7 +266,7 @@ angular
                if step is 0 then start
                else up step
              is-active = (step)->
-               func = 
+               func =
                    | options?active-day-strategy is 'dayHasBookableSlot' => day-has-bookable-slot
                    | _=> is-disabled-day
                typeof (get(step).days |> p.find(-> !func(it))) isnt \undefined
@@ -276,8 +276,8 @@ angular
              scroll-to(active) if active > 0
        next-month = (d, x) ->
          date.clone!.add(x, \months)
-       
-       calendar = 
+
+       calendar =
            first: start-month
            second: start-month.clone!.add(12, \month)
            move: (direction)->
@@ -301,7 +301,7 @@ angular
            day = moment(date-transform.frontendify(moment(pairs.1, \YYYYMMDDHHmmssZ).to-date!))
            slot =
              slots |> p.find (.event-id is id)
-           if slot? 
+           if slot?
               if inPast(day)
                 status-slot := \not-found
                 return observer.notify \event-not-found
@@ -311,7 +311,7 @@ angular
               if not is-disabled-day(day)
                   select-day day
                   slot = active-slots |> p.find (._id is slot._id)
-                  debug \slot, slot 
+                  debug \slot, slot
                   if slot?
                     debug \choose-slot, slot
                     if not-available-slot(slot)
@@ -320,11 +320,11 @@ angular
                     else
                        debug \available, slot
                        slot |> choose-slot
-                  else 
+                  else
                     debug \event-not-found
                     observer.notify \event-not-found
-              else 
-                visual-slot = 
+              else
+                visual-slot =
                    slots-by-day(day) |> p.find (._id is slot._id)
                 if !slot?
                    return observer.notify \event-not-found
@@ -333,9 +333,9 @@ angular
                    observer.notify \event-sold-out
                 else
                    observer.notify \event-not-found
-           else 
-              observer.notify \event-not-found  
-       
+           else
+              observer.notify \event-not-found
+
        load-events = (callback)->
          slots.length = 0
          ablapi
@@ -354,7 +354,7 @@ angular
                  slots.length = 0
                  if loaded-slots.length is 0
                     debug \event-not-found
-                    observer.notify \event-not-found 
+                    observer.notify \event-not-found
                  else
                     loaded-slots.list.map(transform-date).for-each (item)->
                        debug \add-slot
@@ -365,8 +365,8 @@ angular
                  observer.notify \load-slot-list-complete
                  callback?!
            .error ->
-                 observer.notify \event-not-found 
-           
+                 observer.notify \event-not-found
+
        is-dummy = (date)->
            | date is null => yes
            | _ => no
@@ -390,7 +390,7 @@ angular
        disabled-slot = (slot)->
            | !slot? => "Event Not Found"
            | slot.available is 0 => "This event is full"
-           | _ => "" 
+           | _ => ""
        not-available-slot = (slot)->
           !slot? or slot.available <= 0
        close = (chosen)->
@@ -417,7 +417,7 @@ angular
            get-month(date) is get-month(model.value)
        is-calendar-up-disabled = ->
            get-month(calendars.0.time) < get-month(new-date!)
-       
+
        set-month = (date, max)->
          iter = max ? 99
          iter = iter - 1
@@ -442,14 +442,14 @@ angular
              * generate-calendar start-month.clone!.add(12, \month)
              * ->
                  select-day model.value
-       
+
        move = (booking-id)->
          $xabl
            .put do
               * "bookings/#{booking-id}/move"
               * event-instance-id: create-event-instance-id!
        event-instance-id = (model)->
-         transform = abldate activity.time-zone  
+         transform = abldate activity.time-zone
          model.event-id + \_ + transform.backendify(model.date.start).replace(/[\:-]/ig,'')
        create-event-instance-id = ->
          event-instance-id(model)
@@ -458,7 +458,7 @@ angular
        calendars = []
        active-slots = []
        possible-slots = []
-       model 
+       model
           ..date =
               start: null
               end: null
@@ -471,9 +471,9 @@ angular
           ..questions= activity.questions ? []
           ..bg= activity.image
        setup!
-       state = 
+       state =
            chosen-event: null
-       observer = 
+       observer =
             list: []
             observe: (func)->
               observer.list.push func
