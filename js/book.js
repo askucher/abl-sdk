@@ -171,7 +171,7 @@ angular.module('ablsdk').service('ablbook', function($xabl, p, stripe, debug, pr
       return eventId + '_' + state.calendar.date.origin;
     };
     bookingProcess = function(token, callback){
-      var f, a, makeNulls, coupon, free, req, ref$;
+      var f, a, makeNulls, coupon, agentCode, free, req, ref$;
       f = state.form;
       a = activity;
       makeNulls = function(total){
@@ -187,6 +187,7 @@ angular.module('ablsdk').service('ablbook', function($xabl, p, stripe, debug, pr
         }()));
       };
       coupon = state.calendar.calc.coupon.codes.length > 0;
+      agentCode = state.calendar.calc.agent.codes.length > 0;
       free = state.calendar.calc.calcTotal() === 0;
       req = {
         isMobile: (ref$ = f.isMobile) != null ? ref$ : false,
@@ -202,6 +203,7 @@ angular.module('ablsdk').service('ablbook', function($xabl, p, stripe, debug, pr
             return 'credit';
           }
         }()),
+        agentCode: agentCode ? state.calendar.calc.agent.codes[0].code : undefined,
         eventInstanceId: getEventInstanceId(),
         addons: p.pairsToObj(
         p.map(function(a){

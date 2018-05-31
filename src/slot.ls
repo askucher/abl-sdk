@@ -88,7 +88,7 @@ angular
            model.date.end = slot.end-time
            model.title = slot.title ? activity.title
            model.charges = slot.charges
-           model.calc = ablcalc(slot.charges ++ activity.charges)
+           model.calc = ablcalc(slot.charges ++ activity.charges,null,null, activity.operator._id) # TODO: Refactor this: find a better way to make operator id available to calc
            if !slot._id?
              throw "Slot doesn't have required field '_id'"
            model._id = slot._id

@@ -20,7 +20,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
       if (date != null) {
         res = (date != null ? date.format : void 8) != null
           ? date
-          : moment(date);
+          : moment(date).tz(activity.timeZone);
         return parseInt(
         res.format('YYYYMMDD'));
       } else {
@@ -140,7 +140,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
         ? ref$
         : activity.title;
       model.charges = slot.charges;
-      model.calc = ablcalc(slot.charges.concat(activity.charges));
+      model.calc = ablcalc(slot.charges.concat(activity.charges), null, null, activity.operator._id);
       if (slot._id == null) {
         throw "Slot doesn't have required field '_id'";
       }
@@ -451,7 +451,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
     };
     calendar = {
       first: startMonth,
-      second: startMonth.clone().add(1, 'months'),
+      second: startMonth.clone().add(12, 'month'),
       move: function(direction){
         calendar.first = calendar.first.clone().add(direction, 'month');
         calendar.second = calendar.second.clone().add(direction, 'month');
@@ -690,7 +690,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
       return calendar.down();
     };
     setup = function(){
-      return setCalendars(generateCalendar(startMonth.clone()), generateCalendar(startMonth.clone().add(1, 'month')), function(){
+      return setCalendars(generateCalendar(startMonth.clone()), generateCalendar(startMonth.clone().add(12, 'month')), function(){
         return selectDay(model.value);
       });
     };
@@ -751,7 +751,7 @@ angular.module('ablsdk').service('ablslot', function(abldate, ablcalc, ablapi, f
       return slotsByDayWithoutFilters(day).length > 0;
     };
     dayWithSlots = function(day){
-      return slotsByDayWithoutFilters(day)
+      return slotsByDayWithoutFilters(day);
     };
     return {
       observe: observer.observe,

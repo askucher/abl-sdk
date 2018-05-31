@@ -11,8 +11,8 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       arr);
     }
   };
-  return function(inputNewCharges, inputPrevousCharges, paid){
-    var prevousCharges, newCharges, ref$, makeNewCharge, byPrice, makeOldCharge, oldAmounts, exclude, availableAmounts, getAmounts, serviceFee, state, totalAdjustment, calcSubtotal, calcTaxFee, calcTaxesFees, showPrice, calcPrice, showAddonPrice, calcAddonPrice, totalAddons, calcCoupon, warning, calcTotalWithoutCoupon, calcTotalWithoutService, calcServiceFee, calcTotal, calcPreviousTotal, deposit, calcBalanceDue, adjustment, observers, onEvent, notify, coupon, this$ = this;
+  return function(inputNewCharges, inputPrevousCharges, paid, operatorId){
+    var prevousCharges, newCharges, ref$, makeNewCharge, byPrice, makeOldCharge, oldAmounts, exclude, availableAmounts, getAmounts, serviceFee, state, totalAdjustment, calcSubtotal, calcTaxFee, calcTaxesFees, showPrice, calcPrice, showAddonPrice, calcAddonPrice, totalAddons, calcCoupon, calcAgentCommission, warning, calcTotalWithoutCoupon, calcTotalWithoutService, calcServiceFee, calcTotalWithoutAgent, calcTotal, calcPreviousTotal, deposit, calcBalanceDue, adjustment, observers, onEvent, notify, coupon, agent, this$ = this;
     prevousCharges = inputPrevousCharges != null
       ? inputPrevousCharges
       : [];
@@ -130,40 +130,18 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       adjustment.list));
     };
     calcSubtotal = function(){
-      //debug('ablsdk calcSubtotal attendees', state.attendees);
-      var newsum = totalAdjustment() + totalAddons();
-      if(angular.isDefined(state.attendees[0]['_ids'])) {
-        state.attendees[0]['_ids'].forEach(function(e,i) {
-          newsum += state.attendees[0].amount;
-        });
-      }
-      else {
-        state.attendees.forEach(function(e,i) {
-            newsum += (state.attendees[i]['quantity'] * state.attendees[i].amount);
-        });
-      }
-
-      return newsum;
+      return sum(
+      state.attendees.map(calcPrice)) + totalAdjustment() + totalAddons();
     };
     calcTaxFee = function(charge){
-      //debug('ablsdk calcTaxFee attendees', state.attendees);
-
       switch (false) {
       case charge.type !== 'tax':
         return calcSubtotal() / 100 * charge.amount;
       case charge.type !== 'fee':
-        var newsum = 0;
-        if(angular.isDefined(state.attendees[0]['_ids'])) {
-          state.attendees[0]['_ids'].forEach(function(e,i) {
-              newsum += charge.amount;
-          });
-        }
-        else {
-          state.attendees.forEach(function(e,i) {
-            newsum += charge.amount * state.attendees[i]['quantity'];
-          });
-        }
-        return newsum;
+        return sum(
+        state.attendees.map(function(it){
+          return it.quantity;
+        })) * charge.amount;
       default:
         return 0;
       }
@@ -216,6 +194,27 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       }());
       return result * -1;
     };
+    calcAgentCommission = function(opts){
+      var code, originalExclusive, subtotal, additional, type, amount, totalAsSource;
+      code = agent.codes[0];
+      if (code == null) {
+        return 0;
+      }
+      originalExclusive = code.settings.commission.originalExclusive;
+      if (originalExclusive === false) {
+        return 0;
+      }
+      subtotal = calcSubtotal();
+      additional = calcTotalWithoutAgent(opts) - subtotal;
+      type = code.settings.commission.type;
+      amount = code.settings.commission.amount;
+      totalAsSource = code.settings.commission.totalAsSource;
+      if (type === 'percentage') {
+        return (subtotal + additional * totalAsSource) * (amount / 100);
+      } else {
+        return amount;
+      }
+    };
     warning = function(charge, name){
       var removed, type, changed, res;
       removed = charge.status === 'inactive';
@@ -254,8 +253,11 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
         ? opts.applicationFee
         : serviceFee.amount);
     };
-    calcTotal = function(opts){
+    calcTotalWithoutAgent = function(opts){
       return calcTotalWithoutService() + calcServiceFee(opts);
+    };
+    calcTotal = function(opts){
+      return calcTotalWithoutAgent() + calcAgentCommission(opts);
     };
     calcPreviousTotal = function(){
       var this$ = this;
@@ -426,6 +428,71 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       },
       code: ""
     };
+    agent = {
+      codes: p.filter(function(it){
+        return it.type === 'agent_commission';
+      })(
+      prevousCharges),
+      calc: calcAgentCommission,
+      show: false,
+      edit: function(c){
+        agent.code = c.code;
+        agent.remove(c);
+        return agent.show = true;
+      },
+      remove: function(c){
+        var index;
+        index = agent.codes.indexOf(c);
+        if (index > -1) {
+          return agent.codes.splice(index, 1);
+        }
+      },
+      add: function(activity){
+        var ref$, apply, handleError;
+        if (((ref$ = agent.code) != null ? ref$ : "").length === 0) {
+          return;
+        }
+        agent.error = (function(){
+          switch (false) {
+          case agent.code.length !== 0:
+            return "Code is required";
+          default:
+            return "";
+          }
+        }());
+        if (agent.error.length > 0) {
+          return;
+        }
+        apply = function(data){
+          agent.codes.push(data);
+          notify('agent-added', data);
+          agent.code = "";
+          agent.success = "Agent code " + data.code + " added successfully";
+          agent.show = false;
+          $timeout(function(){
+            var ref$;
+            return ref$ = agent.success, delete agent.success, ref$;
+          }, 3000);
+          return "";
+        };
+        handleError = function(data){
+          var ref$, ref1$;
+          agent.error = (ref$ = data != null ? (ref1$ = data.errors) != null ? ref1$[0] : void 8 : void 8) != null ? ref$ : "Agent code not found";
+          agent.code = "";
+          return agent.show = true;
+        };
+        return $xabl.get("operators/" + operatorId + "/agents?code=" + agent.code).success(function(data){
+          if (data.list.length === 1) {
+            return apply(data.list[0]);
+          } else {
+            return handleError(data);
+          }
+        }).error(function(data){
+          return handleError(data);
+        });
+      },
+      code: ""
+    };
     return {
       warning: warning,
       on: onEvent,
@@ -434,7 +501,13 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
         debug('handle', $event);
         return coupon.code = ((ref$ = coupon.code) != null ? ref$ : "").toUpperCase();
       },
+      handleAgent: function($event){
+        var ref$;
+        debug('handle-agent-code', $event);
+        return agent.code = (ref$ = agent.code) != null ? ref$ : "";
+      },
       coupon: coupon,
+      agent: agent,
       calcServiceFee: calcServiceFee,
       adjustment: adjustment,
       addons: state.addons,
@@ -461,6 +534,7 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       },
       totalWithoutTaxesfees: calcSubtotal,
       calcCoupon: calcCoupon,
+      calcAgentCommission: calcAgentCommission,
       couponCode: function(){
         var code, ref$;
         code = coupon.codes[0];
