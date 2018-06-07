@@ -281,7 +281,7 @@ angular
                 agent.show = yes
 
               $xabl
-                .get "operators/#{operator-id}/agents?code=#{agent.code}"
+                .get "operators/#{operator-id}/agents?exact=true&code=#{agent.code}"
                 .success (data)->
                     if data.list.length is 1 => apply data.list.0
                     else handle-error data
