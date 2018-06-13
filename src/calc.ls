@@ -294,7 +294,6 @@ angular
             debug \handle, $event
             coupon.code = (coupon.code ? "").to-upper-case!
           handle-agent: ($event) ->
-            debug \handle-agent-code, $event
             agent.code = agent.code ? ""
           coupon: coupon
           agent: agent

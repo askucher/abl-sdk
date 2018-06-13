@@ -503,7 +503,6 @@ angular.module('ablsdk').service('ablcalc', function($xabl, $timeout, p, debug){
       },
       handleAgent: function($event){
         var ref$;
-        debug('handle-agent-code', $event);
         return agent.code = (ref$ = agent.code) != null ? ref$ : "";
       },
       coupon: coupon,
