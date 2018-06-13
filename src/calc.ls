@@ -283,7 +283,7 @@ angular
               $xabl
                 .get "operators/#{operator-id}/agents?partialMatch=false&code=#{agent.code}"
                 .success (data)->
-                    if data.list.length is 1 => apply data.list.0
+                    if data.length is 1 => apply data.0
                     else handle-error data
                 .error (data)->
                     handle-error data

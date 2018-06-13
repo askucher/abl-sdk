@@ -1226,8 +1226,8 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
           return agent.show = true;
         };
         return $xabl.get("operators/" + operatorId + "/agents?partialMatch=false&code=" + agent.code).success(function(data){
-          if (data.list.length === 1) {
-            return apply(data.list[0]);
+          if (data.length === 1) {
+            return apply(data[0]);
           } else {
             return handleError(data);
           }
