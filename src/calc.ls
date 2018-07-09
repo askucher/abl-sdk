@@ -260,6 +260,7 @@ angular
                  agent.codes.splice index, 1
             add: (activity)->
               return if (agent.code ? "").length is 0
+              agent.code = agent.code.to-upper-case!
               agent.error =
                  | agent.code.length is 0 => "Code is required"
                  | _ => ""
@@ -294,7 +295,7 @@ angular
             debug \handle, $event
             coupon.code = (coupon.code ? "").to-upper-case!
           handle-agent: ($event) ->
-            agent.code = agent.code ? ""
+            agent.code = (agent.code ? "").to-upper-case!
           coupon: coupon
           agent: agent
           calc-service-fee: calc-service-fee

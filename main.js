@@ -1196,6 +1196,7 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
         if (((ref$ = agent.code) != null ? ref$ : "").length === 0) {
           return;
         }
+        agent.code = agent.code.toUpperCase();
         agent.error = (function(){
           switch (false) {
           case agent.code.length !== 0:
@@ -1247,7 +1248,7 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       },
       handleAgent: function($event){
         var ref$;
-        return agent.code = (ref$ = agent.code) != null ? ref$ : "";
+        return agent.code = ((ref$ = agent.code) != null ? ref$ : "").toUpperCase();
       },
       coupon: coupon,
       agent: agent,
