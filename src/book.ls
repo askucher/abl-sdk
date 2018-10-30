@@ -111,6 +111,8 @@ angular
               #debug state.calendar.calc.attendees
               coupon = 
                   state.calendar.calc.coupon.codes.length > 0
+              agent-code = 
+                  state.calendar.calc.agent.codes.length > 0
                   
               free = 
                   state.calendar.calc.calc-total! is 0
@@ -123,6 +125,9 @@ angular
                 payment-method: | free and coupon => \gift
                                 | free => \cash
                                 | _ => \credit
+                agent-code: if agent-code
+                            then state.calendar.calc.agent.codes.0.code
+                            else undefined
                 event-instance-id: get-event-instance-id!
                 addons: state.calendar.calc.addons |> p.map ((a)-> [a._id, make-nulls a.quantity])
                                                    |> p.pairs-to-obj

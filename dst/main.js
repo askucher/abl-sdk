@@ -250,7 +250,7 @@ angular.module('ablsdk').service('ablbook', ["$xabl", "p", "stripe", "debug", "p
       return eventId + '_' + state.calendar.date.origin;
     };
     bookingProcess = function(token, callback){
-      var f, a, makeNulls, coupon, free, req, ref$;
+      var f, a, makeNulls, coupon, agentCode, free, req, ref$;
       f = state.form;
       a = activity;
       makeNulls = function(total){
@@ -266,6 +266,7 @@ angular.module('ablsdk').service('ablbook', ["$xabl", "p", "stripe", "debug", "p
         }()));
       };
       coupon = state.calendar.calc.coupon.codes.length > 0;
+      agentCode = state.calendar.calc.agent.codes.length > 0;
       free = state.calendar.calc.calcTotal() === 0;
       req = {
         isMobile: (ref$ = f.isMobile) != null ? ref$ : false,
@@ -281,6 +282,7 @@ angular.module('ablsdk').service('ablbook', ["$xabl", "p", "stripe", "debug", "p
             return 'credit';
           }
         }()),
+        agentCode: agentCode ? state.calendar.calc.agent.codes[0].code : undefined,
         eventInstanceId: getEventInstanceId(),
         addons: p.pairsToObj(
         p.map(function(a){
@@ -753,8 +755,8 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       arr);
     }
   };
-  return function(inputNewCharges, inputPrevousCharges, paid){
-    var prevousCharges, newCharges, ref$, makeNewCharge, byPrice, makeOldCharge, oldAmounts, exclude, availableAmounts, getAmounts, serviceFee, state, totalAdjustment, calcSubtotal, calcTaxFee, calcTaxesFees, showPrice, calcPrice, showAddonPrice, calcAddonPrice, totalAddons, calcCoupon, warning, calcTotalWithoutCoupon, calcTotalWithoutService, calcServiceFee, calcTotal, calcPreviousTotal, deposit, calcBalanceDue, adjustment, observers, onEvent, notify, coupon, this$ = this;
+  return function(inputNewCharges, inputPrevousCharges, paid, operatorId){
+    var prevousCharges, newCharges, ref$, makeNewCharge, byPrice, makeOldCharge, oldAmounts, exclude, availableAmounts, getAmounts, serviceFee, state, totalAdjustment, calcSubtotal, calcTaxFee, calcTaxesFees, showPrice, calcPrice, showAddonPrice, calcAddonPrice, totalAddons, calcCoupon, calcAgentCommission, warning, calcTotalWithoutCoupon, calcTotalWithoutService, calcServiceFee, calcTotalWithoutAgent, calcTotal, calcPreviousTotal, deposit, calcBalanceDue, adjustment, observers, onEvent, notify, coupon, agent, this$ = this;
     prevousCharges = inputPrevousCharges != null
       ? inputPrevousCharges
       : [];
@@ -872,40 +874,18 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       adjustment.list));
     };
     calcSubtotal = function(){
-      //debug('ablsdk calcSubtotal attendees', state.attendees);
-      var newsum = totalAdjustment() + totalAddons();
-      if(angular.isDefined(state.attendees[0]['_ids'])) {
-        state.attendees[0]['_ids'].forEach(function(e,i) {
-          newsum += state.attendees[0].amount;
-        });
-      }
-      else {
-        state.attendees.forEach(function(e,i) {
-            newsum += (state.attendees[i]['quantity'] * state.attendees[i].amount);
-        });
-      }
-
-      return newsum;
+      return sum(
+      state.attendees.map(calcPrice)) + totalAdjustment() + totalAddons();
     };
     calcTaxFee = function(charge){
-      //debug('ablsdk calcTaxFee attendees', state.attendees);
-
       switch (false) {
       case charge.type !== 'tax':
         return calcSubtotal() / 100 * charge.amount;
       case charge.type !== 'fee':
-        var newsum = 0;
-        if(angular.isDefined(state.attendees[0]['_ids'])) {
-          state.attendees[0]['_ids'].forEach(function(e,i) {
-              newsum += charge.amount;
-          });
-        }
-        else {
-          state.attendees.forEach(function(e,i) {
-            newsum += charge.amount * state.attendees[i]['quantity'];
-          });
-        }
-        return newsum;
+        return sum(
+        state.attendees.map(function(it){
+          return it.quantity;
+        })) * charge.amount;
       default:
         return 0;
       }
@@ -958,6 +938,27 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       }());
       return result * -1;
     };
+    calcAgentCommission = function(opts){
+      var code, originalExclusive, subtotal, additional, type, amount, totalAsSource;
+      code = agent.codes[0];
+      if (code == null) {
+        return 0;
+      }
+      originalExclusive = code.settings.commission.originalExclusive;
+      if (originalExclusive === false) {
+        return 0;
+      }
+      subtotal = calcSubtotal();
+      additional = calcTotalWithoutAgent(opts) - subtotal;
+      type = code.settings.commission.type;
+      amount = code.settings.commission.amount;
+      totalAsSource = code.settings.commission.totalAsSource;
+      if (type === 'percentage') {
+        return (subtotal + additional * totalAsSource) * (amount / 100);
+      } else {
+        return amount;
+      }
+    };
     warning = function(charge, name){
       var removed, type, changed, res;
       removed = charge.status === 'inactive';
@@ -996,8 +997,11 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
         ? opts.applicationFee
         : serviceFee.amount);
     };
-    calcTotal = function(opts){
+    calcTotalWithoutAgent = function(opts){
       return calcTotalWithoutService() + calcServiceFee(opts);
+    };
+    calcTotal = function(opts){
+      return calcTotalWithoutAgent() + calcAgentCommission(opts);
     };
     calcPreviousTotal = function(){
       var this$ = this;
@@ -1168,6 +1172,72 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       },
       code: ""
     };
+    agent = {
+      codes: p.filter(function(it){
+        return it.type === 'agent_commission';
+      })(
+      prevousCharges),
+      calc: calcAgentCommission,
+      show: false,
+      edit: function(c){
+        agent.code = c.code;
+        agent.remove(c);
+        return agent.show = true;
+      },
+      remove: function(c){
+        var index;
+        index = agent.codes.indexOf(c);
+        if (index > -1) {
+          return agent.codes.splice(index, 1);
+        }
+      },
+      add: function(activity){
+        var ref$, apply, handleError;
+        if (((ref$ = agent.code) != null ? ref$ : "").length === 0) {
+          return;
+        }
+        agent.code = agent.code.toUpperCase();
+        agent.error = (function(){
+          switch (false) {
+          case agent.code.length !== 0:
+            return "Code is required";
+          default:
+            return "";
+          }
+        }());
+        if (agent.error.length > 0) {
+          return;
+        }
+        apply = function(data){
+          agent.codes.push(data);
+          notify('agent-added', data);
+          agent.code = "";
+          agent.success = "Agent code " + data.code + " added successfully";
+          agent.show = false;
+          $timeout(function(){
+            var ref$;
+            return ref$ = agent.success, delete agent.success, ref$;
+          }, 3000);
+          return "";
+        };
+        handleError = function(data){
+          var ref$, ref1$;
+          agent.error = (ref$ = data != null ? (ref1$ = data.errors) != null ? ref1$[0] : void 8 : void 8) != null ? ref$ : "Agent code not found";
+          agent.code = "";
+          return agent.show = true;
+        };
+        return $xabl.get("operators/" + operatorId + "/agents?partialMatch=false&code=" + agent.code).success(function(data){
+          if (data.length === 1) {
+            return apply(data[0]);
+          } else {
+            return handleError(data);
+          }
+        }).error(function(data){
+          return handleError(data);
+        });
+      },
+      code: ""
+    };
     return {
       warning: warning,
       on: onEvent,
@@ -1176,7 +1246,12 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
         debug('handle', $event);
         return coupon.code = ((ref$ = coupon.code) != null ? ref$ : "").toUpperCase();
       },
+      handleAgent: function($event){
+        var ref$;
+        return agent.code = ((ref$ = agent.code) != null ? ref$ : "").toUpperCase();
+      },
       coupon: coupon,
+      agent: agent,
       calcServiceFee: calcServiceFee,
       adjustment: adjustment,
       addons: state.addons,
@@ -1203,6 +1278,7 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       },
       totalWithoutTaxesfees: calcSubtotal,
       calcCoupon: calcCoupon,
+      calcAgentCommission: calcAgentCommission,
       couponCode: function(){
         var code, ref$;
         code = coupon.codes[0];
@@ -1242,7 +1318,6 @@ function curry$(f, bound){
   };
   return _curry();
 }
-
 angular.module('ablsdk').filter('capitalize', function(){
   return function(input){
     if (angular.isString(input) && input.length > 0) {
@@ -2347,7 +2422,7 @@ angular.module('ablsdk').service('safeApply', ["$rootScope", function($rootScope
 var toString$ = {}.toString;
 angular.module('ablsdk').service('ablslot', ["abldate", "ablcalc", "ablapi", "formula", "p", "debug", "$xabl", "$rootScope", "types", function(abldate, ablcalc, ablapi, formula, p, debug, $xabl, $rootScope, types){
   return function(activity, inputModel, options){
-    var transformCharge, getDay, newDate, generateCalendar, getMonth, hackDate, merge, makeAvailable, defineDateStart, performChooseSlot, actualEvent, isEmpty, transformSlot, slotsByDayWithoutFilters, slotsByDay, skipSlots, select, isFitToSlotFull, isFitToSlot, isNotFitToAnySlot, cutoff, inPast, isTooClose, createMonth, startMonth, _eventDate, _pairs, _dateTransform, _month, setCalendars, scroll, nextMonth, calendar, statusSlot, findChosenEvent, loadEvents, isDummy, isDisabledDay, selectDayAnyway, selectDay, notSelected, disabledSlot, notAvailableSlot, close, chooseSlot, chooseSlotAnyway, isActiveDay, isDisabledMonth, isActiveMonth, isCalendarUpDisabled, setMonth, calendarUp, calendarDown, setup, move, eventInstanceId, createEventInstanceId, model, slots, calendars, activeSlots, possibleSlots, x$, ref$, state, observer, dayHasBookableSlot;
+    var transformCharge, getDay, newDate, generateCalendar, getMonth, hackDate, merge, makeAvailable, defineDateStart, performChooseSlot, actualEvent, isEmpty, transformSlot, slotsByDayWithoutFilters, slotsByDay, skipSlots, select, isFitToSlotFull, isFitToSlot, isNotFitToAnySlot, cutoff, inPast, isTooClose, createMonth, startMonth, _eventDate, _pairs, _dateTransform, _month, setCalendars, scroll, nextMonth, calendar, statusSlot, findChosenEvent, loadEvents, isDummy, isDisabledDay, selectDayAnyway, selectDay, notSelected, disabledSlot, notAvailableSlot, close, chooseSlot, chooseSlotAnyway, isActiveDay, isDisabledMonth, isActiveMonth, isCalendarUpDisabled, setMonth, calendarUp, calendarDown, setup, move, eventInstanceId, createEventInstanceId, model, slots, calendars, activeSlots, possibleSlots, x$, ref$, state, observer, dayHasBookableSlot, dayWithSlots;
     debug(function(){
       if (activity == null) {
         return console.warn("Activity is Not Defined for Ablslot ");
@@ -2366,7 +2441,7 @@ angular.module('ablsdk').service('ablslot', ["abldate", "ablcalc", "ablapi", "fo
       if (date != null) {
         res = (date != null ? date.format : void 8) != null
           ? date
-          : moment(date);
+          : moment(date).tz(activity.timeZone);
         return parseInt(
         res.format('YYYYMMDD'));
       } else {
@@ -2486,7 +2561,7 @@ angular.module('ablsdk').service('ablslot', ["abldate", "ablcalc", "ablapi", "fo
         ? ref$
         : activity.title;
       model.charges = slot.charges;
-      model.calc = ablcalc(slot.charges.concat(activity.charges));
+      model.calc = ablcalc(slot.charges.concat(activity.charges), null, null, activity.operator._id);
       if (slot._id == null) {
         throw "Slot doesn't have required field '_id'";
       }
@@ -2797,7 +2872,7 @@ angular.module('ablsdk').service('ablslot', ["abldate", "ablcalc", "ablapi", "fo
     };
     calendar = {
       first: startMonth,
-      second: startMonth.clone().add(1, 'months'),
+      second: startMonth.clone().add(12, 'month'),
       move: function(direction){
         calendar.first = calendar.first.clone().add(direction, 'month');
         calendar.second = calendar.second.clone().add(direction, 'month');
@@ -3036,7 +3111,7 @@ angular.module('ablsdk').service('ablslot', ["abldate", "ablcalc", "ablapi", "fo
       return calendar.down();
     };
     setup = function(){
-      return setCalendars(generateCalendar(startMonth.clone()), generateCalendar(startMonth.clone().add(1, 'month')), function(){
+      return setCalendars(generateCalendar(startMonth.clone()), generateCalendar(startMonth.clone().add(12, 'month')), function(){
         return selectDay(model.value);
       });
     };
@@ -3096,6 +3171,9 @@ angular.module('ablsdk').service('ablslot', ["abldate", "ablcalc", "ablapi", "fo
     dayHasBookableSlot = function(day){
       return slotsByDayWithoutFilters(day).length > 0;
     };
+    dayWithSlots = function(day){
+      return slotsByDayWithoutFilters(day);
+    };
     return {
       observe: observer.observe,
       chooseEvent: function(id){
@@ -3121,6 +3199,7 @@ angular.module('ablsdk').service('ablslot', ["abldate", "ablcalc", "ablapi", "fo
       isActiveMonth: isActiveMonth,
       isDisabledDay: isDisabledDay,
       dayHasBookableSlot: dayHasBookableSlot,
+      dayWithSlots: dayWithSlots,
       isDisabledMonth: isDisabledMonth,
       isCalendarUpDisabled: isCalendarUpDisabled,
       isDummy: isDummy,

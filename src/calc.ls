@@ -7,7 +7,7 @@ angular
         | typeof arr is \undefined => 0
         | typeof arr is null => 0
         | _ => arr |> p.sum
-      (input-new-charges, input-prevous-charges, paid)->
+      (input-new-charges, input-prevous-charges, paid, operator-id)->
           prevous-charges = input-prevous-charges ? []
           new-charges = input-new-charges?filter(-> it.status is \active) ? []
           #debug do
@@ -101,6 +101,19 @@ angular
                 | percentage is no => current-price
                 | _  => current-price / 100 * origin
               result * -1
+          calc-agent-commission = (opts)->
+              code = agent.codes.0 
+              return 0 if not code?
+              originalExclusive = code.settings.commission.originalExclusive 
+              return 0 if originalExclusive is no
+              subtotal = calc-subtotal!
+              additional = (calc-total-without-agent opts) - subtotal
+              type = code.settings.commission.type
+              amount = code.settings.commission.amount
+              total-as-source = code.settings.commission.totalAsSource
+              if type is 'percentage' 
+                then (subtotal + (additional * total-as-source)) * (amount / 100)
+                else amount
           warning = (charge, name)->
               removed =
                 charge.status is \inactive
@@ -122,8 +135,10 @@ angular
           calc-service-fee = (opts) ->
               (calc-total-without-service! / 100) * (if (opts && opts.applicationFee != null) then opts.applicationFee else service-fee.amount)
 
-          calc-total = (opts) ->
+          calc-total-without-agent = (opts)->
               calc-total-without-service! + calc-service-fee opts
+          calc-total = (opts) ->
+              calc-total-without-agent! + calc-agent-commission opts
           calc-previous-total = ->
               prevous-charges |> p.map (.amount)
                               |> p.sum
@@ -231,12 +246,58 @@ angular
                     coupon.code = ""
                     coupon.show = yes
             code: ""
+          agent =
+            codes: prevous-charges |> p.filter(-> it.type is \agent_commission)
+            calc: calc-agent-commission
+            show: no
+            edit: (c)->
+              agent.code = c.code
+              agent.remove c
+              agent.show = yes
+            remove: (c)->
+              index = agent.codes.index-of c
+              if index > -1
+                 agent.codes.splice index, 1
+            add: (activity)->
+              return if (agent.code ? "").length is 0
+              agent.code = agent.code.to-upper-case!
+              agent.error =
+                 | agent.code.length is 0 => "Code is required"
+                 | _ => ""
+              return if agent.error.length > 0
+              apply = (data)->
+                agent.codes.push data
+                notify \agent-added, data
+                agent.code = ""
+                agent.success = "Agent code #{data.code} added successfully"
+                agent.show = no
+                $timeout do
+                   * ->
+                       delete agent.success
+                   * 3000
+                ""
+              handle-error = (data) ->
+                agent.error = data?errors?0 ? "Agent code not found"
+                agent.code = ""
+                agent.show = yes
+
+              $xabl
+                .get "operators/#{operator-id}/agents?partialMatch=false&code=#{agent.code}"
+                .success (data)->
+                    if data.length is 1 => apply data.0
+                    else handle-error data
+                .error (data)->
+                    handle-error data
+            code: ""
           warning: warning
           on: on-event
           handle: ($event)->
             debug \handle, $event
             coupon.code = (coupon.code ? "").to-upper-case!
+          handle-agent: ($event) ->
+            agent.code = (agent.code ? "").to-upper-case!
           coupon: coupon
+          agent: agent
           calc-service-fee: calc-service-fee
           adjustment: adjustment
           addons: state.addons
@@ -247,6 +308,7 @@ angular
             state.addons |> p.filter (-> it.quantity > 0) |> p.map ((o)-> "#{o.quantity} #{o.name}") |> p.join ", "
           total-without-taxesfees: calc-subtotal
           calc-coupon: calc-coupon
+          calc-agent-commission: calc-agent-commission
           coupon-code: ->
              code = coupon.codes.0
              code?couponId ? code?name ? \UNKNOWN
