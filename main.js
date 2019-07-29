@@ -1238,6 +1238,71 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
       },
       code: ""
     };
+    giftcard = {
+      codes: p.filter(function(it){
+        return it.type === 'agent_commission';
+      })(prevousCharges),
+      calc: calcAgentCommission,
+      show: false,
+      edit: function(c){
+        giftcard.code = c.code;
+        giftcard.remove(c);
+        return giftcard.show = true;
+      },
+      remove: function(c){
+        var index;
+        console.log('remove', giftcard.codes, c);
+        index = giftcard.codes.indexOf(c);
+        console.log('remove', index);
+        if (index > -1) {
+          return giftcard.codes.splice(index, 1);
+        }
+      },
+      add: function(activity){
+        console.log('add', activity);
+        var ref$, apply, handleError;
+        if (((ref$ = giftcard.code) != null ? ref$ : "").length === 0) {
+          return;
+        }
+        giftcard.code = giftcard.code.toUpperCase();
+        giftcard.error = (function(){
+          switch (false) {
+          case giftcard.code.length !== 0:
+            return "eGIft Card is required";
+          default:
+            return "";
+          }
+        }());
+        if (giftcard.error.length > 0) {
+          return;
+        }
+        apply = function(data){
+          console.log('apply', data);
+          giftcard.codes.push(data);
+          notify('giftcard-added', data);
+          giftcard.code = data.redemptionNumber;
+          giftcard.success = "eGift Card " + data.redemptionNumber + " added successfully";
+          giftcard.show = false;
+          $timeout(function(){
+            var ref$;
+            return ref$ = giftcard.success, delete giftcard.success, ref$;
+          }, 3000);
+        };
+        handleError = function(data){
+          var ref$, ref1$;
+          giftcard.error = (ref$ = data != null ? (ref1$ = data.errors) != null ? ref1$[0] : void 8 : void 8) != null ? ref$ : "eGift Card not found";
+          giftcard.code = "";
+          return giftcard.show = true;
+        };
+        console.log('adding', giftcard);
+        return $xabl.get("/giftcards/redemption-number/" + giftcard.code).success(function(data){
+          return apply(data);
+        }).error(function(data){
+          return handleError(data);
+        });
+      },
+      code: ""
+    };
     return {
       warning: warning,
       on: onEvent,
@@ -1250,8 +1315,13 @@ angular.module('ablsdk').service('ablcalc', ["$xabl", "$timeout", "p", "debug", 
         var ref$;
         return agent.code = ((ref$ = agent.code) != null ? ref$ : "").toUpperCase();
       },
+      handleGiftcard: function($event){
+        var ref$;
+        return giftcard.code = ((ref$ = giftcard.code) != null ? ref$ : "").toUpperCase();
+      },
       coupon: coupon,
       agent: agent,
+      giftcard: giftcard,
       calcServiceFee: calcServiceFee,
       adjustment: adjustment,
       addons: state.addons,
